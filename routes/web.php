@@ -12,6 +12,7 @@ use App\Http\Controllers\StudentProfileController;
 use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 
+
 Route::get('/', function () {
     return redirect()->route('login');
 });
@@ -78,6 +79,12 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/mapel/{subject}/items', [SubjectController::class, 'storeItem'])->name('subjects.items.store');
     Route::patch('/mapel/{subject}/items/{item}', [SubjectController::class, 'updateItem'])->name('subjects.items.update');
     Route::delete('/mapel/{subject}/items/{item}', [SubjectController::class, 'destroyItem'])->name('subjects.items.destroy');
+    Route::post('/items/{item}/toggle-complete', [SubjectController::class, 'toggleComplete'])->name('items.toggle-complete');
+
+    Route::get('/mapel/{subject}', [SubjectController::class, 'show'])->name('subject.show');
+    Route::post('/mapel/{subject}/items', [SubjectController::class, 'storeItem'])->name('subject.items.store');
+    Route::patch('/mapel/{subject}/items/{item}', [SubjectController::class, 'updateItem'])->name('subject.items.update');
+    Route::delete('/mapel/{subject}/items/{item}', [SubjectController::class, 'destroyItem'])->name('subject.items.destroy');
     Route::post('/items/{item}/toggle-complete', [SubjectController::class, 'toggleComplete'])->name('items.toggle-complete');
 });
 
