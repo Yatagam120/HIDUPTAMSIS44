@@ -44,9 +44,41 @@ class StudentSeeder extends Seeder
                 'foto' => null,
             ],
 
+            // === ARCHIE LIONEL (Bingkai Emas + Mahkota di /students) ===
+            [
+                'nama' => 'Archie Lionel',
+                'jabatan' => 'siswa',
+                'umur' => null,
+                'tanggal_lahir' => null,
+                'hobi' => null,
+                'skill' => null,
+                'quote' => null,
+                'foto' => null,
+            ],
+
+            // === CONTOH JABATAN PPTS & EX-PPTS (Ubah jabatan sesuai anggota yang dimaksud) ===
+            [
+                'nama' => 'Adianku',
+                'jabatan' => 'ppts',
+                'umur' => null,
+                'tanggal_lahir' => null,
+                'hobi' => null,
+                'skill' => null,
+                'quote' => null,
+                'foto' => null,
+            ],
+            [
+                'nama' => 'Ahmad Rafi',
+                'jabatan' => 'ex_ppts',
+                'umur' => null,
+                'tanggal_lahir' => null,
+                'hobi' => null,
+                'skill' => null,
+                'quote' => null,
+                'foto' => null,
+            ],
+
             // === DAFTAR SISWA XI RPL 1 (Detail dikosongkan dulu) ===
-            ['nama' => 'Adianku', 'jabatan' => 'siswa'],
-            ['nama' => 'Ahmad Rafi', 'jabatan' => 'siswa'],
             ['nama' => 'Amelia Yohana', 'jabatan' => 'siswa'],
             ['nama' => 'Anisha Putri Andriyani', 'jabatan' => 'siswa'],
             ['nama' => 'Azzahra Ramadana Putri Herawati', 'jabatan' => 'siswa'],
@@ -68,7 +100,6 @@ class StudentSeeder extends Seeder
             ['nama' => 'Febriansyah Frastiago', 'jabatan' => 'siswa'],
             ['nama' => 'Fiorenza Cira Amabel Haloho', 'jabatan' => 'siswa'],
             ['nama' => 'Muhammad Arya Azizan', 'jabatan' => 'siswa'],
-            ['nama' => 'Archie Lionel', 'jabatan' => 'siswa'],
             ['nama' => 'Gugun Gumalayan', 'jabatan' => 'siswa'],
             ['nama' => 'Gwen Adriano Sule', 'jabatan' => 'siswa'],
             ['nama' => 'Hazwan Adji Sasongko Iswat', 'jabatan' => 'siswa'],
