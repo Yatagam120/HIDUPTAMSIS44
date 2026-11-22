@@ -7,8 +7,19 @@
             'event'   => 'Event',
         ];
         $currentTab = $activeTab ?? request('tab', 'catatan');
+        if (!array_key_exists($currentTab, $tabs)) {
+            $currentTab = 'catatan';
+        }
         $notif = $notifColor ?? request('notif', '');
         $currentUserId = (int) auth()->id();
+        $subjectTitle = $subject->name ?? $subject->nama ?? $subject->title ?? 'Mata Pelajaran';
+        $teacherName = $subject->teacher ?? $subject->guru ?? null;
+        $safeItems = $items ?? collect();
+
+        $userIds = $safeItems->pluck('user_id')->filter()->unique()->values();
+        $usersMap = $userIds->isNotEmpty()
+            ? \App\Models\User::whereIn('id', $userIds)->pluck('name', 'id')
+            : collect();
     @endphp
 
     <div class="max-w-5xl mx-auto space-y-5">
@@ -30,24 +41,22 @@
             </div>
         @endif
 
-        <!-- Header Mapel -->
         <div class="theme-card rounded-2xl p-5 sm:p-7 border theme-border space-y-2">
             <span class="inline-block px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider theme-soft" style="color: var(--primary);">
-                {{ $subject->name }}
+                {{ $subjectTitle }}
             </span>
-            <h1 class="text-xl sm:text-3xl font-extrabold">{{ $subject->name }}</h1>
-            @if(!empty($subject->teacher))
-                <p class="text-xs opacity-75">Guru Pengampu: {{ $subject->teacher }}</p>
+            <h1 class="text-xl sm:text-3xl font-extrabold">{{ $subjectTitle }}</h1>
+            @if(!empty($teacherName))
+                <p class="text-xs opacity-75">Guru Pengampu: {{ $teacherName }}</p>
             @endif
         </div>
 
-        <!-- Bar Tab & Tombol Tambah -->
         <div class="flex flex-wrap items-center justify-between gap-3">
             <div class="flex flex-wrap items-center gap-2">
                 @foreach($tabs as $key => $label)
                     @php
                         $isActive = $currentTab === $key;
-                        $hasSourceNotif = $isActive && in_array($notif, ['yellow', 'red', 'blue']);
+                        $hasSourceNotif = $isActive && in_array($notif, ['yellow', 'red', 'blue'], true);
                     @endphp
                     <button type="button"
                             data-tab="{{ $key }}"
@@ -69,30 +78,38 @@
             </button>
         </div>
 
-        <!-- Daftar Post per Tab -->
         @foreach($tabs as $key => $label)
             @php
-                $tabItems = $items->where('type', $key);
+                $tabItems = $safeItems->filter(fn($it) => strtolower((string) ($it->type ?? '')) === $key);
             @endphp
             <div id="panel-{{ $key }}" class="subject-tab-panel space-y-4 {{ $currentTab === $key ? '' : 'hidden' }}">
                 @forelse($tabItems as $item)
                     @php
-                        $isOwner = $currentUserId > 0 && (int) $item->user_id === $currentUserId;
-                        $completedBy = is_array($item->completed_by)
+                        $itemOwnerId = (int) ($item->user_id ?? 0);
+                        $isOwner = $currentUserId > 0 && $itemOwnerId === $currentUserId;
+                        $authorName = $usersMap[$itemOwnerId] ?? 'Siswa';
+
+                        $completedBy = is_array($item->completed_by ?? null)
                             ? $item->completed_by
                             : (json_decode($item->completed_by ?? '[]', true) ?: []);
                         $isDoneByMe = in_array($currentUserId, array_map('intval', $completedBy), true);
 
                         $dueText = null;
+                        $dueFormattedInput = '';
                         $dueBadgeClass = '';
                         if (!empty($item->due_date)) {
-                            $due = \Carbon\Carbon::parse($item->due_date)->startOfDay();
-                            $diffDays = now()->startOfDay()->diffInDays($due, false);
-                            $dueText = $due->translatedFormat('d M Y');
-                            if ($diffDays < 0) {
-                                $dueBadgeClass = 'bg-red-500/20 text-red-300 border-red-500/40';
-                            } elseif ($diffDays <= 2) {
-                                $dueBadgeClass = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+                            try {
+                                $due = \Carbon\Carbon::parse($item->due_date)->startOfDay();
+                                $diffDays = now()->startOfDay()->diffInDays($due, false);
+                                $dueText = $due->translatedFormat('d M Y');
+                                $dueFormattedInput = $due->format('Y-m-d');
+                                if ($diffDays < 0) {
+                                    $dueBadgeClass = 'bg-red-500/20 text-red-300 border-red-500/40';
+                                } elseif ($diffDays <= 2) {
+                                    $dueBadgeClass = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+                                }
+                            } catch (\Throwable $e) {
+                                $dueText = (string) $item->due_date;
                             }
                         }
                     @endphp
@@ -101,7 +118,7 @@
                         <div class="flex flex-wrap items-start justify-between gap-2">
                             <div class="space-y-1">
                                 <div class="flex flex-wrap items-center gap-2">
-                                    <h2 class="text-sm sm:text-base font-extrabold uppercase">{{ $item->title }}</h2>
+                                    <h2 class="text-sm sm:text-base font-extrabold uppercase">{{ $item->title ?? 'Tanpa Judul' }}</h2>
                                     @if($dueBadgeClass && !$isDoneByMe)
                                         <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border {{ $dueBadgeClass }}">
                                             ⚠️ TENGGAT ({{ $dueText }})
@@ -109,28 +126,27 @@
                                     @endif
                                 </div>
                                 <div class="text-xs opacity-75">
-                                    Oleh <strong>{{ $item->user->name ?? 'Siswa' }}</strong>
+                                    Oleh <strong>{{ $authorName }}</strong>
                                     @if($dueText)
                                         • Tenggat: <strong>{{ $dueText }}</strong>
                                     @endif
                                 </div>
                             </div>
 
-                            <!-- Hanya pembuat post yang bisa Edit & Hapus -->
                             @if($isOwner)
                                 <div class="flex items-center gap-3 text-xs font-extrabold">
                                     <button type="button"
                                             onclick='openEditItemModal(@json([
                                                 "id" => $item->id,
-                                                "title" => $item->title,
-                                                "description" => $item->description,
-                                                "due_date" => $item->due_date ? \Carbon\Carbon::parse($item->due_date)->format("Y-m-d") : ""
+                                                "title" => $item->title ?? "",
+                                                "description" => $item->description ?? "",
+                                                "due_date" => $dueFormattedInput
                                             ]))'
                                             class="text-indigo-400 hover:underline">
                                         Edit
                                     </button>
                                     <form method="POST"
-                                          action="{{ route('subjects.items.destroy', [$subject->id, $item->id]) }}"
+                                          action="{{ route('subject.items.destroy', [$subject->id, $item->id]) }}"
                                           onsubmit="return confirm('Hapus postingan ini?');">
                                         @csrf
                                         @method('DELETE')
@@ -146,7 +162,7 @@
                             <p class="text-xs sm:text-sm opacity-90 whitespace-pre-line">{{ $item->description }}</p>
                         @endif
 
-                        @if(in_array($key, ['tugas', 'pr']))
+                        @if(in_array($key, ['tugas', 'pr'], true))
                             <div class="pt-3 border-t theme-border flex items-center justify-between">
                                 <form method="POST" action="{{ route('items.toggle-complete', $item->id) }}">
                                     @csrf
@@ -175,7 +191,7 @@
                 <button type="button" onclick="closeNewItemModal()" class="px-2.5 py-1 rounded-lg text-xs font-bold border theme-border">✕</button>
             </div>
 
-            <form method="POST" action="{{ route('subjects.items.store', $subject->id) }}" class="space-y-3">
+            <form method="POST" action="{{ route('subject.items.store', $subject->id) }}" class="space-y-3">
                 @csrf
                 <input type="hidden" id="new-item-type" name="type" value="{{ $currentTab }}">
 
@@ -202,7 +218,7 @@
         </div>
     </div>
 
-    <!-- Modal Edit Post (Hanya Pembuat Post) -->
+    <!-- Modal Edit Post -->
     <div id="edit-item-modal" class="fixed inset-0 z-[9995] hidden items-center justify-center bg-black/65 p-4">
         <div class="theme-card rounded-2xl border theme-border shadow-2xl max-w-md w-full p-5 space-y-4">
             <div class="flex items-center justify-between">

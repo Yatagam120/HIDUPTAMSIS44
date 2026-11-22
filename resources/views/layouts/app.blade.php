@@ -397,80 +397,19 @@
             box-shadow: 0 0 8px #10b981;
         }
 
-        /* =========================================================
-           KHUSUS TABLET & MOBILE (<= 1024px): RUANG LEGA & SINGKAT MAPEL
-           ========================================================= */
-        @media (max-width: 1024px) {
-            .filter-bar-mobile-grid {
-                display: grid !important;
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 6px !important;
-                width: 100% !important;
-            }
-            .filter-bar-mobile-grid button,
-            .filter-bar-mobile-grid a {
-                width: 100% !important;
-                justify-content: center !important;
-                padding: 6px 8px !important;
-                font-size: 11px !important;
-                border-radius: 10px !important;
-                margin: 0 !important;
-            }
-
-            .timetable-wrap-scroll {
-                overflow-x: hidden !important;
-                width: 100% !important;
-            }
-            .timetable-grid {
-                width: 100% !important;
-                min-width: 0 !important;
-                max-width: 100% !important;
-                table-layout: fixed !important;
-                border-collapse: separate !important;
-                border-spacing: 2px !important;
-            }
-            .timetable-grid th,
-            .timetable-grid td {
-                font-size: 7.5px !important;
-                padding: 2px 1px !important;
-                line-height: 1.15 !important;
-                vertical-align: middle !important;
-                overflow: hidden !important;
-            }
-            .timetable-grid th:first-child,
-            .timetable-grid td:first-child {
-                width: 38px !important;
-                font-size: 7.5px !important;
-                text-align: center !important;
-            }
+        /* Koreksi khusus Desktop: agar "Ketamansiswaan" tidak terpotong huruf n di ujung */
+        @media (min-width: 1025px) {
             .timetable-grid a,
             .timetable-grid .subject-box {
-                position: relative !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                justify-content: center !important;
-                text-align: center !important;
-                width: 100% !important;
-                min-height: 40px !important;
-                padding: 12px 2px 3px 2px !important;
-                border-radius: 6px !important;
-                font-size: 8px !important;
-                font-weight: 800 !important;
-                line-height: 1.1 !important;
-                letter-spacing: 0.02em;
-                white-space: nowrap !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
-            }
-            .timetable-grid a span.rounded-full,
-            .timetable-grid .subject-box span.rounded-full {
-                width: 7px !important;
-                height: 7px !important;
-                top: 2px !important;
+                padding-left: 4px !important;
+                padding-right: 4px !important;
+                overflow: visible !important;
             }
         }
 
+        /* =========================================================
+           KHUSUS MOBILE (<= 640px): SAMA DENGAN JADWAL ASLI & RAPI
+           ========================================================= */
         @media (max-width: 640px) {
             nav.main-tamsis-nav > div {
                 padding: 0.4rem 0.45rem !important;
@@ -503,20 +442,75 @@
                 grid-template-columns: 1fr !important;
                 gap: 0.45rem !important;
             }
+
+            .filter-bar-mobile-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 6px !important;
+                width: 100% !important;
+            }
+            .filter-bar-mobile-grid button,
+            .filter-bar-mobile-grid a {
+                width: 100% !important;
+                justify-content: center !important;
+                padding: 6px 8px !important;
+                font-size: 11px !important;
+                border-radius: 10px !important;
+                margin: 0 !important;
+            }
+
+            .timetable-wrap-scroll {
+                overflow-x: hidden !important;
+                width: 100% !important;
+            }
+            .timetable-grid {
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                table-layout: fixed !important;
+                border-collapse: separate !important;
+                border-spacing: 2px !important;
+            }
             .timetable-grid th,
             .timetable-grid td {
                 font-size: 6.5px !important;
                 padding: 1.5px 1px !important;
+                line-height: 1.12 !important;
+                vertical-align: middle !important;
+                overflow: hidden !important;
             }
             .timetable-grid th:first-child,
             .timetable-grid td:first-child {
                 width: 32px !important;
                 font-size: 6.5px !important;
+                text-align: center !important;
             }
             .timetable-grid a,
             .timetable-grid .subject-box {
+                position: relative !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                width: 100% !important;
                 min-height: 38px !important;
-                font-size: 7px !important;
+                padding: 10px 2px 3px 2px !important;
+                border-radius: 6px !important;
+                font-size: 6.8px !important;
+                font-weight: 800 !important;
+                line-height: 1.1 !important;
+                letter-spacing: -0.01em;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: clip !important;
+            }
+            .timetable-grid a span.rounded-full,
+            .timetable-grid .subject-box span.rounded-full {
+                width: 6px !important;
+                height: 6px !important;
+                top: 2px !important;
+                z-index: 2 !important;
             }
         }
     </style>
@@ -652,27 +646,30 @@
         }
         applySavedAppearance();
 
-        function abbreviateSubjectLabel(rawText) {
+        // Singkatan mapel khusus MOBILE (<= 640px) agar persis seperti jadwal asli; DESKTOP tidak disentuh
+        function abbreviateMobileSubject(rawText) {
             const cleaned = rawText.replace(/\s+/g, ' ').trim();
-            if (!cleaned || cleaned.length <= 5) return cleaned;
+            if (!cleaned) return cleaned;
 
             const lower = cleaned.toLowerCase();
             const mapelDict = [
-                ['pemrograman lanjut', 'PML'],
-                ['pendidikan pancasila', 'PPKN'],
+                ['muatan bahasa jepang', 'MBJ(J)'],
+                ['bahasa jepang', 'MBJ(J)'],
+                ['pendidikan pancasila', 'PP'],
+                ['bahasa inggris', 'B.Ing'],
                 ['bimbingan konseling', 'BK'],
-                ['bahasa indonesia', 'B.IND'],
-                ['bahasa inggris', 'B.ING'],
-                ['muatan bahasa jepang', 'JEPANG'],
-                ['bahasa jepang', 'JEPANG'],
-                ['pendidikan jasmani', 'PJOK'],
+                ['bahasa indonesia', 'BI'],
+                ['matematika', 'MTK'],
                 ['kreativitas & desain interaktif', 'KDI'],
                 ['kreativitas dan desain interaktif', 'KDI'],
+                ['pendidikan jasmani', 'Penjas'],
+                ['ketamansiswaan', 'KTS'],
+                ['samsung institute tech', 'STI'],
                 ['sistem teknologi informasi', 'STI'],
-                ['sejarah indonesia', 'SEJ'],
-                ['kewirausahaan', 'KWU'],
+                ['pemrograman lanjut', 'PL(RPL1)'],
+                ['sejarah indonesia', 'SI'],
+                ['kewirausahaan', 'KWH'],
                 ['pendidikan agama islam', 'PAI'],
-                ['matematika', 'MTK'],
             ];
 
             for (const [key, abbr] of mapelDict) {
@@ -681,19 +678,11 @@
                 }
             }
 
-            const words = cleaned
-                .replace(/[()]/g, ' ')
-                .split(/\s+/)
-                .filter(w => w.length > 0 && !['dan', '&', 'rpl', '1', 'xi'].includes(w.toLowerCase()));
-
-            if (words.length >= 2) {
-                return words.slice(0, 3).map(w => w[0].toUpperCase()).join('');
-            }
-            return cleaned.slice(0, 4).toUpperCase();
+            return cleaned.length > 6 ? cleaned.slice(0, 5).toUpperCase() : cleaned;
         }
 
-        function shortenSubjectsForMobileAndTablet() {
-            if (window.innerWidth > 1024) return;
+        function shortenSubjectsForMobile() {
+            if (window.innerWidth > 640) return;
 
             document.querySelectorAll('table.timetable-grid a, table.timetable-grid .subject-box').forEach(box => {
                 const badges = Array.from(box.querySelectorAll('span.rounded-full'));
@@ -707,9 +696,11 @@
                 }
                 if (textNodes.length === 0) return;
 
-                const fullLabel = textNodes.map(t => t.nodeValue.trim()).join(' ');
-                const shortCode = abbreviateSubjectLabel(fullLabel);
+                if (!box.dataset.fullLabel) {
+                    box.dataset.fullLabel = textNodes.map(t => t.nodeValue.trim()).join(' ');
+                }
 
+                const shortCode = abbreviateMobileSubject(box.dataset.fullLabel);
                 textNodes.forEach((t, idx) => {
                     t.nodeValue = idx === 0 ? shortCode : '';
                 });
@@ -738,7 +729,7 @@
                 container.classList.add('filter-bar-mobile-grid');
             }
 
-            shortenSubjectsForMobileAndTablet();
+            shortenSubjectsForMobile();
         }
 
         function renderOnlineMemberPill() {
@@ -972,7 +963,7 @@
             });
 
             applyPhraseTranslation(lang);
-            shortenSubjectsForMobileAndTablet();
+            shortenSubjectsForMobile();
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -983,7 +974,7 @@
         });
 
         window.addEventListener('resize', () => {
-            shortenSubjectsForMobileAndTablet();
+            shortenSubjectsForMobile();
         });
     </script>
 </body>
