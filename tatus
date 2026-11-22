@@ -1,0 +1,19 @@
+[33mcommit fa2cf65bfbcf4faec1bebba60380b1a431690a83[m[33m ([m[1;36mHEAD -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m
+Author: Somekidthatactuallyannoying42 <archie.newnormal@gmail.com>
+Date:   Sun Nov 22 23:05:17 2026 +0700
+
+    Move subject views to resources/views/subjects for subjects.show route
+
+ resources/views/subject/show.blade.php             | 323 [31m---------------------[m
+ .../views/{subject => subjects}/edit.blade.php     |   0
+ .../views/{subject => subjects}/tasks.blade.php    |   0
+ 3 files changed, 323 deletions(-)
+
+[33mcommit b066b2c096dd69eda7a26f6fac138a5f1bc9e4fd[m
+Author: Somekidthatactuallyannoying42 <archie.newnormal@gmail.com>
+Date:   Sun Nov 22 23:03:43 2026 +0700
+
+    Add subjects.show blade view
+
+ resources/views/subjects/show.blade.php | 327 [32m++++++++++++++++++++++++++++++++[m
+ 1 file changed, 327 insertions(+)
