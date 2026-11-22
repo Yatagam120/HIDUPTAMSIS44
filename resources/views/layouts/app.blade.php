@@ -455,8 +455,27 @@
             }
         }
     </style>
+
+    <!-- Mode Hemat Performa (Saat Toggle Animasi Dimatikan) -->
+    <style id="tamsis-anim-toggle-css">
+        body[data-anim="off"] *,
+        body[data-anim="off"] *::before,
+        body[data-anim="off"] *::after {
+            animation: none !important;
+            transition: none !important;
+            scroll-behavior: auto !important;
+        }
+        body[data-anim="off"] .theme-card,
+        body[data-anim="off"] nav.main-tamsis-nav {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+        }
+        body[data-anim="off"] #tamsis-splash {
+            display: none !important;
+        }
+    </style>
 </head>
-<body class="antialiased" data-theme="academic-trust" data-font="sans">
+<body class="antialiased" data-theme="academic-trust" data-font="sans" data-anim="on">
 
     <!-- Splash Screen Kilat -->
     <div id="tamsis-splash">
@@ -478,8 +497,9 @@
         </div>
     </div>
     <script>
-        if (sessionStorage.getItem('tamsis_booted')) {
-            document.getElementById('tamsis-splash').style.display = 'none';
+        if (sessionStorage.getItem('tamsis_booted') || localStorage.getItem('app_anim') === 'off') {
+            const sp = document.getElementById('tamsis-splash');
+            if (sp) sp.style.display = 'none';
         }
     </script>
 
@@ -548,8 +568,10 @@
         function applySavedAppearance() {
             const savedTheme = localStorage.getItem('app_theme') || 'academic-trust';
             const savedFont  = localStorage.getItem('app_font') || 'sans';
+            const savedAnim  = localStorage.getItem('app_anim') || 'on';
             document.body.setAttribute('data-theme', savedTheme);
             document.body.setAttribute('data-font', savedFont);
+            document.body.setAttribute('data-anim', savedAnim);
         }
         applySavedAppearance();
 
@@ -609,7 +631,7 @@
                 day_kamis: 'Kamis',
                 day_jumat: 'Jumat',
                 settings_title: 'Pengaturan Tampilan',
-                settings_sub: 'Sesuaikan tema gradien warna, gaya huruf, suara efek, dan bahasa aplikasi.',
+                settings_sub: 'Sesuaikan tema gradien warna, gaya huruf, suara efek, animasi, dan bahasa aplikasi.',
                 dark_theme_label: 'Tema Gelap (Gradien)',
                 light_theme_label: 'Tema Terang (Gradien)',
                 font_style_label: 'Gaya Huruf',
@@ -617,6 +639,9 @@
                 sfx_label: 'Efek Suara (SFX)',
                 sfx_on: 'Aktif',
                 sfx_off: 'Senyap',
+                anim_label: 'Animasi & Efek Visual',
+                anim_on: 'Aktif',
+                anim_off: 'Mati (Ringan)',
                 easter_title: 'Kode Unik (Easter Egg) 🎁',
                 easter_sub: 'Punya kode rahasia kelas XI RPL 1? Masukkan di sini untuk membuka fitur tersembunyi!',
                 klaim_btn: 'Klaim',
@@ -625,7 +650,7 @@
                 rating_label: 'Rating Web (0.0 – 5.0 Bintang)',
                 rating_hint: 'Geser slider atau ketik angka desimal seperti 4.5, 3.4, atau 5.0.',
                 komentar_label: 'Komentar / Saran / Detail Bug',
-                lampiran_bug_label: 'Lampiran Foto / Video Bug (Opsional)',
+                lampiran_bug_label: 'Lampiran Foto / Video Bug (Bisa Lebih Dari 1 File)',
                 kirim_saran_btn: 'Kirim Saran ke Admin',
                 ap_title: 'Admin Panel (AP)',
                 ap_sub: 'Kelola persetujuan akun, role pengguna, dan tinjau kritik dari kelas XI RPL 1.',
@@ -652,7 +677,7 @@
                 day_kamis: 'Thursday',
                 day_jumat: 'Friday',
                 settings_title: 'Display Settings',
-                settings_sub: 'Customize color gradient themes, font styles, sound effects, and app language.',
+                settings_sub: 'Customize color gradient themes, font styles, sound effects, animations, and app language.',
                 dark_theme_label: 'Dark Theme (Gradient)',
                 light_theme_label: 'Light Theme (Gradient)',
                 font_style_label: 'Font Style',
@@ -660,6 +685,9 @@
                 sfx_label: 'Sound Effects (SFX)',
                 sfx_on: 'Active',
                 sfx_off: 'Muted',
+                anim_label: 'Animations & Visual Effects',
+                anim_on: 'On',
+                anim_off: 'Off (Lite)',
                 easter_title: 'Unique Code (Easter Egg) 🎁',
                 easter_sub: 'Have a secret XI RPL 1 class code? Enter it here to unlock hidden features!',
                 klaim_btn: 'Claim',
@@ -668,7 +696,7 @@
                 rating_label: 'Web Rating (0.0 – 5.0 Stars)',
                 rating_hint: 'Drag the slider or enter a decimal value such as 4.5, 3.4, or 5.0.',
                 komentar_label: 'Comment / Suggestion / Bug Details',
-                lampiran_bug_label: 'Bug Photo / Video Attachment (Optional)',
+                lampiran_bug_label: 'Bug Photo / Video Attachment (Multiple Files Supported)',
                 kirim_saran_btn: 'Submit Feedback to Admin',
                 ap_title: 'Admin Panel (AP)',
                 ap_sub: 'Manage account approvals, user roles, and review class feedback.',
@@ -695,7 +723,7 @@
                 day_kamis: '木曜日',
                 day_jumat: '金曜日',
                 settings_title: '表示設定',
-                settings_sub: 'カラーグラデーションテーマ、フォント、効果音、言語をカスタマイズします。',
+                settings_sub: 'カラーグラデーションテーマ、フォント、効果音、アニメーション、言語をカスタマイズします。',
                 dark_theme_label: 'ダークテーマ（グラデーション）',
                 light_theme_label: 'ライトテーマ（グラデーション）',
                 font_style_label: 'フォントスタイル',
@@ -703,6 +731,9 @@
                 sfx_label: '効果音 (SFX)',
                 sfx_on: 'オン',
                 sfx_off: 'ミュート',
+                anim_label: 'アニメーション・視覚効果',
+                anim_on: 'オン',
+                anim_off: 'オフ（軽量）',
                 easter_title: 'ユニークコード (Easter Egg) 🎁',
                 easter_sub: 'XI RPL 1 の秘密コードをお持ちですか？入力して隠し機能を解放しましょう！',
                 klaim_btn: '引き換え',
@@ -711,7 +742,7 @@
                 rating_label: 'ウェブ評価（0.0 ～ 5.0 星）',
                 rating_hint: 'スライダーを動かすか、4.5・3.4・5.0などの数値を直接入力してください。',
                 komentar_label: 'コメント / ご提案 / バグの詳細',
-                lampiran_bug_label: 'バグの写真・動画添付（任意）',
+                lampiran_bug_label: 'バグの写真・動画添付（複数可）',
                 kirim_saran_btn: '管理者に送信する',
                 ap_title: '管理パネル (AP)',
                 ap_sub: 'アカウント承認、ユーザー権限、クラスからのご意見を管理します。',
@@ -738,7 +769,7 @@
                 day_kamis: 'Четверг',
                 day_jumat: 'Пятница',
                 settings_title: 'Настройки отображения',
-                settings_sub: 'Настройте цветовые градиенты, стиль шрифта, звуковые эффекты и язык.',
+                settings_sub: 'Настройте цветовые градиенты, стиль шрифта, звуковые эффекты, анимацию и язык.',
                 dark_theme_label: 'Тёмная тема (Градиент)',
                 light_theme_label: 'Светлая тема (Градиент)',
                 font_style_label: 'Стиль шрифта',
@@ -746,6 +777,9 @@
                 sfx_label: 'Звуковые эффекты (SFX)',
                 sfx_on: 'Включено',
                 sfx_off: 'Без звука',
+                anim_label: 'Анимация и визуальные эффекты',
+                anim_on: 'Вкл',
+                anim_off: 'Выкл (Лёгкий)',
                 easter_title: 'Уникальный код (Easter Egg) 🎁',
                 easter_sub: 'Есть секретный код класса XI RPL 1? Введите его здесь, чтобы открыть скрытые функции!',
                 klaim_btn: 'Активировать',
@@ -754,7 +788,7 @@
                 rating_label: 'Оценка сайта (0.0 – 5.0 звёзд)',
                 rating_hint: 'Передвиньте ползунок или введите число, например 4.5, 3.4 или 5.0.',
                 komentar_label: 'Комментарий / Предложение / Описание бага',
-                lampiran_bug_label: 'Фото или видео бага (необязательно)',
+                lampiran_bug_label: 'Фото или видео бага (можно несколько)',
                 kirim_saran_btn: 'Отправить администратору',
                 ap_title: 'Админ-панель (AP)',
                 ap_sub: 'Управление подтверждением аккаунтов, ролями и отзывами класса XI RPL 1.',

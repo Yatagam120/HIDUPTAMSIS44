@@ -6,6 +6,8 @@ use App\Models\Feedback;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class AdminUserController extends Controller
 {
@@ -44,19 +46,28 @@ class AdminUserController extends Controller
     {
         $this->ensureAdmin();
 
-        $request->validate([
+        $validated = $request->validate([
             'role' => ['required', 'in:admin,guru,ketua_kelas,wakil_ketua,murid'],
         ]);
 
-        if ((int) $user->id === (int) Auth::id() && $request->role !== 'admin') {
+        if ((int) $user->id === (int) Auth::id() && $validated['role'] !== 'admin') {
             return redirect()->route('admin.users')->with('error', 'Anda tidak dapat menurunkan role Admin milik Anda sendiri.');
         }
 
-        $user->role = $request->role;
-        $user->is_approved = true;
-        $user->save();
+        try {
+            // Pastikan tipe kolom role di MySQL mendukung seluruh nilai role
+            if (DB::getDriverName() === 'mysql' && Schema::hasColumn('users', 'role')) {
+                DB::statement("ALTER TABLE `users` MODIFY COLUMN `role` VARCHAR(50) NOT NULL DEFAULT 'murid'");
+            }
 
-        return redirect()->route('admin.users')->with('success', "Role {$user->name} berhasil diubah menjadi " . strtoupper(str_replace('_', ' ', $request->role)) . ".");
+            $user->role = $validated['role'];
+            $user->is_approved = true;
+            $user->save();
+
+            return redirect()->route('admin.users')->with('success', "Role {$user->name} berhasil diubah menjadi " . strtoupper(str_replace('_', ' ', $validated['role'])) . ".");
+        } catch (\Throwable $e) {
+            return redirect()->route('admin.users')->with('error', 'Gagal mengubah role: ' . $e->getMessage());
+        }
     }
 
     public function destroy(User $user)

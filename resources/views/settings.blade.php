@@ -53,7 +53,7 @@
         <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-8 border theme-border space-y-5">
             <div>
                 <h1 class="text-lg sm:text-2xl font-extrabold" data-i18n="settings_title">Pengaturan Tampilan</h1>
-                <p class="text-xs sm:text-sm opacity-75 mt-0.5" data-i18n="settings_sub">Sesuaikan tema gradien warna, gaya huruf, suara efek, dan bahasa aplikasi.</p>
+                <p class="text-xs sm:text-sm opacity-75 mt-0.5" data-i18n="settings_sub">Sesuaikan tema gradien warna, gaya huruf, suara efek, animasi, dan bahasa aplikasi.</p>
             </div>
 
             <!-- Tema Gelap (Gradien) -->
@@ -138,18 +138,34 @@
                 </div>
             </div>
 
-            <!-- Efek Suara (SFX) -->
-            <div>
-                <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2" data-i18n="sfx_label">Efek Suara (SFX)</h2>
-                <div class="grid grid-cols-2 gap-2.5">
-                    <button type="button" onclick="selectSfx('active')" data-sfx-btn="active"
-                            class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
-                        🔊 <span data-i18n="sfx_on">Aktif</span>
-                    </button>
-                    <button type="button" onclick="selectSfx('muted')" data-sfx-btn="muted"
-                            class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
-                        🔇 <span data-i18n="sfx_off">Senyap</span>
-                    </button>
+            <!-- Efek Suara (SFX) & Animasi Performa -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2" data-i18n="sfx_label">Efek Suara (SFX)</h2>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <button type="button" onclick="selectSfx('active')" data-sfx-btn="active"
+                                class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
+                            🔊 <span data-i18n="sfx_on">Aktif</span>
+                        </button>
+                        <button type="button" onclick="selectSfx('muted')" data-sfx-btn="muted"
+                                class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
+                            🔇 <span data-i18n="sfx_off">Senyap</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2" data-i18n="anim_label">Animasi & Efek Visual</h2>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <button type="button" onclick="selectAnim('on')" data-anim-btn="on"
+                                class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
+                            ✨ <span data-i18n="anim_on">Aktif</span>
+                        </button>
+                        <button type="button" onclick="selectAnim('off')" data-anim-btn="off"
+                                class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
+                            ⚡ <span data-i18n="anim_off">Mati (Ringan)</span>
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -238,7 +254,6 @@
     </div>
 
     <script>
-        // Akumulasi Multi-File untuk Form Saran (Bisa tambah berkali-kali & hapus satuan)
         const feedbackDataTransfer = new DataTransfer();
         const fbMediaInput = document.getElementById('feedback-media-input');
 
@@ -292,11 +307,13 @@
             const curFont  = localStorage.getItem('app_font') || 'sans';
             const curLang  = localStorage.getItem('app_lang') || 'id';
             const curSfx   = localStorage.getItem('app_sfx') || 'active';
+            const curAnim  = localStorage.getItem('app_anim') || 'on';
 
             document.querySelectorAll('[data-theme-btn]').forEach(b => b.classList.toggle('active-pill', b.dataset.themeBtn === curTheme));
             document.querySelectorAll('[data-font-btn]').forEach(b => b.classList.toggle('active-pill', b.dataset.fontBtn === curFont));
             document.querySelectorAll('[data-lang-btn]').forEach(b => b.classList.toggle('active-pill', b.dataset.langBtn === curLang));
             document.querySelectorAll('[data-sfx-btn]').forEach(b => b.classList.toggle('active-pill', b.dataset.sfxBtn === curSfx));
+            document.querySelectorAll('[data-anim-btn]').forEach(b => b.classList.toggle('active-pill', b.dataset.animBtn === curAnim));
         }
 
         function selectTheme(theme) {
@@ -322,6 +339,13 @@
         function selectSfx(mode) {
             localStorage.setItem('app_sfx', mode);
             if (mode === 'active') playSfx('enter');
+            refreshActivePills();
+        }
+
+        function selectAnim(mode) {
+            localStorage.setItem('app_anim', mode);
+            document.body.setAttribute('data-anim', mode);
+            playSfx('click');
             refreshActivePills();
         }
 
