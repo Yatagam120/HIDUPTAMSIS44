@@ -47,7 +47,7 @@ class StudentSeeder extends Seeder
             // === ARCHIE LIONEL (Bingkai Emas + Mahkota di /students) ===
             ['nama' => 'Archie Lionel', 'jabatan' => 'siswa'],
 
-            // === CONTOH ROLE PPTS & EX-PPTS ===
+            // === ROLE PPTS & EX-PPTS (Sesuaikan nama anggota PPTS/Ex-PPTS di kelas) ===
             ['nama' => 'Adianku', 'jabatan' => 'ppts'],
             ['nama' => 'Ahmad Rafi', 'jabatan' => 'ex_ppts'],
 

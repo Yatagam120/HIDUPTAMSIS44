@@ -1,25 +1,36 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace App\Models;
 
-return new class extends Migration
+use Illuminate\Database\Eloquent\Model;
+
+class Subject extends Model
 {
-    public function up(): void
+    protected $guarded = [];
+
+    public function schedules()
     {
-        if (!Schema::hasTable('subjects')) {
-            Schema::create('subjects', function (Blueprint $table) {
-                $table->id();
-                $table->string('kode_mapel')->nullable();
-                $table->string('nama_mapel');
-                $table->timestamps();
-            });
-        }
+        return $this->hasMany(Schedule::class);
     }
 
-    public function down(): void
+    public function posts()
     {
-        Schema::dropIfExists('subjects');
+        return $this->hasMany(SubjectPost::class);
     }
-};
+
+    public function getKodeMapelAttribute($value)
+    {
+        return $value
+            ?? ($this->attributes['kode']
+            ?? ($this->attributes['code']
+            ?? ($this->attributes['singkatan'] ?? 'MAPEL')));
+    }
+
+    public function getNamaMapelAttribute($value)
+    {
+        return $value
+            ?? ($this->attributes['nama']
+            ?? ($this->attributes['name']
+            ?? ($this->attributes['judul'] ?? '-')));
+    }
+}

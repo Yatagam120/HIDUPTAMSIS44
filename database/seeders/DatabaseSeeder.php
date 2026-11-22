@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Deteksi Kolom Tabel 'subjects'
+        // 2. Deteksi Kolom Tabel 'subjects' & Isi Mapel
         $cols = Schema::getColumnListing('subjects');
         $kodeCol = collect(['kode_mapel', 'kode', 'code', 'singkatan'])->first(fn ($c) => in_array($c, $cols));
         $namaCol = collect(['nama_mapel', 'nama', 'name', 'judul', 'title'])->first(fn ($c) => in_array($c, $cols));
