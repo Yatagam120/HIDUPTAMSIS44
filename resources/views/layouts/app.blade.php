@@ -139,25 +139,53 @@
             border-color: var(--border-color);
         }
 
-        /* Gaya Grafik: Minimalist (Style Kantoran) */
-        body[data-graphic="minimalist"] .theme-card {
-            backdrop-filter: none !important;
-            border-radius: 10px !important;
-            box-shadow: 0 1px 3px rgba(15, 23, 42, 0.14) !important;
-            border-width: 1px !important;
+        /* =========================================================
+           3 STYLE GRAFIK UI (HEADER, BUTTON, CARD & ELEMEN WEB)
+           ========================================================= */
+
+        /* 1. LEGACY: Gaya UI bawaan saat ini */
+        body[data-graphic="legacy"] nav.main-tamsis-nav {
+            border-radius: 0;
+        }
+
+        /* 2. MINIMALIST: Style kantoran (tegas, bersih, terstruktur) */
+        body[data-graphic="minimalist"] {
+            --bg-gradient: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+        }
+        body[data-graphic="minimalist"][data-theme="teal-growth"],
+        body[data-graphic="minimalist"][data-theme="creative-spark"],
+        body[data-graphic="minimalist"][data-theme="lavender-dream"],
+        body[data-graphic="minimalist"][data-theme="soft-berry"],
+        body[data-graphic="minimalist"][data-theme="morning-assembly"] {
+            --bg-gradient: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
         }
         body[data-graphic="minimalist"] nav.main-tamsis-nav {
             backdrop-filter: none !important;
-            box-shadow: 0 1px 4px rgba(15, 23, 42, 0.18) !important;
+            box-shadow: none !important;
+            border-bottom: 1.5px solid var(--border-color) !important;
         }
-        body[data-graphic="minimalist"] .nav-btn-anim,
+        body[data-graphic="minimalist"] .theme-card {
+            backdrop-filter: none !important;
+            border-radius: 6px !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14) !important;
+            border: 1px solid var(--border-color) !important;
+        }
         body[data-graphic="minimalist"] button,
-        body[data-graphic="minimalist"] a.rounded-xl,
-        body[data-graphic="minimalist"] a.rounded-lg {
-            border-radius: 8px !important;
+        body[data-graphic="minimalist"] .nav-btn-anim,
+        body[data-graphic="minimalist"] .j-filter-btn,
+        body[data-graphic="minimalist"] .setting-pill {
+            border-radius: 6px !important;
+            box-shadow: none !important;
+            font-weight: 700 !important;
+        }
+        body[data-graphic="minimalist"] .theme-primary {
+            box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2) !important;
         }
 
-        /* Gaya Grafik: Simple (Otomatis Matikan Animasi UI) */
+        /* 3. STYLE SIMPLE: Polos, ringan & otomatis mematikan animasi UI */
+        body[data-graphic="simple"] {
+            --bg-gradient: var(--bg-card);
+        }
         body[data-graphic="simple"],
         body[data-graphic="simple"] *,
         body[data-graphic="simple"] *::before,
@@ -165,17 +193,30 @@
             animation: none !important;
             transition: none !important;
         }
-        body[data-graphic="simple"] .theme-card,
         body[data-graphic="simple"] nav.main-tamsis-nav {
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
+            box-shadow: none !important;
+            border-bottom: 1px solid var(--border-color) !important;
+        }
+        body[data-graphic="simple"] .theme-card {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
+            box-shadow: none !important;
+            border-radius: 8px !important;
+        }
+        body[data-graphic="simple"] button,
+        body[data-graphic="simple"] .nav-btn-anim,
+        body[data-graphic="simple"] .j-filter-btn,
+        body[data-graphic="simple"] .setting-pill {
+            border-radius: 8px !important;
             box-shadow: none !important;
         }
         body[data-graphic="simple"] #tamsis-splash {
             display: none !important;
         }
 
-        /* Mode Hemat Performa (Saat Toggle Animasi Dimatikan di Legacy / Minimalist) */
+        /* Toggle Animasi (Aktif / Mati) */
         body[data-anim="off"] *,
         body[data-anim="off"] *::before,
         body[data-anim="off"] *::after {
@@ -336,9 +377,9 @@
                 flex-shrink: 0;
             }
             main.page-animate-in {
-                padding-left: 0.55rem !important;
-                padding-right: 0.55rem !important;
-                padding-top: 0.75rem !important;
+                padding-left: 0.65rem !important;
+                padding-right: 0.65rem !important;
+                padding-top: 0.8rem !important;
             }
             .grid-5-cols,
             .grid-4-cols {
@@ -349,25 +390,74 @@
                 grid-template-columns: 1fr !important;
                 gap: 0.5rem !important;
             }
-            /* Jadwal di HP pas dalam layar tanpa scroll kiri-kanan */
-            .timetable-grid {
+
+            /* Jadwal HP rapi berbentuk kartu vertikal, tidak scroll samping & tidak pecah huruf */
+            .timetable-wrap-scroll {
+                overflow-x: visible !important;
+                width: 100% !important;
+            }
+            .timetable-grid.mobile-cards-mode {
+                display: block !important;
                 width: 100% !important;
                 min-width: 0 !important;
-                table-layout: fixed !important;
+                table-layout: auto !important;
             }
-            .timetable-grid tbody tr {
-                height: 50px !important;
+            .timetable-grid.mobile-cards-mode thead {
+                display: none !important;
             }
-            .timetable-grid th,
-            .timetable-grid td {
-                font-size: 8px !important;
-                padding: 2px 1.5px !important;
-                line-height: 1.1 !important;
-                word-break: break-word;
+            .timetable-grid.mobile-cards-mode tbody {
+                display: flex !important;
+                flex-direction: column !important;
+                gap: 10px !important;
+                width: 100% !important;
             }
-            table th, table td {
-                font-size: 9.5px !important;
-                padding: 4px !important;
+            .timetable-grid.mobile-cards-mode tbody tr {
+                display: flex !important;
+                flex-direction: column !important;
+                height: auto !important;
+                padding: 10px !important;
+                border-radius: 14px !important;
+                border: 1px solid var(--border-color) !important;
+                background: var(--bg-card) !important;
+                gap: 6px !important;
+            }
+            .timetable-grid.mobile-cards-mode tbody td {
+                display: block !important;
+                width: 100% !important;
+                height: auto !important;
+                padding: 0 !important;
+                border: none !important;
+                text-align: left !important;
+                font-size: 11px !important;
+                line-height: 1.35 !important;
+                word-break: normal !important;
+                overflow-wrap: break-word !important;
+            }
+            .timetable-grid.mobile-cards-mode tbody td:first-child {
+                font-size: 13px !important;
+                font-weight: 800 !important;
+                color: var(--primary) !important;
+                padding-bottom: 4px !important;
+                margin-bottom: 2px !important;
+                border-bottom: 1px solid var(--border-color) !important;
+            }
+            .timetable-grid.mobile-cards-mode a,
+            .timetable-grid.mobile-cards-mode .subject-box {
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                gap: 2px !important;
+                width: 100% !important;
+                padding: 8px 10px !important;
+                border-radius: 10px !important;
+                font-size: 11.5px !important;
+                line-height: 1.3 !important;
+                white-space: normal !important;
+                word-break: normal !important;
+            }
+            .timetable-grid.mobile-cards-mode a:hover,
+            .timetable-grid.mobile-cards-mode .subject-box:hover {
+                transform: none !important;
             }
         }
     </style>
@@ -465,6 +555,19 @@
             document.body.setAttribute('data-anim', savedAnim);
         }
         applySavedAppearance();
+
+        function initMobileTimetableLayout() {
+            document.querySelectorAll('table.timetable-grid, main table').forEach(tbl => {
+                if (tbl.closest('.overflow-x-auto')) {
+                    tbl.closest('.overflow-x-auto').classList.add('timetable-wrap-scroll');
+                }
+                if (tbl.querySelector('thead') && tbl.querySelectorAll('tbody tr').length >= 3) {
+                    tbl.classList.add('timetable-grid', 'mobile-cards-mode');
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', initMobileTimetableLayout);
+        window.addEventListener('resize', initMobileTimetableLayout);
 
         function hideTamsisSplash() {
             sessionStorage.setItem('tamsis_booted', '1');

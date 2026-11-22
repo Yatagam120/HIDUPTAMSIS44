@@ -12,7 +12,6 @@
             </div>
         @endif
 
-        <!-- Header Admin Panel -->
         <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-6 border theme-border">
             <h1 class="text-lg sm:text-2xl font-extrabold" data-i18n="ap_title">Admin Panel (AP)</h1>
             <p class="text-xs sm:text-sm opacity-75 mt-0.5" data-i18n="ap_sub">Kelola persetujuan akun, role pengguna, izin bingkai siswa, dan tinjau kritik dari kelas XI RPL 1.</p>
@@ -56,7 +55,7 @@
             @endforelse
         </div>
 
-        <!-- Tabel Manajemen Akun & Role -->
+        <!-- Manajemen Akun Pengguna -->
         <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-6 border theme-border space-y-4">
             <h2 class="text-base sm:text-lg font-extrabold">👥 Manajemen Akun Pengguna</h2>
 
@@ -128,7 +127,7 @@
             </div>
         </div>
 
-        <!-- Bagian Kritik & Laporan Bug -->
+        <!-- Kritik & Laporan Bug -->
         @php
             $avgRating = ($feedbacks && $feedbacks->count() > 0) ? number_format((float) $feedbacks->avg('rating'), 1) : '0.0';
         @endphp

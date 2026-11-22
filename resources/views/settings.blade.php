@@ -49,7 +49,6 @@
             </div>
         @endif
 
-        <!-- Panel Pengaturan Tampilan Lengkap -->
         <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-8 border theme-border space-y-5">
             <div>
                 <h1 class="text-lg sm:text-2xl font-extrabold" data-i18n="settings_title">Pengaturan Tampilan</h1>
@@ -96,11 +95,11 @@
                 </div>
             </div>
 
-            <!-- Section Grafik (3 Gaya + Toggle Animasi di Legacy & Minimalist) -->
+            <!-- Section Grafik (3 Style UI: Legacy, Minimalist, Style Simple + Toggle Animasi) -->
             <div class="space-y-3 pt-2 border-t border-gray-200/20">
                 <div>
                     <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85">📊 Grafik</h2>
-                    <p class="text-[11px] opacity-75 mt-0.5">Pilih <b>Legacy</b> (UI saat ini), <b>Minimalist</b> (style kantoran), atau <b>Style Simple</b> (otomatis mematikan animasi UI).</p>
+                    <p class="text-[11px] opacity-75 mt-0.5">Style untuk header, button, dan panel web: <b>Legacy</b> (UI style sekarang), <b>Minimalist</b> (style kantoran), atau <b>Style Simple</b> (otomatis mematikan animasi UI).</p>
                 </div>
 
                 <div class="grid-3-cols">
@@ -125,8 +124,8 @@
 
                 <div id="graphic-anim-control" class="p-3.5 rounded-2xl border theme-border theme-soft flex flex-wrap items-center justify-between gap-3">
                     <div>
-                        <div class="text-xs font-extrabold">🎬 Animasi UI</div>
-                        <div id="graphic-anim-desc" class="text-[11px] opacity-75">Atur animasi aktif atau nonaktif untuk gaya tampilan terpilih.</div>
+                        <div class="text-xs font-extrabold">🎬 Toggle Animasi UI</div>
+                        <div id="graphic-anim-desc" class="text-[11px] opacity-75">Aktifkan atau matikan animasi UI pada mode Legacy & Minimalist.</div>
                     </div>
                     <div class="flex items-center gap-2">
                         <button type="button" onclick="selectAnim('on')" data-anim-btn="on"
@@ -160,7 +159,7 @@
                 </div>
             </div>
 
-            <!-- Bahasa (4 Bahasa Full) -->
+            <!-- Bahasa -->
             <div>
                 <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2" data-i18n="lang_label">Bahasa</h2>
                 <div class="grid-4-cols">

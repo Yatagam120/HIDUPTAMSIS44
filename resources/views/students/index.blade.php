@@ -1,6 +1,26 @@
 <x-app-layout>
     @php
         $students = $students ?? \App\Models\Student::orderBy('id')->get();
+
+        $hierarchyOrder = [
+            'walas'       => 1,
+            'wali_kelas'  => 1,
+            'ketua_kelas' => 2,
+            'wakil_ketua' => 3,
+            'sekretaris'  => 4,
+            'bendahara'   => 5,
+            'ppts'        => 6,
+            'ex_ppts'     => 7,
+            'siswa'       => 8,
+            'murid'       => 8,
+        ];
+
+        $students = $students->sortBy(function ($s) use ($hierarchyOrder) {
+            $rankKey = strtolower(trim((string) ($s->hierarchy ?? $s->role ?? $s->jabatan ?? 'siswa')));
+            $rank = $hierarchyOrder[$rankKey] ?? 99;
+            return sprintf('%02d-%06d', $rank, (int) ($s->id ?? 0));
+        })->values();
+
         $myPendingFrame = \App\Models\FrameChangeRequest::where('user_id', auth()->id())->where('status', 'pending')->latest()->first();
         $latestApprovedFrame = \App\Models\FrameChangeRequest::where('status', 'approved')->latest()->first();
     @endphp
@@ -18,7 +38,6 @@
             </div>
         @endif
 
-        <!-- Header Daftar Siswa -->
         <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-6 border theme-border flex flex-wrap items-center justify-between gap-3">
             <div>
                 <h1 class="text-lg sm:text-2xl font-extrabold">Anggota Kelas XI RPL 1</h1>
@@ -29,31 +48,31 @@
             </a>
         </div>
 
-        <!-- Grid Kartu Siswa -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             @forelse($students as $student)
                 @php
                     $activeFrame = $student->frame_path ?: ($latestApprovedFrame->frame_path ?? null);
+                    $displayName = $student->name ?? $student->nama ?? ($student->user->name ?? 'Siswa');
+                    $displayRank = $student->hierarchy ?? $student->role ?? $student->jabatan ?? 'siswa';
+                    $initial = strtoupper(substr(trim((string) $displayName), 0, 1)) ?: 'S';
                 @endphp
                 <div class="theme-card rounded-2xl shadow-md p-4 border theme-border flex items-center gap-3.5">
-                    <div class="relative w-16 h-16 shrink-0 rounded-2xl overflow-hidden border-2 theme-border theme-soft flex items-center justify-center">
+                    <div class="relative w-14 h-14 shrink-0 rounded-xl overflow-hidden border theme-border theme-soft flex items-center justify-center">
                         @if($activeFrame)
-                            <img src="{{ asset('storage/' . $activeFrame) }}" alt="Bingkai {{ $student->name }}" class="w-full h-full object-cover">
+                            <img src="{{ asset('storage/' . $activeFrame) }}" alt="Bingkai {{ $displayName }}" class="w-full h-full object-cover">
                         @else
-                            <span class="text-lg font-extrabold opacity-80">{{ strtoupper(substr($student->name ?? 'S', 0, 1)) }}</span>
+                            <span class="text-base font-extrabold opacity-90">{{ $initial }}</span>
                         @endif
                     </div>
 
                     <div class="min-w-0 flex-1">
-                        <div class="font-extrabold text-sm truncate">{{ $student->name }}</div>
+                        <div class="font-extrabold text-sm truncate">{{ $displayName }}</div>
                         @if(!empty($student->nis))
                             <div class="text-xs opacity-75">NIS: {{ $student->nis }}</div>
                         @endif
-                        @if(!empty($student->jabatan))
-                            <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold theme-primary">
-                                {{ $student->jabatan }}
-                            </span>
-                        @endif
+                        <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold theme-primary">
+                            {{ $displayRank }}
+                        </span>
                     </div>
                 </div>
             @empty
@@ -63,12 +82,12 @@
             @endforelse
         </div>
 
-        <!-- Form Pengajuan Ganti Gambar Bingkai Siswa (Wajib Persetujuan Admin) -->
+        <!-- Pengajuan Ganti Gambar Bingkai Siswa (Wajib Persetujuan / Izin Admin) -->
         <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-6 border theme-border space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-2">
                 <div>
                     <h2 class="text-base sm:text-lg font-extrabold">🖼️ Ganti Gambar Bingkai Siswa</h2>
-                    <p class="text-xs opacity-75">Murid bisa mengajukan gambar bingkai siswa. Gambar baru baru diproses dan aktif setelah mendapat izin / persetujuan Admin.</p>
+                    <p class="text-xs opacity-75">Murid bisa mengajukan gambar bingkai siswa. Gambar baru baru diproses setelah mendapat izin / persetujuan Admin.</p>
                 </div>
 
                 @if($myPendingFrame)
@@ -87,7 +106,7 @@
                     <img src="{{ asset('storage/' . $myPendingFrame->frame_path) }}" alt="Bingkai Menunggu Izin" class="w-12 h-12 rounded-xl object-cover border border-amber-400/40">
                     <div>
                         <div class="font-extrabold text-amber-300">Permintaan Bingkai Sedang Ditinjau Admin</div>
-                        <div class="opacity-80">Belum diterapkan ke bingkai siswa sebelum Admin menekan Setujui.</div>
+                        <div class="opacity-80">Belum diproses ke bingkai siswa sebelum Admin menekan Setujui.</div>
                     </div>
                 </div>
             @endif
@@ -99,7 +118,8 @@
                     <select name="student_id" class="rounded-xl border px-3 py-2.5 text-xs font-bold">
                         <option value="">-- Pilih Siswa (Opsional) --</option>
                         @foreach($students as $st)
-                            <option value="{{ $st->id }}">{{ $st->name }}</option>
+                            @php $stName = $st->name ?? $st->nama ?? ('Siswa #' . $st->id); @endphp
+                            <option value="{{ $st->id }}">{{ $stName }}</option>
                         @endforeach
                     </select>
                 @endif

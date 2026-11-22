@@ -29,7 +29,6 @@ class FrameRequestController extends Controller
             }
         }
 
-        // Batalkan permintaan pending lama milik user ini agar tidak menumpuk
         FrameChangeRequest::where('user_id', $user->id)
             ->where('status', 'pending')
             ->update(['status' => 'rejected', 'reviewed_at' => now()]);
@@ -41,7 +40,7 @@ class FrameRequestController extends Controller
             'status'       => 'pending',
         ]);
 
-        return back()->with('success', 'Permintaan ganti gambar bingkai terkirim! Menunggu persetujuan Admin sebelum diproses.');
+        return back()->with('success', 'Permintaan ganti gambar bingkai terkirim! Menunggu izin/persetujuan Admin sebelum diproses.');
     }
 
     public function approve(FrameChangeRequest $frameRequest)
