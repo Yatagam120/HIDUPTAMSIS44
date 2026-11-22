@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
 
 class DatabaseSeeder extends Seeder
 {
@@ -34,20 +35,48 @@ class DatabaseSeeder extends Seeder
             'Penjas' => 'Pendidikan Jasmani',
         ];
 
+        $kodeCol = Schema::hasColumn('subjects', 'kode_mapel')
+            ? 'kode_mapel'
+            : (Schema::hasColumn('subjects', 'kode') ? 'kode' : null);
+
+        $namaCol = Schema::hasColumn('subjects', 'nama_mapel')
+            ? 'nama_mapel'
+            : (Schema::hasColumn('subjects', 'nama') ? 'nama' : null);
+
+        $hasCreatedAt = Schema::hasColumn('subjects', 'created_at');
+        $hasUpdatedAt = Schema::hasColumn('subjects', 'updated_at');
+
         $subjects = [];
         $now = now();
+
         foreach ($mapelList as $kode => $nama) {
-            DB::table('subjects')->updateOrInsert(
-                ['kode_mapel' => $kode],
-                [
-                    'nama_mapel' => $nama,
-                    'updated_at' => $now,
-                    'created_at' => $now,
-                ]
-            );
-            $subjects[$kode] = DB::table('subjects')
-                ->where('kode_mapel', $kode)
-                ->value('id');
+            $lookup = [];
+            if ($kodeCol) {
+                $lookup[$kodeCol] = $kode;
+            } elseif ($namaCol) {
+                $lookup[$namaCol] = $nama;
+            }
+
+            $values = [];
+            if ($kodeCol) {
+                $values[$kodeCol] = $kode;
+            }
+            if ($namaCol) {
+                $values[$namaCol] = $nama;
+            }
+            if ($hasUpdatedAt) {
+                $values['updated_at'] = $now;
+            }
+            if ($hasCreatedAt) {
+                $values['created_at'] = $now;
+            }
+
+            if (!empty($lookup)) {
+                DB::table('subjects')->updateOrInsert($lookup, $values);
+                $subjects[$kode] = DB::table('subjects')
+                    ->where($lookup)
+                    ->value('id');
+            }
         }
 
         // 3. Jadwal Pelajaran XI RPL 1 (Senin - Jumat)
