@@ -1,18 +1,25 @@
 <?php
-namespace App\Models;
-use Illuminate\Database\Eloquent\Model;
 
-class Subject extends Model
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
 {
-    protected $fillable = ['kode_mapel', 'nama_mapel'];
-
-    public function schedules()
+    public function up(): void
     {
-        return $this->hasMany(Schedule::class);
+        if (!Schema::hasTable('subjects')) {
+            Schema::create('subjects', function (Blueprint $table) {
+                $table->id();
+                $table->string('kode_mapel')->nullable();
+                $table->string('nama_mapel');
+                $table->timestamps();
+            });
+        }
     }
 
-    public function materials()
+    public function down(): void
     {
-        return $this->hasMany(Material::class);
+        Schema::dropIfExists('subjects');
     }
-}
+};
