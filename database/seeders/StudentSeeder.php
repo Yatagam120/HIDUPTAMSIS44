@@ -14,16 +14,6 @@ class StudentSeeder extends Seeder
         $anggotaKelas = [
             // === HIRARKI ATAS (Wali Kelas, Ketua Kelas, Wakil Ketua Kelas) ===
             [
-            'nama' => 'Archie Lionel',
-            'jabatan' => 'admin', // atau 'siswa' / 'ex_ppts' / 'ppts' sesuai yang dipakai di students/index.blade.php
-            'umur' => 16,
-            'tanggal_lahir' => '2009-01-01',
-            'hobi' => 'Ngoding & Eksplorasi Sistem',
-            'skill' => 'Laravel, PHP, Android & Full-Stack Dev',
-            'quote' => 'Developer XI RPL 1.',
-            'foto' => null,
-            ],
-            [
                 'nama' => 'Gunadi',
                 'jabatan' => 'walas',
                 'umur' => 35,
@@ -59,7 +49,6 @@ class StudentSeeder extends Seeder
             ['nama' => 'Ahmad Rafi', 'jabatan' => 'siswa'],
             ['nama' => 'Amelia Yohana', 'jabatan' => 'siswa'],
             ['nama' => 'Anisha Putri Andriyani', 'jabatan' => 'siswa'],
-            ['nama' => 'Archie Lionel', 'jabatan' => 'siswa'],
             ['nama' => 'Azzahra Ramadana Putri Herawati', 'jabatan' => 'siswa'],
             ['nama' => 'Azzahro Ramadani Putri Herwati', 'jabatan' => 'siswa'],
             ['nama' => 'Butet Citra Aritonang', 'jabatan' => 'siswa'],
@@ -79,6 +68,7 @@ class StudentSeeder extends Seeder
             ['nama' => 'Febriansyah Frastiago', 'jabatan' => 'siswa'],
             ['nama' => 'Fiorenza Cira Amabel Haloho', 'jabatan' => 'siswa'],
             ['nama' => 'Muhammad Arya Azizan', 'jabatan' => 'siswa'],
+            ['nama' => 'Archie Lionel', 'jabatan' => 'siswa'],
             ['nama' => 'Gugun Gumalayan', 'jabatan' => 'siswa'],
             ['nama' => 'Gwen Adriano Sule', 'jabatan' => 'siswa'],
             ['nama' => 'Hazwan Adji Sasongko Iswat', 'jabatan' => 'siswa'],
