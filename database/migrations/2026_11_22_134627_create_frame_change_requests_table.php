@@ -8,18 +8,20 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('frame_change_requests', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('student_name')->nullable();
-            $table->string('frame_path');
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
-            $table->timestamp('reviewed_at')->nullable();
-            $table->timestamps();
+        if (!Schema::hasTable('frame_change_requests')) {
+            Schema::create('frame_change_requests', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('user_id');
+                $table->string('student_name')->nullable();
+                $table->string('frame_path');
+                $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+                $table->timestamp('reviewed_at')->nullable();
+                $table->timestamps();
 
-            $table->index('user_id');
-            $table->index('status');
-        });
+                $table->index('user_id');
+                $table->index('status');
+            });
+        }
     }
 
     public function down(): void

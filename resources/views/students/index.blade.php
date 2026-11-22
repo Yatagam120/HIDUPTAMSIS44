@@ -2,92 +2,209 @@
     @php
         $students = $students ?? \App\Models\Student::orderBy('id')->get();
 
-        $hierarchyOrder = [
-            'walas'       => 1,
-            'wali_kelas'  => 1,
-            'ketua_kelas' => 2,
-            'wakil_ketua' => 3,
-            'sekretaris'  => 4,
-            'bendahara'   => 5,
-            'ppts'        => 6,
-            'ex_ppts'     => 7,
-            'siswa'       => 8,
-            'murid'       => 8,
-        ];
+        $walas = $students->first(function ($s) {
+            $tag = strtolower(trim((string) ($s->hierarchy ?? $s->role ?? $s->jabatan ?? '')));
+            return in_array($tag, ['walas', 'wali_kelas', 'wali kelas']);
+        });
 
-        $students = $students->sortBy(function ($s) use ($hierarchyOrder) {
-            $rankKey = strtolower(trim((string) ($s->hierarchy ?? $s->role ?? $s->jabatan ?? 'siswa')));
-            $rank = $hierarchyOrder[$rankKey] ?? 99;
-            return sprintf('%02d-%06d', $rank, (int) ($s->id ?? 0));
-        })->values();
+        $ketuaKelas = $students->first(function ($s) {
+            $tag = strtolower(trim((string) ($s->hierarchy ?? $s->role ?? $s->jabatan ?? '')));
+            return in_array($tag, ['ketua_kelas', 'ketua kelas']);
+        });
+
+        $wakilKetua = $students->first(function ($s) {
+            $tag = strtolower(trim((string) ($s->hierarchy ?? $s->role ?? $s->jabatan ?? '')));
+            return in_array($tag, ['wakil_ketua', 'wakil ketua', 'wakil ketua kelas']);
+        });
+
+        $excludedIds = collect([$walas->id ?? null, $ketuaKelas->id ?? null, $wakilKetua->id ?? null])->filter();
+        $members = $students->reject(fn($s) => $excludedIds->contains($s->id))->values();
 
         $myPendingFrame = \App\Models\FrameChangeRequest::where('user_id', auth()->id())->where('status', 'pending')->latest()->first();
         $latestApprovedFrame = \App\Models\FrameChangeRequest::where('status', 'approved')->latest()->first();
     @endphp
 
+    <style>
+        .tamsis-green-chart {
+            background: radial-gradient(circle at top, #0b4f36 0%, #063524 60%, #042418 100%);
+            border: 1px solid rgba(52, 211, 153, 0.25);
+            color: #ecfdf5;
+        }
+        .chart-avatar-ring {
+            width: 48px;
+            height: 48px;
+            border-radius: 9999px;
+            background: rgba(16, 185, 129, 0.16);
+            border: 2px solid rgba(110, 231, 183, 0.55);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            margin: 0 auto;
+        }
+        .chart-role-badge {
+            display: inline-block;
+            background: #059669;
+            color: #ffffff;
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            padding: 2px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .chart-vline {
+            width: 1.5px;
+            height: 20px;
+            background: rgba(167, 243, 208, 0.45);
+            margin: 0 auto;
+        }
+        .chart-hline-wrap {
+            position: relative;
+            width: 56%;
+            max-width: 340px;
+            height: 18px;
+            margin: 0 auto;
+            border-top: 1.5px solid rgba(167, 243, 208, 0.45);
+        }
+        .chart-hline-wrap::before,
+        .chart-hline-wrap::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            width: 1.5px;
+            height: 18px;
+            background: rgba(167, 243, 208, 0.45);
+        }
+        .chart-hline-wrap::before { left: 0; }
+        .chart-hline-wrap::after  { right: 0; }
+    </style>
+
     <div class="max-w-6xl mx-auto space-y-6">
         @if(session('success'))
-            <div class="p-3.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs sm:text-sm font-semibold">
+            <div class="p-3.5 rounded-xl bg-emerald-500/20 text-emerald-200 border border-emerald-400/40 text-xs sm:text-sm font-semibold">
                 {{ session('success') }}
             </div>
         @endif
 
         @if($errors->any())
-            <div class="p-3.5 rounded-xl bg-red-500/20 text-red-300 border border-red-500/40 text-xs sm:text-sm font-semibold">
+            <div class="p-3.5 rounded-xl bg-red-500/20 text-red-200 border border-red-400/40 text-xs sm:text-sm font-semibold">
                 {{ $errors->first() }}
             </div>
         @endif
 
-        <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-6 border theme-border flex flex-wrap items-center justify-between gap-3">
-            <div>
-                <h1 class="text-lg sm:text-2xl font-extrabold">Anggota Kelas XI RPL 1</h1>
-                <p class="text-xs sm:text-sm opacity-75 mt-0.5">Daftar siswa dan struktur pengurus kelas XI RPL 1.</p>
+        <!-- Bagan Hirarki Kelas Bergaya Hijau -->
+        <div class="tamsis-green-chart rounded-2xl shadow-xl p-5 sm:p-8 space-y-6">
+            <div class="flex items-center justify-between gap-2">
+                <a href="{{ route('dashboard') }}" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-emerald-950/70 hover:bg-emerald-900 border border-emerald-400/30 text-emerald-100">
+                    ← Jadwal
+                </a>
+
+                @if(Route::has('students.create'))
+                    <a href="{{ route('students.create') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-extrabold bg-emerald-600 hover:bg-emerald-500 text-white shadow">
+                        + Tambah Siswa
+                    </a>
+                @endif
             </div>
-            <a href="{{ route('dashboard') }}" class="px-4 py-2 rounded-xl text-xs font-extrabold border theme-border theme-soft hover:opacity-90">
-                ← Kembali ke Jadwal Utama
-            </a>
-        </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            @forelse($students as $student)
+            <!-- Puncak: Wali Kelas -->
+            <div class="text-center space-y-1.5">
                 @php
-                    $activeFrame = $student->frame_path ?: ($latestApprovedFrame->frame_path ?? null);
-                    $displayName = $student->name ?? $student->nama ?? ($student->user->name ?? 'Siswa');
-                    $displayRank = $student->hierarchy ?? $student->role ?? $student->jabatan ?? 'siswa';
-                    $initial = strtoupper(substr(trim((string) $displayName), 0, 1)) ?: 'S';
+                    $walasName = $walas->name ?? $walas->nama ?? 'Wali Kelas';
+                    $walasFrame = $walas->frame_path ?? ($latestApprovedFrame->frame_path ?? null);
                 @endphp
-                <div class="theme-card rounded-2xl shadow-md p-4 border theme-border flex items-center gap-3.5">
-                    <div class="relative w-14 h-14 shrink-0 rounded-xl overflow-hidden border theme-border theme-soft flex items-center justify-center">
-                        @if($activeFrame)
-                            <img src="{{ asset('storage/' . $activeFrame) }}" alt="Bingkai {{ $displayName }}" class="w-full h-full object-cover">
-                        @else
-                            <span class="text-base font-extrabold opacity-90">{{ $initial }}</span>
-                        @endif
-                    </div>
+                <div class="chart-avatar-ring">
+                    @if($walasFrame)
+                        <img src="{{ asset('storage/' . $walasFrame) }}" alt="{{ $walasName }}" class="w-full h-full object-cover">
+                    @else
+                        <svg class="w-6 h-6 text-emerald-200" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                        </svg>
+                    @endif
+                </div>
+                <div class="text-xs sm:text-sm font-extrabold text-white">{{ $walasName }}</div>
+                <div class="chart-vline"></div>
+                <div class="chart-hline-wrap"></div>
+            </div>
 
-                    <div class="min-w-0 flex-1">
-                        <div class="font-extrabold text-sm truncate">{{ $displayName }}</div>
-                        @if(!empty($student->nis))
-                            <div class="text-xs opacity-75">NIS: {{ $student->nis }}</div>
+            <!-- Tingkat 2: Ketua Kelas & Wakil Ketua Kelas -->
+            <div class="grid grid-cols-2 gap-4 max-w-md mx-auto text-center">
+                <div class="space-y-1.5">
+                    <span class="chart-role-badge" data-i18n="ketua_badge">KETUA KELAS</span>
+                    @php
+                        $ketuaName = $ketuaKelas->name ?? $ketuaKelas->nama ?? 'Ketua Kelas';
+                        $ketuaFrame = $ketuaKelas->frame_path ?? ($latestApprovedFrame->frame_path ?? null);
+                    @endphp
+                    <div class="chart-avatar-ring">
+                        @if($ketuaFrame)
+                            <img src="{{ asset('storage/' . $ketuaFrame) }}" alt="{{ $ketuaName }}" class="w-full h-full object-cover">
+                        @else
+                            <svg class="w-6 h-6 text-emerald-200" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                            </svg>
                         @endif
-                        <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold theme-primary">
-                            {{ $displayRank }}
-                        </span>
                     </div>
+                    <div class="text-xs font-bold text-emerald-50">{{ $ketuaName }}</div>
                 </div>
-            @empty
-                <div class="theme-card rounded-2xl p-6 border theme-border col-span-full text-center text-xs sm:text-sm opacity-75">
-                    Belum ada data siswa yang tercatat.
+
+                <div class="space-y-1.5">
+                    <span class="chart-role-badge" data-i18n="wakil_badge">WAKIL KETUA KELAS</span>
+                    @php
+                        $wakilName = $wakilKetua->name ?? $wakilKetua->nama ?? 'Wakil Ketua Kelas';
+                        $wakilFrame = $wakilKetua->frame_path ?? ($latestApprovedFrame->frame_path ?? null);
+                    @endphp
+                    <div class="chart-avatar-ring">
+                        @if($wakilFrame)
+                            <img src="{{ asset('storage/' . $wakilFrame) }}" alt="{{ $wakilName }}" class="w-full h-full object-cover">
+                        @else
+                            <svg class="w-6 h-6 text-emerald-200" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                            </svg>
+                        @endif
+                    </div>
+                    <div class="text-xs font-bold text-emerald-50">{{ $wakilName }}</div>
                 </div>
-            @endforelse
+            </div>
+
+            <!-- Tingkat 3: Anggota Kelas XI RPL 1 -->
+            <div class="pt-3 space-y-4">
+                <div class="text-center">
+                    <span class="text-[11px] font-extrabold tracking-widest uppercase text-emerald-200/90" data-i18n="anggota_badge">
+                        ANGGOTA KELAS XI RPL 1
+                    </span>
+                </div>
+
+                <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-y-5 gap-x-3 text-center">
+                    @foreach($members as $member)
+                        @php
+                            $mName = $member->name ?? $member->nama ?? 'Siswa';
+                            $mFrame = $member->frame_path ?? ($latestApprovedFrame->frame_path ?? null);
+                        @endphp
+                        <div class="space-y-1 min-w-0">
+                            <div class="chart-avatar-ring">
+                                @if($mFrame)
+                                    <img src="{{ asset('storage/' . $mFrame) }}" alt="{{ $mName }}" class="w-full h-full object-cover">
+                                @else
+                                    <svg class="w-5 h-5 text-emerald-200" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                                    </svg>
+                                @endif
+                            </div>
+                            <div class="text-[11px] font-semibold text-emerald-50/95 truncate px-0.5" title="{{ $mName }}">
+                                {{ $mName }}
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
         </div>
 
-        <!-- Pengajuan Ganti Gambar Bingkai Siswa (Wajib Persetujuan / Izin Admin) -->
+        <!-- Pengajuan Ganti Gambar Bingkai Siswa (Wajib Izin Admin) -->
         <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-6 border theme-border space-y-4">
             <div class="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                    <h2 class="text-base sm:text-lg font-extrabold">🖼️ Ganti Gambar Bingkai Siswa</h2>
-                    <p class="text-xs opacity-75">Murid bisa mengajukan gambar bingkai siswa. Gambar baru baru diproses setelah mendapat izin / persetujuan Admin.</p>
+                    <h2 class="text-base sm:text-lg font-extrabold" data-i18n="frame_title">🖼️ Ganti Gambar Bingkai Siswa</h2>
+                    <p class="text-xs opacity-75" data-i18n="frame_sub">Murid bisa mengajukan gambar bingkai siswa. Gambar baru baru diproses setelah mendapat izin / persetujuan Admin.</p>
                 </div>
 
                 @if($myPendingFrame)
@@ -128,7 +245,8 @@
                        class="rounded-xl border p-2 text-xs">
 
                 <button type="submit"
-                        class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold theme-primary shadow-md hover:opacity-90 transition">
+                        class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold theme-primary shadow-md hover:opacity-90 transition"
+                        data-i18n="frame_submit">
                     Ajukan Ganti Bingkai
                 </button>
             </form>

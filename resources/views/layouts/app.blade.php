@@ -140,49 +140,67 @@
         }
 
         /* =========================================================
-           3 STYLE GRAFIK UI (HEADER, BUTTON, CARD & ELEMEN WEB)
+           3 STYLE GRAFIK UI: LEGACY, MINIMALIST (TEGAS & RELAKS), SIMPLE
            ========================================================= */
 
-        /* 1. LEGACY: Gaya UI bawaan saat ini */
+        /* 1. LEGACY: UI style bawaan sekarang */
         body[data-graphic="legacy"] nav.main-tamsis-nav {
             border-radius: 0;
         }
 
-        /* 2. MINIMALIST: Style kantoran (tegas, bersih, terstruktur) */
+        /* 2. MINIMALIST: Bersih, simple, tegas namun relaks (gaya workspace kantoran modern) */
         body[data-graphic="minimalist"] {
-            --bg-gradient: linear-gradient(180deg, #0f172a 0%, #1e293b 100%);
+            --bg-gradient: #0f172a;
+            --bg-card: #162033;
+            --border-color: rgba(148, 163, 184, 0.22);
         }
         body[data-graphic="minimalist"][data-theme="teal-growth"],
         body[data-graphic="minimalist"][data-theme="creative-spark"],
         body[data-graphic="minimalist"][data-theme="lavender-dream"],
         body[data-graphic="minimalist"][data-theme="soft-berry"],
         body[data-graphic="minimalist"][data-theme="morning-assembly"] {
-            --bg-gradient: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+            --bg-gradient: #f1f5f9;
+            --bg-card: #ffffff;
+            --border-color: rgba(15, 23, 42, 0.14);
         }
         body[data-graphic="minimalist"] nav.main-tamsis-nav {
+            background: var(--bg-card) !important;
             backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
             box-shadow: none !important;
-            border-bottom: 1.5px solid var(--border-color) !important;
+            border-bottom: 1px solid var(--border-color) !important;
         }
         body[data-graphic="minimalist"] .theme-card {
             backdrop-filter: none !important;
-            border-radius: 6px !important;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.14) !important;
+            -webkit-backdrop-filter: none !important;
+            border-radius: 8px !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
             border: 1px solid var(--border-color) !important;
         }
         body[data-graphic="minimalist"] button,
         body[data-graphic="minimalist"] .nav-btn-anim,
         body[data-graphic="minimalist"] .j-filter-btn,
         body[data-graphic="minimalist"] .setting-pill {
-            border-radius: 6px !important;
+            border-radius: 7px !important;
             box-shadow: none !important;
-            font-weight: 700 !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.01em;
+        }
+        body[data-graphic="minimalist"] .setting-pill.active-pill {
+            box-shadow: none !important;
+            border-width: 1.5px !important;
         }
         body[data-graphic="minimalist"] .theme-primary {
-            box-shadow: inset 0 -2px 0 rgba(0, 0, 0, 0.2) !important;
+            box-shadow: none !important;
+        }
+        body[data-graphic="minimalist"] input,
+        body[data-graphic="minimalist"] select,
+        body[data-graphic="minimalist"] textarea {
+            border-radius: 7px !important;
+            box-shadow: none !important;
         }
 
-        /* 3. STYLE SIMPLE: Polos, ringan & otomatis mematikan animasi UI */
+        /* 3. STYLE SIMPLE: Ringan, polos & otomatis matikan animasi UI */
         body[data-graphic="simple"] {
             --bg-gradient: var(--bg-card);
         }
@@ -356,6 +374,9 @@
             box-sizing: border-box;
         }
 
+        /* =========================================================
+           JADWAL HP: TETAP MODEL GRID LAPTOP & DISESUAIKAN AGAR TIDAK NABRAK
+           ========================================================= */
         @media (max-width: 640px) {
             nav.main-tamsis-nav > div {
                 padding: 0.45rem 0.5rem !important;
@@ -391,73 +412,55 @@
                 gap: 0.5rem !important;
             }
 
-            /* Jadwal HP rapi berbentuk kartu vertikal, tidak scroll samping & tidak pecah huruf */
             .timetable-wrap-scroll {
-                overflow-x: visible !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
                 width: 100% !important;
             }
-            .timetable-grid.mobile-cards-mode {
-                display: block !important;
-                width: 100% !important;
-                min-width: 0 !important;
+            .timetable-grid {
+                width: max-content !important;
+                min-width: 820px !important;
                 table-layout: auto !important;
+                border-collapse: separate !important;
+                border-spacing: 3px !important;
             }
-            .timetable-grid.mobile-cards-mode thead {
-                display: none !important;
+            .timetable-grid th {
+                font-size: 9px !important;
+                padding: 4px 5px !important;
+                line-height: 1.15 !important;
+                white-space: nowrap !important;
             }
-            .timetable-grid.mobile-cards-mode tbody {
+            .timetable-grid td {
+                font-size: 9px !important;
+                padding: 3px !important;
+                line-height: 1.15 !important;
+                vertical-align: middle !important;
+            }
+            .timetable-grid td:first-child,
+            .timetable-grid th:first-child {
+                position: sticky;
+                left: 0;
+                z-index: 15;
+                font-size: 9.5px !important;
+                padding: 4px 6px !important;
+                white-space: nowrap !important;
+            }
+            .timetable-grid a,
+            .timetable-grid .subject-box {
+                position: relative !important;
                 display: flex !important;
                 flex-direction: column !important;
-                gap: 10px !important;
-                width: 100% !important;
-            }
-            .timetable-grid.mobile-cards-mode tbody tr {
-                display: flex !important;
-                flex-direction: column !important;
-                height: auto !important;
-                padding: 10px !important;
-                border-radius: 14px !important;
-                border: 1px solid var(--border-color) !important;
-                background: var(--bg-card) !important;
-                gap: 6px !important;
-            }
-            .timetable-grid.mobile-cards-mode tbody td {
-                display: block !important;
-                width: 100% !important;
-                height: auto !important;
-                padding: 0 !important;
-                border: none !important;
-                text-align: left !important;
-                font-size: 11px !important;
-                line-height: 1.35 !important;
-                word-break: normal !important;
-                overflow-wrap: break-word !important;
-            }
-            .timetable-grid.mobile-cards-mode tbody td:first-child {
-                font-size: 13px !important;
-                font-weight: 800 !important;
-                color: var(--primary) !important;
-                padding-bottom: 4px !important;
-                margin-bottom: 2px !important;
-                border-bottom: 1px solid var(--border-color) !important;
-            }
-            .timetable-grid.mobile-cards-mode a,
-            .timetable-grid.mobile-cards-mode .subject-box {
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: flex-start !important;
-                gap: 2px !important;
-                width: 100% !important;
-                padding: 8px 10px !important;
-                border-radius: 10px !important;
-                font-size: 11.5px !important;
-                line-height: 1.3 !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                padding: 6px 14px !important;
+                min-height: 46px !important;
+                border-radius: 8px !important;
+                font-size: 9px !important;
+                line-height: 1.15 !important;
                 white-space: normal !important;
                 word-break: normal !important;
-            }
-            .timetable-grid.mobile-cards-mode a:hover,
-            .timetable-grid.mobile-cards-mode .subject-box:hover {
-                transform: none !important;
+                overflow-wrap: break-word !important;
             }
         }
     </style>
@@ -562,12 +565,11 @@
                     tbl.closest('.overflow-x-auto').classList.add('timetable-wrap-scroll');
                 }
                 if (tbl.querySelector('thead') && tbl.querySelectorAll('tbody tr').length >= 3) {
-                    tbl.classList.add('timetable-grid', 'mobile-cards-mode');
+                    tbl.classList.add('timetable-grid');
                 }
             });
         }
         document.addEventListener('DOMContentLoaded', initMobileTimetableLayout);
-        window.addEventListener('resize', initMobileTimetableLayout);
 
         function hideTamsisSplash() {
             sessionStorage.setItem('tamsis_booted', '1');
@@ -620,6 +622,14 @@
                 settings_sub: 'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, dan bahasa aplikasi.',
                 dark_theme_label: 'Tema Gelap (Gradien)',
                 light_theme_label: 'Tema Terang (Gradien)',
+                graphic_label: '📊 Grafik',
+                graphic_sub: 'Style untuk header, button, dan panel web: Legacy (UI sekarang), Minimalist (tegas, simple & relaks), atau Style Simple (otomatis matikan animasi).',
+                graphic_legacy_sub: 'UI style sekarang',
+                graphic_min_sub: 'Simple, tegas & relaks',
+                graphic_simple_sub: 'Otomatis matikan animasi UI',
+                anim_toggle_title: '🎬 Toggle Animasi UI',
+                anim_on: '✨ Aktif',
+                anim_off: '🔇 Mati',
                 font_style_label: 'Gaya Huruf',
                 lang_label: 'Bahasa',
                 sfx_label: 'Efek Suara (SFX)',
@@ -641,6 +651,12 @@
                 critic_sub: 'Ulasan bintang, masukan, dan laporan bug dari pengguna web kelas.',
                 avg_rating_label: 'Rata-rata Rating Web',
                 critic_empty: 'Belum ada kritik, saran, atau laporan bug yang masuk.',
+                ketua_badge: 'KETUA KELAS',
+                wakil_badge: 'WAKIL KETUA KELAS',
+                anggota_badge: 'ANGGOTA KELAS XI RPL 1',
+                frame_title: '🖼️ Ganti Gambar Bingkai Siswa',
+                frame_sub: 'Murid bisa mengajukan gambar bingkai siswa. Gambar baru baru diproses setelah mendapat izin / persetujuan Admin.',
+                frame_submit: 'Ajukan Ganti Bingkai',
             },
             en: {
                 splash_sub: 'Loading XI RPL 1 Timetable & Classroom...',
@@ -655,6 +671,14 @@
                 settings_sub: 'Customize color gradients, graphics style, animations, sound effects, and language.',
                 dark_theme_label: 'Dark Theme (Gradient)',
                 light_theme_label: 'Light Theme (Gradient)',
+                graphic_label: '📊 Graphics',
+                graphic_sub: 'Style for web header, buttons, and panels: Legacy (current UI), Minimalist (simple, sharp & relaxed), or Style Simple (auto-disables animations).',
+                graphic_legacy_sub: 'Current UI style',
+                graphic_min_sub: 'Simple, sharp & relaxed',
+                graphic_simple_sub: 'Auto-disables UI animations',
+                anim_toggle_title: '🎬 UI Animation Toggle',
+                anim_on: '✨ Active',
+                anim_off: '🔇 Off',
                 font_style_label: 'Font Style',
                 lang_label: 'Language',
                 sfx_label: 'Sound Effects (SFX)',
@@ -676,18 +700,202 @@
                 critic_sub: 'Star ratings, feedback, and bug reports submitted by class users.',
                 avg_rating_label: 'Average Web Rating',
                 critic_empty: 'No feedback, criticism, or bug reports submitted yet.',
+                ketua_badge: 'CLASS PRESIDENT',
+                wakil_badge: 'VICE PRESIDENT',
+                anggota_badge: 'XI RPL 1 CLASS MEMBERS',
+                frame_title: '🖼️ Change Student Frame Image',
+                frame_sub: 'Students can submit a frame image. New frames are processed only after Admin approval.',
+                frame_submit: 'Request Frame Change',
+            },
+            ja: {
+                splash_sub: 'XI RPL 1の時間割とクラスルームを読み込んでいます...',
+                nav_ap: '管理',
+                nav_jadwal: '時間割',
+                nav_list_tugas: '課題一覧',
+                nav_kalender: 'カレンダー',
+                nav_siswa: '生徒',
+                nav_profile: 'プロフィール',
+                nav_pengaturan: '設定',
+                settings_title: '表示設定',
+                settings_sub: 'カラーテーマ、グラフィックスタイル、アニメーション、効果音、言語をカスタマイズします。',
+                dark_theme_label: 'ダークテーマ（グラデーション）',
+                light_theme_label: 'ライトテーマ（グラデーション）',
+                graphic_label: '📊 グラフィック',
+                graphic_sub: 'ヘッダー・ボタン・パネルのスタイル：Legacy（現在のUI）、Minimalist（シンプルで落ち着いたデザイン）、Style Simple（アニメーション自動オフ）。',
+                graphic_legacy_sub: '現在のUIスタイル',
+                graphic_min_sub: 'シンプル・シャープ・快適',
+                graphic_simple_sub: 'UIアニメーションを自動オフ',
+                anim_toggle_title: '🎬 UIアニメーション切替',
+                anim_on: '✨ オン',
+                anim_off: '🔇 オフ',
+                font_style_label: 'フォントスタイル',
+                lang_label: '言語',
+                sfx_label: '効果音 (SFX)',
+                sfx_on: 'オン',
+                sfx_off: 'ミュート',
+                easter_title: 'シークレットコード 🎁',
+                easter_sub: 'XI RPL 1の秘密コードを入力して隠し機能を開放しよう！',
+                klaim_btn: '適用',
+                saran_btn: 'ご意見・バグ報告',
+                saran_sub: '星評価（4.5などの小数も可）、コメント、バグの画像・動画を送信できます。',
+                rating_label: 'Web評価 (0.0 – 5.0)',
+                rating_hint: 'スライダーまたは4.5、3.4などの数値を入力してください。',
+                komentar_label: 'コメント / ご意見 / バグ詳細',
+                lampiran_bug_label: 'バグ画像・動画の添付（複数選択可）',
+                kirim_saran_btn: '管理者に送信',
+                ap_title: '管理者パネル (AP)',
+                ap_sub: 'アカウント承認、権限管理、生徒フレーム承認、フィードバックを確認します。',
+                critic_title: 'フィードバック',
+                critic_sub: 'クラスメンバーからの評価、意見、バグ報告一覧。',
+                avg_rating_label: '平均評価',
+                critic_empty: 'まだフィードバックやバグ報告はありません。',
+                ketua_badge: '学級委員長',
+                wakil_badge: '副委員長',
+                anggota_badge: 'XI RPL 1 クラスメンバー',
+                frame_title: '🖼️ 生徒フレーム画像の変更申請',
+                frame_sub: '生徒は新しいフレーム画像を申請できます。管理者の承認後に反映されます。',
+                frame_submit: 'フレーム変更を申請',
+            },
+            ru: {
+                splash_sub: 'Загрузка расписания и класса XI RPL 1...',
+                nav_ap: 'АП',
+                nav_jadwal: 'Расписание',
+                nav_list_tugas: 'Задания',
+                nav_kalender: 'Календарь',
+                nav_siswa: 'Ученики',
+                nav_profile: 'Профиль',
+                nav_pengaturan: 'Настройки',
+                settings_title: 'Настройки отображения',
+                settings_sub: 'Настройте цветовую тему, стиль графики, анимацию, звуковые эффекты и язык.',
+                dark_theme_label: 'Тёмная тема (Градиент)',
+                light_theme_label: 'Светлая тема (Градиент)',
+                graphic_label: '📊 Графика',
+                graphic_sub: 'Стиль шапки, кнопок и панелей: Legacy (текущий UI), Minimalist (строгий, простой и спокойный) или Style Simple (автоотключение анимации).',
+                graphic_legacy_sub: 'Текущий стиль UI',
+                graphic_min_sub: 'Простой, чёткий и спокойный',
+                graphic_simple_sub: 'Автоотключение анимации UI',
+                anim_toggle_title: '🎬 Переключатель анимации UI',
+                anim_on: '✨ Вкл',
+                anim_off: '🔇 Выкл',
+                font_style_label: 'Шрифт',
+                lang_label: 'Язык',
+                sfx_label: 'Звуковые эффекты (SFX)',
+                sfx_on: 'Вкл',
+                sfx_off: 'Без звука',
+                easter_title: 'Секретный код (Пасхалка) 🎁',
+                easter_sub: 'Есть секретный код класса XI RPL 1? Введите его здесь!',
+                klaim_btn: 'Активировать',
+                saran_btn: 'Отзыв и отчёт об ошибке',
+                saran_sub: 'Поставьте оценку (можно дробную, например 4.5), оставьте комментарий или прикрепите фото/видео.',
+                rating_label: 'Оценка сайта (0.0 – 5.0)',
+                rating_hint: 'Передвиньте ползунок или введите число, например 4.5 или 3.4.',
+                komentar_label: 'Комментарий / Предложение / Описание ошибки',
+                lampiran_bug_label: 'Фото / видео ошибки (можно несколько файлов)',
+                kirim_saran_btn: 'Отправить администратору',
+                ap_title: 'Панель администратора (AP)',
+                ap_sub: 'Управление аккаунтами, ролями, рамками учеников и отзывами класса XI RPL 1.',
+                critic_title: 'Отзывы',
+                critic_sub: 'Оценки, предложения и отчёты об ошибках от пользователей класса.',
+                avg_rating_label: 'Средняя оценка сайта',
+                critic_empty: 'Отзывов и отчётов об ошибках пока нет.',
+                ketua_badge: 'СТАРОСТА КЛАССА',
+                wakil_badge: 'ЗАМ. СТАРОСТЫ',
+                anggota_badge: 'УЧЕНИКИ КЛАССА XI RPL 1',
+                frame_title: '🖼️ Сменить рамку ученика',
+                frame_sub: 'Ученики могут предложить новую рамку. Она применится после одобрения администратором.',
+                frame_submit: 'Отправить запрос на рамку',
             }
         };
+
+        const phraseDictionaries = {
+            ja: {
+                'Jadwal Pelajaran XI RPL 1': 'XI RPL 1 授業時間割',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': '科目ボックスをクリックしてメモ・課題・宿題・予定を確認します。',
+                'Hari / Jam': '曜日 / 時限',
+                'Senin': '月曜日',
+                'Selasa': '火曜日',
+                'Rabu': '水曜日',
+                'Kamis': '木曜日',
+                'Jumat': '金曜日',
+                'Catatan': 'メモ',
+                'Tugas': '課題',
+                'PR': '宿題',
+                'Event': 'イベント',
+                'Tenggat': '締切間近',
+                'Deadline': '締切',
+                'Selesai': '完了',
+                'Reset': 'リセット',
+                'Tambah Siswa': '生徒を追加',
+                '+ Tambah Siswa': '+ 生徒を追加',
+                'Manajemen Akun Pengguna': 'ユーザーアカウント管理',
+                'Persetujuan Ganti Bingkai Siswa': '生徒フレーム変更の承認',
+            },
+            ru: {
+                'Jadwal Pelajaran XI RPL 1': 'Расписание уроков XI RPL 1',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': 'Нажмите на предмет, чтобы посмотреть заметки, задания, ДЗ или события.',
+                'Hari / Jam': 'День / Урок',
+                'Senin': 'Понедельник',
+                'Selasa': 'Вторник',
+                'Rabu': 'Среда',
+                'Kamis': 'Четверг',
+                'Jumat': 'Пятница',
+                'Catatan': 'Заметка',
+                'Tugas': 'Задание',
+                'PR': 'ДЗ',
+                'Event': 'Событие',
+                'Tenggat': 'Срок',
+                'Deadline': 'Дедлайн',
+                'Selesai': 'Готово',
+                'Reset': 'Сброс',
+                'Tambah Siswa': 'Добавить ученика',
+                '+ Tambah Siswa': '+ Добавить ученика',
+                'Manajemen Akun Pengguna': 'Управление аккаунтами',
+                'Persetujuan Ganti Bingkai Siswa': 'Одобрение смены рамки ученика',
+            }
+        };
+
+        function applyPhraseTranslation(lang) {
+            const dict = phraseDictionaries[lang];
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+            let node;
+            while ((node = walker.nextNode())) {
+                if (!node.parentElement || ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT'].includes(node.parentElement.tagName)) continue;
+                const raw = node.nodeValue;
+                const trimmed = raw.trim();
+                if (!trimmed) continue;
+
+                if (!node._origText) {
+                    node._origText = raw;
+                }
+
+                if (lang === 'id') {
+                    node.nodeValue = node._origText;
+                } else if (dict && dict[trimmed]) {
+                    node.nodeValue = raw.replace(trimmed, dict[trimmed]);
+                } else if (node._origText) {
+                    const origTrimmed = node._origText.trim();
+                    if (dict && dict[origTrimmed]) {
+                        node.nodeValue = node._origText.replace(origTrimmed, dict[origTrimmed]);
+                    } else {
+                        node.nodeValue = node._origText;
+                    }
+                }
+            }
+        }
 
         function applyLanguage(lang) {
             if (!translations[lang]) lang = 'id';
             localStorage.setItem('app_lang', lang);
+            document.documentElement.setAttribute('lang', lang);
+
             document.querySelectorAll('[data-i18n]').forEach(el => {
                 const key = el.getAttribute('data-i18n');
                 if (translations[lang][key]) {
                     el.textContent = translations[lang][key];
                 }
             });
+
+            applyPhraseTranslation(lang);
         }
 
         document.addEventListener('DOMContentLoaded', () => {

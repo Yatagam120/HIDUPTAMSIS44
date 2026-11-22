@@ -98,42 +98,42 @@
             <!-- Section Grafik (3 Style UI: Legacy, Minimalist, Style Simple + Toggle Animasi) -->
             <div class="space-y-3 pt-2 border-t border-gray-200/20">
                 <div>
-                    <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85">📊 Grafik</h2>
-                    <p class="text-[11px] opacity-75 mt-0.5">Style untuk header, button, dan panel web: <b>Legacy</b> (UI style sekarang), <b>Minimalist</b> (style kantoran), atau <b>Style Simple</b> (otomatis mematikan animasi UI).</p>
+                    <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85" data-i18n="graphic_label">📊 Grafik</h2>
+                    <p class="text-[11px] opacity-75 mt-0.5" data-i18n="graphic_sub">Style untuk header, button, dan panel web: Legacy (UI sekarang), Minimalist (tegas, simple & relaks), atau Style Simple (otomatis matikan animasi).</p>
                 </div>
 
                 <div class="grid-3-cols">
                     <button type="button" onclick="selectGraphicStyle('legacy')" data-graphic-btn="legacy"
                             class="setting-pill rounded-2xl px-4 py-2.5 text-xs font-extrabold text-left">
                         <div>🏛️ Legacy</div>
-                        <div class="text-[10px] font-normal opacity-75">UI style sekarang</div>
+                        <div class="text-[10px] font-normal opacity-75" data-i18n="graphic_legacy_sub">UI style sekarang</div>
                     </button>
 
                     <button type="button" onclick="selectGraphicStyle('minimalist')" data-graphic-btn="minimalist"
                             class="setting-pill rounded-2xl px-4 py-2.5 text-xs font-extrabold text-left">
                         <div>💼 Minimalist</div>
-                        <div class="text-[10px] font-normal opacity-75">Style kantoran bersih & tegas</div>
+                        <div class="text-[10px] font-normal opacity-75" data-i18n="graphic_min_sub">Simple, tegas & relaks</div>
                     </button>
 
                     <button type="button" onclick="selectGraphicStyle('simple')" data-graphic-btn="simple"
                             class="setting-pill rounded-2xl px-4 py-2.5 text-xs font-extrabold text-left">
                         <div>⚡ Style Simple</div>
-                        <div class="text-[10px] font-normal opacity-75">Otomatis matikan animasi UI</div>
+                        <div class="text-[10px] font-normal opacity-75" data-i18n="graphic_simple_sub">Otomatis matikan animasi UI</div>
                     </button>
                 </div>
 
                 <div id="graphic-anim-control" class="p-3.5 rounded-2xl border theme-border theme-soft flex flex-wrap items-center justify-between gap-3">
                     <div>
-                        <div class="text-xs font-extrabold">🎬 Toggle Animasi UI</div>
+                        <div class="text-xs font-extrabold" data-i18n="anim_toggle_title">🎬 Toggle Animasi UI</div>
                         <div id="graphic-anim-desc" class="text-[11px] opacity-75">Aktifkan atau matikan animasi UI pada mode Legacy & Minimalist.</div>
                     </div>
                     <div class="flex items-center gap-2">
                         <button type="button" onclick="selectAnim('on')" data-anim-btn="on"
-                                class="setting-pill rounded-full px-3.5 py-1.5 text-xs font-extrabold">
+                                class="setting-pill rounded-full px-3.5 py-1.5 text-xs font-extrabold" data-i18n="anim_on">
                             ✨ Aktif
                         </button>
                         <button type="button" onclick="selectAnim('off')" data-anim-btn="off"
-                                class="setting-pill rounded-full px-3.5 py-1.5 text-xs font-extrabold">
+                                class="setting-pill rounded-full px-3.5 py-1.5 text-xs font-extrabold" data-i18n="anim_off">
                             🔇 Mati
                         </button>
                     </div>
@@ -346,7 +346,7 @@
                 if (curGraphic === 'simple') {
                     descEl.textContent = 'Style Simple aktif: Animasi UI otomatis dimatikan.';
                 } else if (curGraphic === 'minimalist') {
-                    descEl.textContent = 'Mode Minimalist (Style Kantoran): Anda bisa mengaktifkan atau mematikan animasi UI.';
+                    descEl.textContent = 'Mode Minimalist (Simple, tegas & relaks): Anda bisa mengaktifkan atau mematikan animasi UI.';
                 } else {
                     descEl.textContent = 'Mode Legacy: Anda bisa mengaktifkan atau mematikan animasi UI.';
                 }

@@ -64,6 +64,10 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/siswa/bingkai-request', [FrameRequestController::class, 'store'])->name('siswa.frame.request');
     Route::post('/admin/frame-requests/{frameRequest}/approve', [FrameRequestController::class, 'approve'])->name('admin.frame.approve');
     Route::post('/admin/frame-requests/{frameRequest}/reject', [FrameRequestController::class, 'reject'])->name('admin.frame.reject');
+
+    Route::post('/siswa/bingkai-request', [FrameRequestController::class, 'store'])->name('siswa.frame.request');
+    Route::post('/admin/frame-requests/{frameRequest}/approve', [FrameRequestController::class, 'approve'])->name('admin.frame.approve');
+    Route::post('/admin/frame-requests/{frameRequest}/reject', [FrameRequestController::class, 'reject'])->name('admin.frame.reject');
 });
 
 require __DIR__.'/auth.php';

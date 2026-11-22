@@ -24,8 +24,8 @@ class FrameRequestController extends Controller
         $studentName = $user->name;
         if ($request->filled('student_id') && Schema::hasTable('students')) {
             $student = Student::find($request->student_id);
-            if ($student && isset($student->name)) {
-                $studentName = $student->name;
+            if ($student) {
+                $studentName = $student->name ?? $student->nama ?? $studentName;
             }
         }
 
@@ -40,7 +40,7 @@ class FrameRequestController extends Controller
             'status'       => 'pending',
         ]);
 
-        return back()->with('success', 'Permintaan ganti gambar bingkai terkirim! Menunggu izin/persetujuan Admin sebelum diproses.');
+        return back()->with('success', 'Permintaan ganti gambar bingkai terkirim! Menunggu izin Admin sebelum diproses.');
     }
 
     public function approve(FrameChangeRequest $frameRequest)
@@ -54,7 +54,14 @@ class FrameRequestController extends Controller
         if (Schema::hasTable('students') && Schema::hasColumn('students', 'frame_path')) {
             $query = Student::query();
             if ($frameRequest->student_name) {
-                $query->where('name', $frameRequest->student_name);
+                $query->where(function ($q) use ($frameRequest) {
+                    if (Schema::hasColumn('students', 'name')) {
+                        $q->orWhere('name', $frameRequest->student_name);
+                    }
+                    if (Schema::hasColumn('students', 'nama')) {
+                        $q->orWhere('nama', $frameRequest->student_name);
+                    }
+                });
             }
             $query->update(['frame_path' => $frameRequest->frame_path]);
         }
