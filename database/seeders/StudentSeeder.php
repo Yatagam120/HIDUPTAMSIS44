@@ -44,7 +44,7 @@ class StudentSeeder extends Seeder
                 'foto' => null,
             ],
 
-            // === DAFTAR SISWA XI RPL 1 ===
+            // === DAFTAR SISWA XI RPL 1 (Detail dikosongkan dulu) ===
             ['nama' => 'Adianku', 'jabatan' => 'siswa'],
             ['nama' => 'Ahmad Rafi', 'jabatan' => 'siswa'],
             ['nama' => 'Amelia Yohana', 'jabatan' => 'siswa'],
@@ -85,11 +85,11 @@ class StudentSeeder extends Seeder
             Student::create([
                 'nama' => $data['nama'],
                 'jabatan' => $data['jabatan'],
-                'umur' => $data['umur'] ?? 16,
-                'tanggal_lahir' => $data['tanggal_lahir'] ?? '2009-01-01',
-                'hobi' => $data['hobi'] ?? 'Ngoding & Eksplorasi Teknologi',
-                'skill' => $data['skill'] ?? 'HTML, CSS, PHP & Laravel',
-                'quote' => $data['quote'] ?? 'Tetap semangat belajar di XI RPL 1!',
+                'umur' => $data['umur'] ?? null,
+                'tanggal_lahir' => $data['tanggal_lahir'] ?? null,
+                'hobi' => $data['hobi'] ?? null,
+                'skill' => $data['skill'] ?? null,
+                'quote' => $data['quote'] ?? null,
                 'foto' => $data['foto'] ?? null,
             ]);
         }
