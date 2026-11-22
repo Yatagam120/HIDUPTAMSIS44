@@ -136,12 +136,11 @@
                             @if($isOwner)
                                 <div class="flex items-center gap-3 text-xs font-extrabold">
                                     <button type="button"
-                                            onclick='openEditItemModal(@json([
-                                                "id" => $item->id,
-                                                "title" => $item->title ?? "",
-                                                "description" => $item->description ?? "",
-                                                "due_date" => $dueFormattedInput
-                                            ]))'
+                                            data-item-id="{{ $item->id }}"
+                                            data-item-title="{{ $item->title ?? '' }}"
+                                            data-item-description="{{ $item->description ?? '' }}"
+                                            data-item-due="{{ $dueFormattedInput }}"
+                                            onclick="openEditItemModalFromBtn(this)"
                                             class="text-indigo-400 hover:underline">
                                         Edit
                                     </button>
@@ -304,6 +303,15 @@
             const m = document.getElementById('new-item-modal');
             m.classList.add('hidden');
             m.classList.remove('flex');
+        }
+
+        function openEditItemModalFromBtn(btn) {
+            openEditItemModal({
+                id: btn.dataset.itemId || '',
+                title: btn.dataset.itemTitle || '',
+                description: btn.dataset.itemDescription || '',
+                due_date: btn.dataset.itemDue || ''
+            });
         }
 
         function openEditItemModal(item) {
