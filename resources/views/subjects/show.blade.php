@@ -13,16 +13,30 @@
             'event'   => 'bg-amber-500/20 text-amber-300 border-amber-500/40',
         ];
 
-        $currentTab = strtolower((string) (session('active_tab') ?? $activeTab ?? request('tab', 'catatan')));
+        $currentTab = strtolower(trim((string) (session('active_tab') ?? $activeTab ?? request('tab', 'catatan'))));
         if (!array_key_exists($currentTab, $tabs)) {
             $currentTab = 'catatan';
         }
 
         $notif = (string) ($notifColor ?? request('notif', ''));
         $currentUserId = (int) auth()->id();
+        $subjectId = (int) ($subject->id ?? 0);
         $subjectTitle = $subject->name ?? $subject->nama ?? $subject->title ?? 'Mata Pelajaran';
         $teacherName = $subject->teacher ?? $subject->guru ?? null;
-        $safeItems = $items ?? collect();
+
+        $safeItems = $items ?? null;
+        if ($safeItems === null) {
+            if (method_exists($subject, 'items')) {
+                $safeItems = $subject->items()->latest()->get();
+            } elseif (class_exists(\App\Models\SubjectItem::class) && $subjectId > 0) {
+                $safeItems = \App\Models\SubjectItem::where('subject_id', $subjectId)->latest()->get();
+            } else {
+                $safeItems = collect();
+            }
+        }
+        if (!($safeItems instanceof \Illuminate\Support\Collection)) {
+            $safeItems = collect($safeItems);
+        }
 
         $userIds = $safeItems->pluck('user_id')->filter()->unique()->values();
         $usersMap = $userIds->isNotEmpty()
@@ -64,16 +78,23 @@
                 @foreach($tabs as $key => $label)
                     @php
                         $isActive = $currentTab === $key;
-                        $hasSourceNotif = $isActive && in_array($notif, ['yellow', 'red', 'blue'], true);
+                        $hasSourceNotif = in_array($notif, ['yellow', 'red', 'blue'], true) && $isActive;
+                        $tabCount = $safeItems->filter(function ($it) use ($key) {
+                            $t = strtolower(trim((string) ($it->type ?? $it->jenis ?? $it->tipe ?? 'catatan')));
+                            return $t === $key;
+                        })->count();
                     @endphp
                     <button type="button"
                             data-tab="{{ $key }}"
                             onclick="switchSubjectTab('{{ $key }}')"
-                            class="subject-tab-btn px-2.5 sm:px-4 py-2 rounded-xl text-[11px] sm:text-sm font-extrabold border theme-border inline-flex items-center justify-center gap-1 {{ $isActive ? 'theme-primary' : 'theme-card' }}">
+                            class="relative subject-tab-btn px-2 sm:px-4 py-2 rounded-xl text-[11px] sm:text-sm font-extrabold border theme-border inline-flex items-center justify-center gap-1 {{ $isActive ? 'theme-primary' : 'theme-card' }}">
                         @if($hasSourceNotif)
-                            <span class="tab-source-badge badge-{{ $notif }}"></span>
+                            <span class="w-2 h-2 rounded-full bg-amber-400 inline-block"></span>
                         @endif
                         <span>{{ $label }}</span>
+                        @if($tabCount > 0)
+                            <span class="px-1.5 py-0.2 rounded-full text-[10px] bg-black/25">{{ $tabCount }}</span>
+                        @endif
                     </button>
                 @endforeach
             </div>
@@ -89,7 +110,7 @@
         @foreach($tabs as $key => $label)
             @php
                 $tabItems = $safeItems->filter(function ($it) use ($key) {
-                    $rawType = strtolower(trim((string) ($it->type ?? $it->jenis ?? $it->tipe ?? '')));
+                    $rawType = strtolower(trim((string) ($it->type ?? $it->jenis ?? $it->tipe ?? 'catatan')));
                     return $rawType === $key;
                 });
             @endphp
@@ -117,27 +138,28 @@
                         $dueBadgeClass = 'bg-slate-500/20 text-slate-300 border-slate-500/40';
                         $dueLabelPrefix = 'TENGGAT';
 
-                        if (!empty($item->due_date)) {
+                        $rawDue = $item->due_date ?? $item->deadline ?? $item->tanggal ?? null;
+                        if (!empty($rawDue)) {
                             try {
-                                $due = \Carbon\Carbon::parse($item->due_date)->startOfDay();
+                                $due = \Carbon\Carbon::parse($rawDue)->startOfDay();
                                 $diffDays = now()->startOfDay()->diffInDays($due, false);
                                 $dueText = $due->translatedFormat('d M Y');
                                 $dueFormattedInput = $due->format('Y-m-d');
                                 if ($diffDays < 0) {
-                                    $dueBadgeClass = 'bg-red-500/20 text-red-300 border-red-500/40';
+                                    $dueBadgeClass = 'bg-red-500/25 text-red-200 border-red-500/50';
                                     $dueLabelPrefix = 'LEWAT TENGGAT';
                                 } elseif ($diffDays === 0) {
-                                    $dueBadgeClass = 'bg-red-500/20 text-red-300 border-red-500/40';
-                                    $dueLabelPrefix = 'TENGGAT HARI INI';
+                                    $dueBadgeClass = 'bg-red-500/25 text-red-200 border-red-500/50';
+                                    $dueLabelPrefix = 'HARI INI';
                                 } elseif ($diffDays <= 2) {
-                                    $dueBadgeClass = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+                                    $dueBadgeClass = 'bg-amber-500/25 text-amber-200 border-amber-500/50';
                                     $dueLabelPrefix = 'TENGGAT DEKAT';
                                 } else {
-                                    $dueBadgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+                                    $dueBadgeClass = 'bg-emerald-500/25 text-emerald-200 border-emerald-500/50';
                                     $dueLabelPrefix = 'TENGGAT';
                                 }
                             } catch (\Throwable $e) {
-                                $dueText = (string) $item->due_date;
+                                $dueText = (string) $rawDue;
                             }
                         }
                     @endphp
@@ -149,7 +171,7 @@
                                     <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase border {{ $itemTypeStyle }}">
                                         {{ $itemTypeLabel }}
                                     </span>
-                                    <h2 class="text-sm sm:text-base font-extrabold uppercase">{{ $item->title ?? 'Tanpa Judul' }}</h2>
+                                    <h2 class="text-sm sm:text-base font-extrabold uppercase">{{ $item->title ?? $item->judul ?? 'Tanpa Judul' }}</h2>
                                     @if($dueText && !$isDoneByMe)
                                         <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold border {{ $dueBadgeClass }}">
                                             ⏰ {{ $dueLabelPrefix }}: {{ $dueText }}
@@ -168,8 +190,8 @@
                                 <div class="flex items-center gap-3 text-xs font-extrabold pt-1 sm:pt-0">
                                     <button type="button"
                                             data-item-id="{{ $item->id }}"
-                                            data-item-title="{{ $item->title ?? '' }}"
-                                            data-item-description="{{ $item->description ?? '' }}"
+                                            data-item-title="{{ $item->title ?? $item->judul ?? '' }}"
+                                            data-item-description="{{ $item->description ?? $item->deskripsi ?? '' }}"
                                             data-item-due="{{ $dueFormattedInput }}"
                                             onclick="openEditItemModalFromBtn(this)"
                                             class="text-indigo-400 hover:underline">
@@ -190,8 +212,9 @@
                             @endif
                         </div>
 
-                        @if(!empty($item->description))
-                            <p class="text-xs sm:text-sm opacity-90 whitespace-pre-line">{{ $item->description }}</p>
+                        @php $descText = $item->description ?? $item->deskripsi ?? null; @endphp
+                        @if(!empty($descText))
+                            <p class="text-xs sm:text-sm opacity-90 whitespace-pre-line">{{ $descText }}</p>
                         @endif
 
                         @if(in_array($key, ['tugas', 'pr'], true) && \Illuminate\Support\Facades\Route::has('items.toggle-complete'))
