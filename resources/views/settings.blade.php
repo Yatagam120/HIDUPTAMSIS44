@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <style>
         .grid-5-cols {
             display: grid;
@@ -98,43 +98,43 @@
             <!-- Section Grafik (3 Style UI: Legacy, Minimalist, Style Simple + Toggle Animasi) -->
             <div class="space-y-3 pt-2 border-t border-gray-200/20">
                 <div>
-                    <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85" data-i18n="graphic_label">ðŸ“Š Grafik</h2>
+                    <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85" data-i18n="graphic_label">📊 Grafik</h2>
                     <p class="text-[11px] opacity-75 mt-0.5" data-i18n="graphic_sub">Style untuk header, button, dan panel web: Legacy (UI sekarang), Minimalist (tegas, simple & relaks), atau Style Simple (otomatis matikan animasi).</p>
                 </div>
 
                 <div class="grid-3-cols">
                     <button type="button" onclick="selectGraphicStyle('legacy')" data-graphic-btn="legacy"
                             class="setting-pill rounded-2xl px-4 py-2.5 text-xs font-extrabold text-left">
-                        <div>ðŸ›ï¸ Legacy</div>
+                        <div>🏛️ Legacy</div>
                         <div class="text-[10px] font-normal opacity-75" data-i18n="graphic_legacy_sub">UI style sekarang</div>
                     </button>
 
                     <button type="button" onclick="selectGraphicStyle('minimalist')" data-graphic-btn="minimalist"
                             class="setting-pill rounded-2xl px-4 py-2.5 text-xs font-extrabold text-left">
-                        <div>ðŸ’¼ Minimalist</div>
+                        <div>💼 Minimalist</div>
                         <div class="text-[10px] font-normal opacity-75" data-i18n="graphic_min_sub">Simple, tegas & relaks</div>
                     </button>
 
                     <button type="button" onclick="selectGraphicStyle('simple')" data-graphic-btn="simple"
                             class="setting-pill rounded-2xl px-4 py-2.5 text-xs font-extrabold text-left">
-                        <div>âš¡ Style Simple</div>
+                        <div>⚡ Style Simple</div>
                         <div class="text-[10px] font-normal opacity-75" data-i18n="graphic_simple_sub">Otomatis matikan animasi UI</div>
                     </button>
                 </div>
 
                 <div id="graphic-anim-control" class="p-3.5 rounded-2xl border theme-border theme-soft flex flex-wrap items-center justify-between gap-3">
                     <div>
-                        <div class="text-xs font-extrabold" data-i18n="anim_toggle_title">ðŸŽ¬ Toggle Animasi UI</div>
+                        <div class="text-xs font-extrabold" data-i18n="anim_toggle_title">🎬 Toggle Animasi UI</div>
                         <div id="graphic-anim-desc" class="text-[11px] opacity-75">Aktifkan atau matikan animasi UI pada mode Legacy & Minimalist.</div>
                     </div>
                     <div class="flex items-center gap-2">
                         <button type="button" onclick="selectAnim('on')" data-anim-btn="on"
                                 class="setting-pill rounded-full px-3.5 py-1.5 text-xs font-extrabold" data-i18n="anim_on">
-                            âœ¨ Aktif
+                            ✨ Aktif
                         </button>
                         <button type="button" onclick="selectAnim('off')" data-anim-btn="off"
                                 class="setting-pill rounded-full px-3.5 py-1.5 text-xs font-extrabold" data-i18n="anim_off">
-                            ðŸ”‡ Mati
+                            🔇 Mati
                         </button>
                     </div>
                 </div>
@@ -165,19 +165,19 @@
                 <div class="grid-4-cols">
                     <button type="button" onclick="selectLang('id')" data-lang-btn="id"
                             class="setting-pill w-full rounded-full px-3 py-2 text-[11px] sm:text-xs font-bold text-center">
-                        ðŸ‡®ðŸ‡© Indonesia
+                        🇮🇩 Indonesia
                     </button>
                     <button type="button" onclick="selectLang('en')" data-lang-btn="en"
                             class="setting-pill w-full rounded-full px-3 py-2 text-[11px] sm:text-xs font-bold text-center">
-                        ðŸ‡¬ðŸ‡§ English
+                        🇬🇧 English
                     </button>
                     <button type="button" onclick="selectLang('ja')" data-lang-btn="ja"
                             class="setting-pill w-full rounded-full px-3 py-2 text-[11px] sm:text-xs font-bold text-center">
-                        ðŸ‡¯ðŸ‡µ æ—¥æœ¬èªž (Jepang)
+                        🇯🇵 日本語 (Jepang)
                     </button>
                     <button type="button" onclick="selectLang('ru')" data-lang-btn="ru"
                             class="setting-pill w-full rounded-full px-3 py-2 text-[11px] sm:text-xs font-bold text-center">
-                        ðŸ‡·ðŸ‡º Ð ÑƒÑÑÐºÐ¸Ð¹ (Rusia)
+                        🇷🇺 Русский (Rusia)
                     </button>
                 </div>
             </div>
@@ -188,18 +188,18 @@
                 <div class="grid grid-cols-2 gap-2.5">
                     <button type="button" onclick="selectSfx('active')" data-sfx-btn="active"
                             class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
-                        ðŸ”Š <span data-i18n="sfx_on">Aktif</span>
+                        🔊 <span data-i18n="sfx_on">Aktif</span>
                     </button>
                     <button type="button" onclick="selectSfx('muted')" data-sfx-btn="muted"
                             class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
-                        ðŸ”‡ <span data-i18n="sfx_off">Senyap</span>
+                        🔇 <span data-i18n="sfx_off">Senyap</span>
                     </button>
                 </div>
             </div>
 
             <!-- Kode Unik (Easter Egg) -->
             <div class="pt-3 border-t border-gray-200/20">
-                <h2 class="text-sm font-extrabold" data-i18n="easter_title">Kode Unik (Easter Egg) ðŸŽ</h2>
+                <h2 class="text-sm font-extrabold" data-i18n="easter_title">Kode Unik (Easter Egg) 🎁</h2>
                 <p class="text-xs opacity-75 mt-0.5 mb-3" data-i18n="easter_sub">Punya kode rahasia kelas XI RPL 1? Masukkan di sini untuk membuka fitur tersembunyi!</p>
 
                 <div class="flex gap-2">
@@ -225,7 +225,7 @@
 
                 <button type="button" onclick="playSfx('click'); document.getElementById('feedback-panel').classList.toggle('hidden')"
                         class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold theme-primary shadow-md hover:opacity-90 transition flex items-center gap-1.5">
-                    <span>â­</span>
+                    <span>⭐</span>
                     <span data-i18n="saran_btn">Kasih Saran & Laporan Bug</span>
                 </button>
             </div>
@@ -235,7 +235,7 @@
                     @csrf
 
                     <div>
-                        <label class="block text-xs font-bold mb-1.5" data-i18n="rating_label">Rating Web (0.0 â€“ 5.0 Bintang)</label>
+                        <label class="block text-xs font-bold mb-1.5" data-i18n="rating_label">Rating Web (0.0 – 5.0 Bintang)</label>
                         <div class="flex flex-wrap items-center gap-3">
                             <input type="range" id="rating-slider" min="0" max="5" step="0.1" value="5.0"
                                    oninput="syncStarRating(this.value)"
@@ -245,7 +245,7 @@
                                 <input type="number" id="rating-number" name="rating" min="0" max="5" step="0.1" value="5.0" required
                                        oninput="syncStarRating(this.value)"
                                        class="w-20 rounded-xl border p-2 text-sm font-extrabold text-center">
-                                <span id="star-visual" class="text-amber-400 text-sm sm:text-base font-bold tracking-wider">â˜…â˜…â˜…â˜…â˜… (5.0)</span>
+                                <span id="star-visual" class="text-amber-400 text-sm sm:text-base font-bold tracking-wider">★★★★★ (5.0)</span>
                             </div>
                         </div>
                         <p class="text-[11px] opacity-70 mt-1" data-i18n="rating_hint">Geser slider atau ketik angka desimal seperti 4.5, 3.4, atau 5.0.</p>
@@ -264,7 +264,7 @@
                             <input type="file" id="feedback-media-input" name="media[]" multiple accept="image/*,video/*" class="hidden">
                             <button type="button" onclick="document.getElementById('feedback-media-input').click()"
                                     class="px-3.5 py-2 rounded-xl border theme-border theme-soft text-xs font-extrabold hover:opacity-90 transition">
-                                ðŸ“Ž + Tambah Foto / Video
+                                📎 + Tambah Foto / Video
                             </button>
                             <span id="feedback-file-count" class="text-xs opacity-75">Belum ada file dipilih</span>
                         </div>
@@ -297,11 +297,11 @@
             files.forEach((file, idx) => {
                 const chip = document.createElement('div');
                 chip.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border theme-border theme-soft text-[11px] font-bold max-w-full';
-                const icon = file.type.startsWith('video/') ? 'ðŸŽ¬' : 'ðŸ–¼ï¸';
+                const icon = file.type.startsWith('video/') ? '🎬' : '🖼️';
                 chip.innerHTML = `
                     <span>${icon}</span>
                     <span class="truncate max-w-[160px]">${file.name}</span>
-                    <button type="button" onclick="removeFeedbackFile(${idx})" class="text-red-400 hover:text-red-300 font-extrabold ml-1">âœ•</button>
+                    <button type="button" onclick="removeFeedbackFile(${idx})" class="text-red-400 hover:text-red-300 font-extrabold ml-1">✕</button>
                 `;
                 listEl.appendChild(chip);
             });
@@ -423,11 +423,11 @@
             if (code === 'XIRPL1' || code === 'TAMSIS' || code === 'ARCHIE' || code === 'BEBEK') {
                 playSfx('secret');
                 fb.className = 'mt-2 text-xs font-bold text-amber-300';
-                fb.textContent = 'ðŸŽ‰ Kode rahasia berhasil diklaim! Selamat datang anggota spesial XI RPL 1!';
+                fb.textContent = '🎉 Kode rahasia berhasil diklaim! Selamat datang anggota spesial XI RPL 1!';
             } else {
                 playSfx('click');
                 fb.className = 'mt-2 text-xs font-bold text-red-400';
-                fb.textContent = 'âŒ Kode unik tidak valid. Coba lagi!';
+                fb.textContent = '❌ Kode unik tidak valid. Coba lagi!';
             }
         }
 
@@ -441,18 +441,17 @@
             document.getElementById('rating-number').value = num.toFixed(1);
 
             const fullStars = Math.floor(num);
-            const halfStar = (num - fullStars) >= 0.4 ? 'â¯ª' : '';
+            const halfStar = (num - fullStars) >= 0.4 ? '⯪' : '';
             const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-            const starsStr = 'â˜…'.repeat(fullStars) + halfStar + 'â˜†'.repeat(Math.max(0, emptyStars));
+            const starsStr = '★'.repeat(fullStars) + halfStar + '☆'.repeat(Math.max(0, emptyStars));
 
             document.getElementById('star-visual').textContent = `${starsStr} (${num.toFixed(1)})`;
         }
 
         document.addEventListener('DOMContentLoaded', refreshActivePills);
     </script>
-
+</x-app-layout>
 <style>
-    /* Fix kontras teks & card di halaman Pengaturan tanpa mengubah layout asli */
     body[data-theme="mode-gelap"],
     body[data-theme="academic-trust"],
     body[data-theme="deep-ocean"],
@@ -463,7 +462,6 @@
         --border-color: rgba(148, 163, 184, 0.28) !important;
         color: #f1f5f9 !important;
     }
-
     body[data-theme="teal-growth"],
     body[data-theme="creative-spark"],
     body[data-theme="lavender-dream"],
@@ -474,13 +472,11 @@
         --border-color: rgba(15, 23, 42, 0.16) !important;
         color: #0f172a !important;
     }
-
     .theme-card {
         background-color: var(--card-bg) !important;
         color: var(--text-main) !important;
         border-color: var(--border-color) !important;
     }
-
     body[data-theme="mode-gelap"] .theme-card button:not(.theme-primary):not(.active),
     body[data-theme="academic-trust"] .theme-card button:not(.theme-primary):not(.active),
     body[data-theme="deep-ocean"] .theme-card button:not(.theme-primary):not(.active),
@@ -490,7 +486,6 @@
         color: #f8fafc !important;
         opacity: 1 !important;
     }
-
     body[data-theme="teal-growth"] .theme-card button:not(.theme-primary):not(.active),
     body[data-theme="creative-spark"] .theme-card button:not(.theme-primary):not(.active),
     body[data-theme="lavender-dream"] .theme-card button:not(.theme-primary):not(.active),
@@ -501,4 +496,3 @@
         opacity: 1 !important;
     }
 </style>
-</x-app-layout>
