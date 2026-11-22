@@ -93,7 +93,7 @@ class StudentSeeder extends Seeder
                 'tanggal_lahir' => $data['tanggal_lahir'] ?? '2009-01-01',
                 'hobi' => $data['hobi'] ?? '-',
                 'skill' => $data['skill'] ?? '-',
-                'quote' => $data['quote'] ?? null,
+                'quote' => $data['quote'] ?? '-',
                 'foto' => $data['foto'] ?? null,
             ]);
         }
