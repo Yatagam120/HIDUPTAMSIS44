@@ -6,10 +6,18 @@
             'pr'      => 'PR',
             'event'   => 'Event',
         ];
-        $currentTab = strtolower((string) ($activeTab ?? request('tab', 'catatan')));
+        $typeBadges = [
+            'catatan' => 'bg-sky-500/20 text-sky-300 border-sky-500/40',
+            'tugas'   => 'bg-indigo-500/20 text-indigo-300 border-indigo-500/40',
+            'pr'      => 'bg-purple-500/20 text-purple-300 border-purple-500/40',
+            'event'   => 'bg-amber-500/20 text-amber-300 border-amber-500/40',
+        ];
+
+        $currentTab = strtolower((string) (session('active_tab') ?? $activeTab ?? request('tab', 'catatan')));
         if (!array_key_exists($currentTab, $tabs)) {
             $currentTab = 'catatan';
         }
+
         $notif = (string) ($notifColor ?? request('notif', ''));
         $currentUserId = (int) auth()->id();
         $subjectTitle = $subject->name ?? $subject->nama ?? $subject->title ?? 'Mata Pelajaran';
@@ -22,7 +30,7 @@
             : collect();
     @endphp
 
-    <div class="max-w-5xl mx-auto space-y-5">
+    <div class="max-w-5xl mx-auto space-y-4 sm:space-y-5 px-1 sm:px-0">
         <div>
             <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold hover:opacity-80" style="color: var(--primary);">
                 ← Kembali ke Jadwal Utama
@@ -41,18 +49,18 @@
             </div>
         @endif
 
-        <div class="theme-card rounded-2xl p-5 sm:p-7 border theme-border space-y-2">
+        <div class="theme-card rounded-2xl p-4 sm:p-7 border theme-border space-y-2">
             <span class="inline-block px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider theme-soft" style="color: var(--primary);">
                 {{ $subjectTitle }}
             </span>
-            <h1 class="text-xl sm:text-3xl font-extrabold">{{ $subjectTitle }}</h1>
+            <h1 class="text-lg sm:text-3xl font-extrabold">{{ $subjectTitle }}</h1>
             @if(!empty($teacherName))
                 <p class="text-xs opacity-75">Guru Pengampu: {{ $teacherName }}</p>
             @endif
         </div>
 
-        <div class="flex flex-wrap items-center justify-between gap-3">
-            <div class="flex flex-wrap items-center gap-2">
+        <div class="flex flex-col sm:flex-row sm:flex-wrap sm:items-center sm:justify-between gap-2.5 sm:gap-3">
+            <div class="grid grid-cols-4 sm:flex sm:flex-wrap items-center gap-1.5 sm:gap-2">
                 @foreach($tabs as $key => $label)
                     @php
                         $isActive = $currentTab === $key;
@@ -61,7 +69,7 @@
                     <button type="button"
                             data-tab="{{ $key }}"
                             onclick="switchSubjectTab('{{ $key }}')"
-                            class="subject-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold border theme-border inline-flex items-center {{ $isActive ? 'theme-primary' : 'theme-card' }}">
+                            class="subject-tab-btn px-2.5 sm:px-4 py-2 rounded-xl text-[11px] sm:text-sm font-extrabold border theme-border inline-flex items-center justify-center gap-1 {{ $isActive ? 'theme-primary' : 'theme-card' }}">
                         @if($hasSourceNotif)
                             <span class="tab-source-badge badge-{{ $notif }}"></span>
                         @endif
@@ -73,18 +81,28 @@
             <button type="button"
                     onclick="openNewItemModal()"
                     id="btn-add-subject-item"
-                    class="px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold theme-primary shadow">
+                    class="w-full sm:w-auto px-4 py-2.5 sm:py-2 rounded-xl text-xs sm:text-sm font-extrabold theme-primary shadow text-center">
                 + Tambah {{ $tabs[$currentTab] ?? 'Catatan' }} Baru
             </button>
         </div>
 
         @foreach($tabs as $key => $label)
             @php
-                $tabItems = $safeItems->filter(fn($it) => strtolower((string) ($it->type ?? '')) === $key);
+                $tabItems = $safeItems->filter(function ($it) use ($key) {
+                    $rawType = strtolower(trim((string) ($it->type ?? $it->jenis ?? $it->tipe ?? '')));
+                    return $rawType === $key;
+                });
             @endphp
-            <div id="panel-{{ $key }}" class="subject-tab-panel space-y-4 {{ $currentTab === $key ? '' : 'hidden' }}">
+            <div id="panel-{{ $key }}" class="subject-tab-panel space-y-3 sm:space-y-4 {{ $currentTab === $key ? '' : 'hidden' }}">
                 @forelse($tabItems as $item)
                     @php
+                        $itemType = strtolower(trim((string) ($item->type ?? $item->jenis ?? $item->tipe ?? $key)));
+                        if (!array_key_exists($itemType, $tabs)) {
+                            $itemType = $key;
+                        }
+                        $itemTypeLabel = strtoupper($tabs[$itemType] ?? $label);
+                        $itemTypeStyle = $typeBadges[$itemType] ?? 'theme-soft theme-border';
+
                         $itemOwnerId = (int) ($item->user_id ?? 0);
                         $isOwner = $currentUserId > 0 && $itemOwnerId === $currentUserId;
                         $authorName = $usersMap[$itemOwnerId] ?? 'Siswa';
@@ -96,7 +114,9 @@
 
                         $dueText = null;
                         $dueFormattedInput = '';
-                        $dueBadgeClass = '';
+                        $dueBadgeClass = 'bg-slate-500/20 text-slate-300 border-slate-500/40';
+                        $dueLabelPrefix = 'TENGGAT';
+
                         if (!empty($item->due_date)) {
                             try {
                                 $due = \Carbon\Carbon::parse($item->due_date)->startOfDay();
@@ -105,8 +125,16 @@
                                 $dueFormattedInput = $due->format('Y-m-d');
                                 if ($diffDays < 0) {
                                     $dueBadgeClass = 'bg-red-500/20 text-red-300 border-red-500/40';
+                                    $dueLabelPrefix = 'LEWAT TENGGAT';
+                                } elseif ($diffDays === 0) {
+                                    $dueBadgeClass = 'bg-red-500/20 text-red-300 border-red-500/40';
+                                    $dueLabelPrefix = 'TENGGAT HARI INI';
                                 } elseif ($diffDays <= 2) {
                                     $dueBadgeClass = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+                                    $dueLabelPrefix = 'TENGGAT DEKAT';
+                                } else {
+                                    $dueBadgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
+                                    $dueLabelPrefix = 'TENGGAT';
                                 }
                             } catch (\Throwable $e) {
                                 $dueText = (string) $item->due_date;
@@ -114,27 +142,30 @@
                         }
                     @endphp
 
-                    <div class="theme-card rounded-2xl p-5 border theme-border space-y-3">
-                        <div class="flex flex-wrap items-start justify-between gap-2">
-                            <div class="space-y-1">
-                                <div class="flex flex-wrap items-center gap-2">
+                    <div class="theme-card rounded-2xl p-4 sm:p-5 border theme-border space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                            <div class="space-y-1.5">
+                                <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                                    <span class="px-2 py-0.5 rounded-md text-[10px] font-extrabold uppercase border {{ $itemTypeStyle }}">
+                                        {{ $itemTypeLabel }}
+                                    </span>
                                     <h2 class="text-sm sm:text-base font-extrabold uppercase">{{ $item->title ?? 'Tanpa Judul' }}</h2>
-                                    @if($dueBadgeClass && !$isDoneByMe)
-                                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border {{ $dueBadgeClass }}">
-                                            ⚠️ TENGGAT ({{ $dueText }})
+                                    @if($dueText && !$isDoneByMe)
+                                        <span class="px-2 py-0.5 rounded-full text-[10px] font-extrabold border {{ $dueBadgeClass }}">
+                                            ⏰ {{ $dueLabelPrefix }}: {{ $dueText }}
                                         </span>
                                     @endif
                                 </div>
-                                <div class="text-xs opacity-75">
-                                    Oleh <strong>{{ $authorName }}</strong>
+                                <div class="text-[11px] sm:text-xs opacity-75 flex flex-wrap items-center gap-x-2 gap-y-1">
+                                    <span>Oleh <strong>{{ $authorName }}</strong></span>
                                     @if($dueText)
-                                        • Tenggat: <strong>{{ $dueText }}</strong>
+                                        <span>• Tenggat: <strong>{{ $dueText }}</strong></span>
                                     @endif
                                 </div>
                             </div>
 
                             @if($isOwner)
-                                <div class="flex items-center gap-3 text-xs font-extrabold">
+                                <div class="flex items-center gap-3 text-xs font-extrabold pt-1 sm:pt-0">
                                     <button type="button"
                                             data-item-id="{{ $item->id }}"
                                             data-item-title="{{ $item->title ?? '' }}"
@@ -176,7 +207,7 @@
                         @endif
                     </div>
                 @empty
-                    <div class="theme-card rounded-2xl p-8 border theme-border text-center text-xs sm:text-sm opacity-70">
+                    <div class="theme-card rounded-2xl p-6 sm:p-8 border theme-border text-center text-xs sm:text-sm opacity-70">
                         Belum ada {{ strtolower($label) }} untuk mata pelajaran ini.
                     </div>
                 @endforelse
