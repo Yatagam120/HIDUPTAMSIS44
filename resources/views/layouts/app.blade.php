@@ -20,7 +20,7 @@
             --font-family: 'Figtree', system-ui, -apple-system, sans-serif;
         }
 
-        /* Tema Gelap */
+        /* Tema Gelap (Gradien) */
         body[data-theme="academic-trust"] {
             --bg-gradient: linear-gradient(135deg, #0a192f 0%, #102a4c 50%, #071120 100%);
             --bg-card: rgba(15, 32, 60, 0.85);
@@ -62,7 +62,7 @@
             --border-color: rgba(161, 161, 170, 0.25);
         }
 
-        /* Tema Terang */
+        /* Tema Terang (Gradien) */
         body[data-theme="teal-growth"] {
             --bg-gradient: linear-gradient(135deg, #ecfdf5 0%, #ccfbf1 55%, #e0f2fe 100%);
             --bg-card: rgba(255, 255, 255, 0.88);
@@ -104,6 +104,7 @@
             --border-color: rgba(217, 119, 6, 0.28);
         }
 
+        /* Gaya Huruf */
         body[data-font="sans"] { --font-family: 'Figtree', system-ui, -apple-system, sans-serif; }
         body[data-font="serif"] { --font-family: Georgia, 'Times New Roman', serif; }
         body[data-font="mono"] { --font-family: 'Fira Code', 'Consolas', monospace; }
@@ -129,11 +130,27 @@
             backdrop-filter: blur(12px);
             transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, background-color 0.3s ease;
         }
-        .theme-primary { background-color: var(--primary); color: #ffffff; }
-        .theme-soft { background-color: var(--primary-soft); }
-        .theme-border { border-color: var(--border-color); }
 
-        /* Minimalist */
+        .theme-primary {
+            background-color: var(--primary);
+            color: #ffffff;
+        }
+
+        .theme-soft {
+            background-color: var(--primary-soft);
+        }
+
+        .theme-border {
+            border-color: var(--border-color);
+        }
+
+        /* =========================================================
+           3 STYLE GRAFIK UI: LEGACY, MINIMALIST (TEGAS & RELAKS), SIMPLE
+           ========================================================= */
+        body[data-graphic="legacy"] nav.main-tamsis-nav {
+            border-radius: 0;
+        }
+
         body[data-graphic="minimalist"] {
             --bg-gradient: #0f172a;
             --bg-card: #162033;
@@ -148,15 +165,37 @@
             --bg-card: #ffffff;
             --border-color: rgba(15, 23, 42, 0.14);
         }
-        body[data-graphic="minimalist"] nav.main-tamsis-nav,
-        body[data-graphic="minimalist"] .theme-card {
+        body[data-graphic="minimalist"] nav.main-tamsis-nav {
+            background: var(--bg-card) !important;
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
             box-shadow: none !important;
+            border-bottom: 1px solid var(--border-color) !important;
+        }
+        body[data-graphic="minimalist"] .theme-card {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
             border-radius: 8px !important;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
+            border: 1px solid var(--border-color) !important;
+        }
+        body[data-graphic="minimalist"] button,
+        body[data-graphic="minimalist"] .nav-btn-anim,
+        body[data-graphic="minimalist"] .j-filter-btn,
+        body[data-graphic="minimalist"] .setting-pill {
+            border-radius: 7px !important;
+            box-shadow: none !important;
+            font-weight: 600 !important;
+            letter-spacing: 0.01em;
+        }
+        body[data-graphic="minimalist"] input,
+        body[data-graphic="minimalist"] select,
+        body[data-graphic="minimalist"] textarea {
+            border-radius: 7px !important;
+            box-shadow: none !important;
         }
 
-        /* Style Simple (Default user baru) */
+        /* Style Simple: Ringan & otomatis matikan animasi UI */
         body[data-graphic="simple"] {
             --bg-gradient: #121215;
             --bg-card: #1c1c21;
@@ -179,15 +218,52 @@
             display: none !important;
         }
 
-        /* Toggle Animasi */
+        /* Toggle Animasi (Aktif / Mati) */
         body[data-anim="off"] *,
         body[data-anim="off"] *::before,
         body[data-anim="off"] *::after {
             animation: none !important;
             transition: none !important;
+            scroll-behavior: auto !important;
+        }
+        body[data-anim="off"] .theme-card,
+        body[data-anim="off"] nav.main-tamsis-nav {
+            backdrop-filter: none !important;
+            -webkit-backdrop-filter: none !important;
         }
         body[data-anim="off"] #tamsis-splash {
             display: none !important;
+        }
+
+        @keyframes pageFadeSlide {
+            0% { opacity: 0; transform: translateY(10px) scale(0.99); }
+            100% { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .page-animate-in {
+            animation: pageFadeSlide 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        table a, .subject-box, .theme-card a[href*="/mapel/"] {
+            transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, border-color 0.22s ease, background-color 0.22s ease !important;
+        }
+        table a:hover, .subject-box:hover, .theme-card a[href*="/mapel/"]:hover {
+            transform: translateY(-3px) scale(1.025) !important;
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.32) !important;
+            border-color: var(--primary) !important;
+        }
+        table a:active, .subject-box:active {
+            transform: scale(0.97) !important;
+        }
+
+        .nav-btn-anim {
+            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+        .nav-btn-anim:hover {
+            transform: translateY(-2px) scale(1.04);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.28);
+        }
+        .nav-btn-anim:active {
+            transform: scale(0.95);
         }
 
         .nav-links-wrap {
@@ -195,25 +271,36 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 6px;
+            overflow: visible !important;
         }
 
-        nav.main-tamsis-nav {
-            position: sticky;
-            top: 0;
-            z-index: 9990 !important;
-            background: rgba(18, 18, 22, 0.97) !important;
-            border-bottom: 1px solid var(--border-color);
+        #tamsis-splash {
+            position: fixed;
+            inset: 0;
+            z-index: 99999;
+            background: radial-gradient(circle at center, #0284c7 0%, #0b2447 75%, #061326 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: #ffffff;
+            transition: opacity 0.22s ease, visibility 0.22s ease;
         }
-        body[data-theme="academic-trust"] nav.main-tamsis-nav { background: rgba(10, 22, 44, 0.96) !important; }
-        body[data-theme="midnight-scholar"] nav.main-tamsis-nav { background: rgba(19, 17, 48, 0.96) !important; }
-        body[data-theme="deep-ocean"] nav.main-tamsis-nav { background: rgba(4, 34, 56, 0.96) !important; }
-        body[data-theme="forest-academy"] nav.main-tamsis-nav { background: rgba(5, 46, 26, 0.96) !important; }
-        body[data-theme="teal-growth"] nav.main-tamsis-nav,
-        body[data-theme="creative-spark"] nav.main-tamsis-nav,
-        body[data-theme="lavender-dream"] nav.main-tamsis-nav,
-        body[data-theme="soft-berry"] nav.main-tamsis-nav,
-        body[data-theme="morning-assembly"] nav.main-tamsis-nav {
-            background: rgba(255, 255, 255, 0.96) !important;
+        #tamsis-splash.splash-hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        @keyframes splashFastBar {
+            0% { width: 20%; }
+            100% { width: 100%; }
+        }
+        .splash-progress-fill {
+            height: 100%;
+            background: #ffffff;
+            border-radius: 9999px;
+            animation: splashFastBar 0.2s ease-out forwards;
         }
 
         input, select, textarea {
@@ -238,6 +325,32 @@
         body[data-theme="morning-assembly"] textarea {
             background-color: rgba(255, 255, 255, 0.9);
             color: #0f172a;
+        }
+
+        nav.main-tamsis-nav {
+            position: sticky;
+            top: 0;
+            z-index: 9990 !important;
+            background: rgba(18, 18, 22, 0.97) !important;
+            backdrop-filter: blur(16px);
+            border-bottom: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+        }
+        body[data-theme="academic-trust"] nav.main-tamsis-nav { background: rgba(10, 22, 44, 0.96) !important; }
+        body[data-theme="midnight-scholar"] nav.main-tamsis-nav { background: rgba(19, 17, 48, 0.96) !important; }
+        body[data-theme="deep-ocean"] nav.main-tamsis-nav { background: rgba(4, 34, 56, 0.96) !important; }
+        body[data-theme="forest-academy"] nav.main-tamsis-nav { background: rgba(5, 46, 26, 0.96) !important; }
+        body[data-theme="teal-growth"] nav.main-tamsis-nav,
+        body[data-theme="creative-spark"] nav.main-tamsis-nav,
+        body[data-theme="lavender-dream"] nav.main-tamsis-nav,
+        body[data-theme="soft-berry"] nav.main-tamsis-nav,
+        body[data-theme="morning-assembly"] nav.main-tamsis-nav {
+            background: rgba(255, 255, 255, 0.96) !important;
+        }
+
+        main.page-animate-in {
+            width: 100%;
+            box-sizing: border-box;
         }
 
         /* Badge notifikasi tab sumber pada halaman detail mapel */
@@ -287,7 +400,7 @@
         }
 
         /* =========================================================
-           PERBAIKAN LAYOUT & FILTER HP (MUAT LAYAR & RAPI)
+           LAYOUT & FILTER HP (MUAT LAYAR & RAPI)
            ========================================================= */
         @media (max-width: 640px) {
             nav.main-tamsis-nav > div {
@@ -312,8 +425,16 @@
             main.page-animate-in {
                 padding: 0.5rem 0.35rem !important;
             }
+            .grid-5-cols,
+            .grid-4-cols {
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 0.45rem !important;
+            }
+            .grid-3-cols {
+                grid-template-columns: 1fr !important;
+                gap: 0.45rem !important;
+            }
 
-            /* Filter jadwal rapi dalam grid 2 kolom di HP */
             .filter-bar-mobile-grid {
                 display: grid !important;
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
@@ -330,7 +451,6 @@
                 margin: 0 !important;
             }
 
-            /* Tabel jadwal muat layar HP tanpa huruf terpotong per karakter */
             .timetable-wrap-scroll {
                 overflow-x: hidden !important;
                 width: 100% !important;
@@ -383,40 +503,85 @@
                 top: 2px !important;
             }
         }
+
+        @media (min-width: 641px) and (max-width: 1024px) {
+            main.page-animate-in {
+                padding-left: 0.9rem !important;
+                padding-right: 0.9rem !important;
+            }
+            .timetable-grid th,
+            .timetable-grid td {
+                font-size: 9px !important;
+                padding: 3px 2px !important;
+            }
+        }
     </style>
 </head>
 <body class="antialiased" data-theme="mode-gelap" data-font="sans" data-graphic="simple" data-anim="off">
     @php
-        // Hitung jumlah tugas & PR yang belum dikerjakan oleh user saat ini
         $pendingTaskCount = 0;
-        if (Auth::check() && \Illuminate\Support\Facades\Schema::hasTable('subject_items')) {
-            $userId = Auth::id();
-            $taskItems = \App\Models\SubjectItem::whereIn('type', ['tugas', 'pr'])->get();
-            foreach ($taskItems as $ti) {
-                $doneByList = is_array($ti->completed_by ?? null) ? $ti->completed_by : json_decode($ti->completed_by ?? '[]', true);
-                $isDone = !empty($ti->is_completed) || (is_array($doneByList) && in_array($userId, $doneByList));
-                if (!$isDone) {
-                    $pendingTaskCount++;
+        if (\Illuminate\Support\Facades\Auth::check()) {
+            try {
+                if (class_exists(\App\Models\SubjectItem::class) && \Illuminate\Support\Facades\Schema::hasTable('subject_items')) {
+                    $userId = (int) \Illuminate\Support\Facades\Auth::id();
+                    $taskItems = \App\Models\SubjectItem::whereIn('type', ['tugas', 'pr'])->get();
+                    foreach ($taskItems as $ti) {
+                        $doneByList = is_array($ti->completed_by ?? null)
+                            ? $ti->completed_by
+                            : (json_decode($ti->completed_by ?? '[]', true) ?: []);
+                        $isDone = !empty($ti->is_completed) || in_array($userId, array_map('intval', $doneByList), true);
+                        if (!$isDone) {
+                            $pendingTaskCount++;
+                        }
+                    }
                 }
+            } catch (\Throwable $e) {
+                $pendingTaskCount = 0;
             }
         }
 
-        // Update aktivitas online user saat ini
         $onlineUsersCount = 0;
-        if (Auth::check() && \Illuminate\Support\Facades\Schema::hasColumn('users', 'last_seen_at')) {
-            \App\Models\User::where('id', Auth::id())->update(['last_seen_at' => now()]);
-            $onlineUsersCount = \App\Models\User::where('last_seen_at', '>=', now()->subMinutes(5))->count();
-        } elseif (\Illuminate\Support\Facades\Schema::hasTable('sessions')) {
-            $onlineUsersCount = \Illuminate\Support\Facades\DB::table('sessions')
-                ->where('last_activity', '>=', now()->subMinutes(5)->timestamp)
-                ->count();
+        try {
+            if (\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Schema::hasColumn('users', 'last_seen_at')) {
+                \App\Models\User::where('id', \Illuminate\Support\Facades\Auth::id())->update(['last_seen_at' => now()]);
+                $onlineUsersCount = \App\Models\User::where('last_seen_at', '>=', now()->subMinutes(5))->count();
+            } elseif (\Illuminate\Support\Facades\Schema::hasTable('sessions')) {
+                $onlineUsersCount = \Illuminate\Support\Facades\DB::table('sessions')
+                    ->where('last_activity', '>=', now()->subMinutes(5)->timestamp)
+                    ->count();
+            }
+        } catch (\Throwable $e) {
+            $onlineUsersCount = 0;
         }
     @endphp
+
+    <!-- Splash Screen Kilat -->
+    <div id="tamsis-splash">
+        <img src="{{ asset('images/logo-tamsis.png') }}"
+             onerror="this.style.display='none'"
+             alt="Logo Tamsis"
+             style="width: 68px; height: 68px; object-fit: contain; margin-bottom: 12px;">
+        <div style="font-size: 17px; font-weight: 800; letter-spacing: 0.04em;">
+            PELAJAR TAMAN SISWA HEBAT!
+        </div>
+        <div style="font-size: 11px; opacity: 0.85; margin-top: 4px;" data-i18n="splash_sub">
+            Memuat Jadwal & Ruang Kelas XI RPL 1...
+        </div>
+        <div style="width: 200px; height: 3px; background: rgba(255,255,255,0.25); border-radius: 9999px; overflow: hidden; margin-top: 14px;">
+            <div class="splash-progress-fill"></div>
+        </div>
+    </div>
+    <script>
+        if (sessionStorage.getItem('tamsis_booted') || localStorage.getItem('app_anim') === 'off' || (localStorage.getItem('app_graphic') || 'simple') === 'simple') {
+            const sp = document.getElementById('tamsis-splash');
+            if (sp) sp.style.display = 'none';
+        }
+    </script>
 
     <!-- Navbar Utama -->
     <nav class="main-tamsis-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[52px] py-1.5 flex flex-wrap items-center justify-between gap-2">
-            <a href="{{ route('dashboard') }}" onclick="playSfx('click')" class="flex items-center gap-2 shrink-0">
+            <a href="{{ route('dashboard') }}" onclick="playSfx('click')" class="flex items-center gap-2 shrink-0" style="gap:8px;">
                 <img src="{{ asset('images/tamsis.jpeg') }}" onerror="this.src='{{ asset('images/logo-tamsis.png') }}'" alt="Logo Perguruan Tamansiswa" class="w-7 h-7 sm:w-9 sm:h-9 rounded-full object-cover shrink-0 border border-white/30 shadow">
                 <div class="leading-tight">
                     <div class="text-[11px] sm:text-sm font-extrabold tracking-wide" style="color: var(--primary);">
@@ -429,14 +594,16 @@
             </a>
 
             <div class="nav-links-wrap">
-                @if(Auth::check() && Auth::user()->role === 'admin')
+                @if(\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user()->role === 'admin')
                     <a href="{{ route('admin.users') }}" onclick="playSfx('enter')"
                        class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-extrabold whitespace-nowrap {{ request()->routeIs('admin.*') ? 'theme-primary shadow-sm' : 'border theme-border' }}"
-                       style="{{ request()->routeIs('admin.*') ? '' : 'background-color: var(--primary-soft); color: var(--primary);' }}">AP</a>
+                       style="{{ request()->routeIs('admin.*') ? '' : 'background-color: var(--primary-soft); color: var(--primary);' }}"
+                       data-i18n="nav_ap">AP</a>
                 @endif
 
                 <a href="{{ route('dashboard') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('dashboard') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">Jadwal</a>
+                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('dashboard') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                   data-i18n="nav_jadwal">Jadwal</a>
 
                 <a href="{{ route('tasks.index') }}" onclick="playSfx('click')"
                    class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('tasks.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">
@@ -444,16 +611,20 @@
                 </a>
 
                 <a href="{{ route('calendar.index') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('calendar.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">Kalender</a>
+                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('calendar.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                   data-i18n="nav_kalender">Kalender</a>
 
                 <a href="{{ route('siswa.index') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('siswa.*') || request()->routeIs('students.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">Siswa</a>
+                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('siswa.*') || request()->routeIs('students.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                   data-i18n="nav_siswa">Siswa</a>
 
                 <a href="{{ route('profile.edit') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('profile.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">Profil</a>
+                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('profile.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                   data-i18n="nav_profile">Profil</a>
 
                 <a href="{{ route('settings') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('settings') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">Pengaturan</a>
+                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('settings') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                   data-i18n="nav_pengaturan">Pengaturan</a>
             </div>
         </div>
     </nav>
@@ -465,7 +636,6 @@
 
     <script>
         function applySavedAppearance() {
-            // Default user baru/fresh: Mode Gelap + Grafik Simple
             const savedTheme   = localStorage.getItem('app_theme') || 'mode-gelap';
             const savedFont    = localStorage.getItem('app_font') || 'sans';
             const savedGraphic = localStorage.getItem('app_graphic') || 'simple';
@@ -478,7 +648,6 @@
         }
         applySavedAppearance();
 
-        // 1. Rapikan bar filter & tabel jadwal di HP
         function enhanceScheduleMobileLayout() {
             document.querySelectorAll('table.timetable-grid, main table').forEach(tbl => {
                 if (tbl.closest('.overflow-x-auto')) {
@@ -489,7 +658,6 @@
                 }
             });
 
-            // Temukan baris tombol filter jadwal (Tenggat, Deadline, Selesai, Reset)
             const resetBtn = Array.from(document.querySelectorAll('button, a')).find(el => el.textContent.trim() === 'Reset');
             if (resetBtn && resetBtn.parentElement) {
                 const container = resetBtn.parentElement.parentElement && resetBtn.parentElement.parentElement.querySelectorAll('button, a').length >= 3
@@ -499,7 +667,6 @@
             }
         }
 
-        // 2. Tampilkan indikator Member Aktif (10+) di pojok atas Jadwal/Dashboard
         function renderOnlineMemberPill() {
             const isDashboard = {{ request()->routeIs('dashboard') ? 'true' : 'false' }};
             const onlineCount = {{ (int) $onlineUsersCount }};
@@ -523,7 +690,6 @@
             }
         }
 
-        // 3. Sinkronkan tanda/notif kuning-merah jadwal ke tab sumber di dalam halaman mapel
         function syncScheduleMarkersAndSourceTab() {
             const links = document.querySelectorAll('table.timetable-grid a, .subject-box a, a.subject-box');
             links.forEach(el => {
@@ -558,7 +724,6 @@
                 }
             });
 
-            // Jika sedang berada di halaman detail mapel (/mapel/{id}?tab=tugas&notif=yellow)
             const params = new URLSearchParams(window.location.search);
             const activeTab = params.get('tab');
             const notifColor = params.get('notif') || 'yellow';
@@ -584,11 +749,15 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            enhanceScheduleMobileLayout();
-            renderOnlineMemberPill();
-            syncScheduleMarkersAndSourceTab();
-        });
+        function hideTamsisSplash() {
+            sessionStorage.setItem('tamsis_booted', '1');
+            const splash = document.getElementById('tamsis-splash');
+            if (splash && !splash.classList.contains('splash-hidden')) {
+                splash.classList.add('splash-hidden');
+                setTimeout(() => splash.remove(), 220);
+            }
+        }
+        setTimeout(hideTamsisSplash, 200);
 
         function playSfx(type = 'click') {
             if (localStorage.getItem('app_sfx') === 'muted') return;
@@ -597,15 +766,264 @@
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(type === 'enter' ? 680 : 540, ctx.currentTime);
-                gain.gain.setValueAtTime(0.04, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.12);
+                if (type === 'enter') {
+                    osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.09);
+                } else if (type === 'secret') {
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.07);
+                    osc.frequency.setValueAtTime(1046.5, ctx.currentTime + 0.14);
+                } else {
+                    osc.frequency.setValueAtTime(620, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.06);
+                }
+                gain.gain.setValueAtTime(0.05, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.18);
                 osc.connect(gain);
                 gain.connect(ctx.destination);
                 osc.start();
-                osc.stop(ctx.currentTime + 0.13);
+                osc.stop(ctx.currentTime + 0.19);
             } catch (e) {}
         }
+
+        const translations = {
+            id: {
+                splash_sub: 'Memuat Jadwal & Ruang Kelas XI RPL 1...',
+                nav_ap: 'AP',
+                nav_jadwal: 'Jadwal',
+                nav_kalender: 'Kalender',
+                nav_siswa: 'Siswa',
+                nav_profile: 'Profil',
+                nav_pengaturan: 'Pengaturan',
+                settings_title: 'Pengaturan Tampilan',
+                settings_sub: 'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, dan bahasa aplikasi.',
+                dark_theme_label: 'Tema Gelap (Gradien)',
+                light_theme_label: 'Tema Terang (Gradien)',
+                font_style_label: 'Gaya Huruf',
+                lang_label: 'Bahasa',
+                sfx_label: 'Efek Suara (SFX)',
+                sfx_on: 'Aktif',
+                sfx_off: 'Senyap',
+                easter_title: 'Kode Unik (Easter Egg) 🎁',
+                easter_sub: 'Punya kode rahasia kelas XI RPL 1? Masukkan di sini untuk membuka fitur tersembunyi!',
+                klaim_btn: 'Klaim',
+                saran_btn: 'Kasih Saran & Laporan Bug',
+                saran_sub: 'Beri rating bintang (bisa desimal seperti 4.5 / 3.4), komentar, atau kirim banyak foto/video jika menemukan bug.',
+                rating_label: 'Rating Web (0.0 – 5.0 Bintang)',
+                rating_hint: 'Geser slider atau ketik angka desimal seperti 4.5, 3.4, atau 5.0.',
+                komentar_label: 'Komentar / Saran / Detail Bug',
+                lampiran_bug_label: 'Lampiran Foto / Video Bug (Bisa Lebih Dari 1 File)',
+                kirim_saran_btn: 'Kirim Saran ke Admin',
+                ap_title: 'Admin Panel (AP)',
+                ap_sub: 'Kelola persetujuan akun, role pengguna, izin bingkai siswa, dan tinjau kritik dari kelas XI RPL 1.',
+                critic_title: 'Kritik',
+                critic_sub: 'Ulasan bintang, masukan, dan laporan bug dari pengguna web kelas.',
+                avg_rating_label: 'Rata-rata Rating Web',
+                critic_empty: 'Belum ada kritik, saran, atau laporan bug yang masuk.',
+            },
+            en: {
+                splash_sub: 'Loading XI RPL 1 Timetable & Classroom...',
+                nav_ap: 'AP',
+                nav_jadwal: 'Schedule',
+                nav_kalender: 'Calendar',
+                nav_siswa: 'Students',
+                nav_profile: 'Profile',
+                nav_pengaturan: 'Settings',
+                settings_title: 'Display Settings',
+                settings_sub: 'Customize color gradients, graphics style, animations, sound effects, and language.',
+                dark_theme_label: 'Dark Theme (Gradient)',
+                light_theme_label: 'Light Theme (Gradient)',
+                font_style_label: 'Font Style',
+                lang_label: 'Language',
+                sfx_label: 'Sound Effects (SFX)',
+                sfx_on: 'Active',
+                sfx_off: 'Muted',
+                easter_title: 'Unique Code (Easter Egg) 🎁',
+                easter_sub: 'Have a secret XI RPL 1 class code? Enter it here to unlock hidden features!',
+                klaim_btn: 'Claim',
+                saran_btn: 'Send Feedback & Bug Report',
+                saran_sub: 'Rate with stars (decimals like 4.5 / 3.4 supported), leave a comment, or attach photos/videos of bugs.',
+                rating_label: 'Web Rating (0.0 – 5.0 Stars)',
+                rating_hint: 'Drag the slider or enter a decimal value such as 4.5, 3.4, or 5.0.',
+                komentar_label: 'Comment / Suggestion / Bug Details',
+                lampiran_bug_label: 'Bug Photo / Video Attachment (Multiple Files Supported)',
+                kirim_saran_btn: 'Submit Feedback to Admin',
+                ap_title: 'Admin Panel (AP)',
+                ap_sub: 'Manage account approvals, user roles, frame approvals, and class feedback.',
+                critic_title: 'Critic',
+                critic_sub: 'Star ratings, feedback, and bug reports submitted by class users.',
+                avg_rating_label: 'Average Web Rating',
+                critic_empty: 'No feedback, criticism, or bug reports submitted yet.',
+            },
+            ja: {
+                splash_sub: 'XI RPL 1の時間割とクラスルームを読み込んでいます...',
+                nav_ap: '管理',
+                nav_jadwal: '時間割',
+                nav_kalender: 'カレンダー',
+                nav_siswa: '生徒',
+                nav_profile: 'プロフィール',
+                nav_pengaturan: '設定',
+                settings_title: '表示設定',
+                settings_sub: 'カラーテーマ、グラフィックスタイル、アニメーション、効果音、言語をカスタマイズします。',
+                dark_theme_label: 'ダークテーマ（グラデーション）',
+                light_theme_label: 'ライトテーマ（グラデーション）',
+                font_style_label: 'フォントスタイル',
+                lang_label: '言語',
+                sfx_label: '効果音 (SFX)',
+                sfx_on: 'オン',
+                sfx_off: 'ミュート',
+                easter_title: 'シークレットコード 🎁',
+                easter_sub: 'XI RPL 1の秘密コードを入力して隠し機能を開放しよう！',
+                klaim_btn: '適用',
+                saran_btn: 'ご意見・バグ報告',
+                saran_sub: '星評価（4.5などの小数も可）、コメント、バグの画像・動画を送信できます。',
+                rating_label: 'Web評価 (0.0 – 5.0)',
+                rating_hint: 'スライダーまたは4.5、3.4などの数値を入力してください。',
+                komentar_label: 'コメント / ご意見 / バグ詳細',
+                lampiran_bug_label: 'バグ画像・動画の添付（複数選択可）',
+                kirim_saran_btn: '管理者に送信',
+                ap_title: '管理者パネル (AP)',
+                ap_sub: 'アカウント承認、権限管理、生徒フレーム承認、フィードバックを確認します。',
+                critic_title: 'フィードバック',
+                critic_sub: 'クラスメンバーからの評価、意見、バグ報告一覧。',
+                avg_rating_label: '平均評価',
+                critic_empty: 'まだフィードバックやバグ報告はありません。',
+            },
+            ru: {
+                splash_sub: 'Загрузка расписания и класса XI RPL 1...',
+                nav_ap: 'АП',
+                nav_jadwal: 'Расписание',
+                nav_kalender: 'Календарь',
+                nav_siswa: 'Ученики',
+                nav_profile: 'Профиль',
+                nav_pengaturan: 'Настройки',
+                settings_title: 'Настройки отображения',
+                settings_sub: 'Настройте цветовую тему, стиль графики, анимацию, звуковые эффекты и язык.',
+                dark_theme_label: 'Тёмная тема (Градиент)',
+                light_theme_label: 'Светлая тема (Градиент)',
+                font_style_label: 'Шрифт',
+                lang_label: 'Язык',
+                sfx_label: 'Звуковые эффекты (SFX)',
+                sfx_on: 'Вкл',
+                sfx_off: 'Без звука',
+                easter_title: 'Секретный код (Пасхалка) 🎁',
+                easter_sub: 'Есть секретный код класса XI RPL 1? Введите его здесь!',
+                klaim_btn: 'Активировать',
+                saran_btn: 'Отзыв и отчёт об ошибке',
+                saran_sub: 'Поставьте оценку (можно дробную, например 4.5), оставьте комментарий или прикрепите фото/видео.',
+                rating_label: 'Оценка сайта (0.0 – 5.0)',
+                rating_hint: 'Передвиньте ползунок или введите число, например 4.5 или 3.4.',
+                komentar_label: 'Комментарий / Предложение / Описание ошибки',
+                lampiran_bug_label: 'Фото / видео ошибки (можно несколько файлов)',
+                kirim_saran_btn: 'Отправить администратору',
+                ap_title: 'Панель администратора (AP)',
+                ap_sub: 'Управление аккаунтами, ролями, рамками учеников и отзывами класса XI RPL 1.',
+                critic_title: 'Отзывы',
+                critic_sub: 'Оценки, предложения и отчёты об ошибках от пользователей класса.',
+                avg_rating_label: 'Средняя оценка сайта',
+                critic_empty: 'Отзывов и отчётов об ошибках пока нет.',
+            }
+        };
+
+        const phraseDictionaries = {
+            ja: {
+                'Jadwal Pelajaran XI RPL 1': 'XI RPL 1 授業時間割',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': '科目ボックスをクリックしてメモ・課題・宿題・予定を確認します。',
+                'Hari / Jam': '曜日 / 時限',
+                'Senin': '月曜日',
+                'Selasa': '火曜日',
+                'Rabu': '水曜日',
+                'Kamis': '木曜日',
+                'Jumat': '金曜日',
+                'Catatan': 'メモ',
+                'Tugas': '課題',
+                'PR': '宿題',
+                'Event': 'イベント',
+                'Tenggat': '締切間近',
+                'Deadline': '締切',
+                'Selesai': '完了',
+                'Reset': 'リセット',
+                'Tambah Siswa': '生徒を追加',
+                '+ Tambah Siswa': '+ 生徒を追加',
+                'Anggota Kelas XI RPL 1': 'XI RPL 1 クラスメンバー',
+                'Manajemen Akun Pengguna': 'ユーザーアカウント管理',
+                'Persetujuan Ganti Bingkai Siswa': '生徒フレーム変更の承認',
+            },
+            ru: {
+                'Jadwal Pelajaran XI RPL 1': 'Расписание уроков XI RPL 1',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, или Acara.': 'Нажмите на предмет, чтобы посмотреть заметки, задания, ДЗ или события.',
+                'Hari / Jam': 'День / Урок',
+                'Senin': 'Понедельник',
+                'Selasa': 'Вторник',
+                'Rabu': 'Среда',
+                'Kamis': 'Четверг',
+                'Jumat': 'Пятница',
+                'Catatan': 'Заметка',
+                'Tugas': 'Задание',
+                'PR': 'ДЗ',
+                'Event': 'Событие',
+                'Tenggat': 'Срок',
+                'Deadline': 'Дедлайн',
+                'Selesai': 'Готово',
+                'Reset': 'Сброс',
+                'Tambah Siswa': 'Добавить ученика',
+                '+ Tambah Siswa': '+ Добавить ученика',
+                'Anggota Kelas XI RPL 1': 'УЧЕНИКИ КЛАССА XI RPL 1',
+                'Manajemen Akun Pengguna': 'Управление аккаунтами',
+                'Persetujuan Ganti Bingkai Siswa': 'Одобрение смены рамки ученика',
+            }
+        };
+
+        function applyPhraseTranslation(lang) {
+            const dict = phraseDictionaries[lang];
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+            let node;
+            while ((node = walker.nextNode())) {
+                if (!node.parentElement || ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT'].includes(node.parentElement.tagName)) continue;
+                const raw = node.nodeValue;
+                const trimmed = raw.trim();
+                if (!trimmed) continue;
+
+                if (!node._origText) {
+                    node._origText = raw;
+                }
+
+                if (lang === 'id') {
+                    node.nodeValue = node._origText;
+                } else if (dict && dict[trimmed]) {
+                    node.nodeValue = raw.replace(trimmed, dict[trimmed]);
+                } else if (node._origText) {
+                    const origTrimmed = node._origText.trim();
+                    if (dict && dict[origTrimmed]) {
+                        node.nodeValue = node._origText.replace(origTrimmed, dict[origTrimmed]);
+                    } else {
+                        node.nodeValue = node._origText;
+                    }
+                }
+            }
+        }
+
+        function applyLanguage(lang) {
+            if (!translations[lang]) lang = 'id';
+            localStorage.setItem('app_lang', lang);
+            document.documentElement.setAttribute('lang', lang);
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (translations[lang][key]) {
+                    el.textContent = translations[lang][key];
+                }
+            });
+
+            applyPhraseTranslation(lang);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            applyLanguage(localStorage.getItem('app_lang') || 'id');
+            enhanceScheduleMobileLayout();
+            renderOnlineMemberPill();
+            syncScheduleMarkersAndSourceTab();
+        });
     </script>
 </body>
 </html>
