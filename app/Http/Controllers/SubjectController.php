@@ -18,6 +18,38 @@ class SubjectController extends Controller
         return 'subject_items';
     }
 
+    private function detectTypeColumn(array $columns): ?string
+    {
+        foreach (['category', 'kategori', 'type', 'jenis', 'tipe'] as $col) {
+            if (in_array($col, $columns, true)) {
+                return $col;
+            }
+        }
+        return null;
+    }
+
+    private function normalizeRow($row)
+    {
+        $rawType = $row->category
+            ?? $row->kategori
+            ?? $row->type
+            ?? $row->jenis
+            ?? $row->tipe
+            ?? 'catatan';
+
+        $type = strtolower(trim((string) $rawType));
+        if (!in_array($type, ['catatan', 'tugas', 'pr', 'event'], true)) {
+            $type = 'catatan';
+        }
+
+        $row->type = $type;
+        $row->title = $row->title ?? $row->judul ?? 'Tanpa Judul';
+        $row->description = $row->description ?? $row->deskripsi ?? $row->content ?? $row->isi ?? null;
+        $row->due_date = $row->due_date ?? $row->deadline ?? $row->tanggal_deadline ?? $row->tanggal ?? null;
+
+        return $row;
+    }
+
     public function show($id, Request $request)
     {
         $subject = Subject::findOrFail($id);
@@ -28,10 +60,14 @@ class SubjectController extends Controller
             $items = DB::table($table)
                 ->where('subject_id', $subject->id)
                 ->orderByDesc('id')
-                ->get();
+                ->get()
+                ->map(fn($row) => $this->normalizeRow($row));
         }
 
-        $activeTab = $request->query('tab', session('active_tab', 'catatan'));
+        $activeTab = strtolower(trim((string) $request->query('tab', session('active_tab', 'catatan'))));
+        if (!in_array($activeTab, ['catatan', 'tugas', 'pr', 'event'], true)) {
+            $activeTab = 'catatan';
+        }
         $notifColor = $request->query('notif', '');
 
         return view('subjects.show', compact('subject', 'items', 'activeTab', 'notifColor'));
@@ -44,11 +80,13 @@ class SubjectController extends Controller
         $request->validate([
             'title' => 'required|string|max:255',
             'type' => 'nullable|string|max:50',
+            'category' => 'nullable|string|max:50',
             'description' => 'nullable|string',
             'due_date' => 'nullable|date',
         ]);
 
-        $type = strtolower(trim($request->input('type', 'catatan')));
+        $rawType = $request->input('type') ?? $request->input('category') ?? 'catatan';
+        $type = strtolower(trim((string) $rawType));
         if (!in_array($type, ['catatan', 'tugas', 'pr', 'event'], true)) {
             $type = 'catatan';
         }
@@ -67,10 +105,12 @@ class SubjectController extends Controller
             $data['user_id'] = Auth::id() ?? 1;
         }
 
-        if (in_array('type', $columns, true)) $data['type'] = $type;
-        elseif (in_array('kategori', $columns, true)) $data['kategori'] = $type;
-        elseif (in_array('jenis', $columns, true)) $data['jenis'] = $type;
-        elseif (in_array('tipe', $columns, true)) $data['tipe'] = $type;
+        // Isi semua kolom kategori yang tersedia agar sinkron di semua controller
+        foreach (['category', 'kategori', 'type', 'jenis', 'tipe'] as $col) {
+            if (in_array($col, $columns, true)) {
+                $data[$col] = $type;
+            }
+        }
 
         if (in_array('title', $columns, true)) $data['title'] = $request->title;
         elseif (in_array('judul', $columns, true)) $data['judul'] = $request->title;
@@ -81,10 +121,12 @@ class SubjectController extends Controller
         elseif (in_array('isi', $columns, true)) $data['isi'] = $request->description;
 
         if ($request->filled('due_date')) {
-            if (in_array('due_date', $columns, true)) $data['due_date'] = $request->due_date;
-            elseif (in_array('deadline', $columns, true)) $data['deadline'] = $request->due_date;
-            elseif (in_array('tanggal_deadline', $columns, true)) $data['tanggal_deadline'] = $request->due_date;
-            elseif (in_array('tanggal', $columns, true)) $data['tanggal'] = $request->due_date;
+            foreach (['due_date', 'deadline', 'tanggal_deadline', 'tanggal'] as $dCol) {
+                if (in_array($dCol, $columns, true)) {
+                    $data[$dCol] = $request->due_date;
+                    break;
+                }
+            }
         }
 
         if (in_array('completed_by', $columns, true)) {
@@ -125,9 +167,12 @@ class SubjectController extends Controller
             elseif (in_array('deskripsi', $columns, true)) $data['deskripsi'] = $request->description;
             elseif (in_array('content', $columns, true)) $data['content'] = $request->description;
 
-            if (in_array('due_date', $columns, true)) $data['due_date'] = $request->due_date ?: null;
-            elseif (in_array('deadline', $columns, true)) $data['deadline'] = $request->due_date ?: null;
-            elseif (in_array('tanggal_deadline', $columns, true)) $data['tanggal_deadline'] = $request->due_date ?: null;
+            foreach (['due_date', 'deadline', 'tanggal_deadline', 'tanggal'] as $dCol) {
+                if (in_array($dCol, $columns, true)) {
+                    $data[$dCol] = $request->due_date ?: null;
+                    break;
+                }
+            }
 
             if (in_array('updated_at', $columns, true)) $data['updated_at'] = now();
 
@@ -180,7 +225,7 @@ class SubjectController extends Controller
 
         if (Schema::hasTable($table)) {
             $columns = Schema::getColumnListing($table);
-            $typeCol = collect(['type', 'kategori', 'jenis', 'tipe'])->first(fn($c) => in_array($c, $columns, true));
+            $typeCol = $this->detectTypeColumn($columns);
 
             $query = DB::table($table)->orderByDesc('id');
             if ($typeCol) {
@@ -188,11 +233,8 @@ class SubjectController extends Controller
             }
 
             $tasks = $query->get()->map(function ($row) use ($subjects) {
+                $row = $this->normalizeRow($row);
                 $row->subject = $subjects->get($row->subject_id);
-                $row->title = $row->title ?? $row->judul ?? 'Tanpa Judul';
-                $row->description = $row->description ?? $row->deskripsi ?? $row->content ?? $row->isi ?? null;
-                $row->type = strtolower((string) ($row->type ?? $row->kategori ?? $row->jenis ?? $row->tipe ?? 'tugas'));
-                $row->due_date = $row->due_date ?? $row->deadline ?? $row->tanggal_deadline ?? $row->tanggal ?? null;
                 return $row;
             });
         }

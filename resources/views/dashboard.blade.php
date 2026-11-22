@@ -365,6 +365,46 @@
             </button>
         </div>
 
+                @php
+            $targetTbl = \Illuminate\Support\Facades\Schema::hasTable('subject_posts')
+                ? 'subject_posts'
+                : (\Illuminate\Support\Facades\Schema::hasTable('subject_items') ? 'subject_items' : null);
+
+            if ($targetTbl) {
+                $allRows = \Illuminate\Support\Facades\DB::table($targetTbl)->get();
+                $subjectBadges = [];
+                $subjectAlerts = [];
+                $uid = (int) auth()->id();
+
+                foreach ($allRows as $si) {
+                    $sid = $si->subject_id;
+                    $rawT = $si->category ?? $si->kategori ?? $si->type ?? $si->jenis ?? $si->tipe ?? 'catatan';
+                    $t = strtolower(trim((string) $rawT));
+                    if (!in_array($t, ['catatan', 'tugas', 'pr', 'event'], true)) {
+                        $t = 'catatan';
+                    }
+
+                    $subjectBadges[$sid][$t] = ($subjectBadges[$sid][$t] ?? 0) + 1;
+
+                    $dueVal = $si->due_date ?? $si->deadline ?? $si->tanggal_deadline ?? $si->tanggal ?? null;
+                    $doneList = json_decode($si->completed_by ?? '[]', true) ?: [];
+                    $isDone = in_array($uid, array_map('intval', $doneList), true);
+
+                    if ($dueVal && !$isDone && in_array($t, ['tugas', 'pr', 'event'], true)) {
+                        try {
+                            $diff = now()->startOfDay()->diffInDays(\Carbon\Carbon::parse($dueVal)->startOfDay(), false);
+                            if ($diff < 0) {
+                                $prevIds = $subjectAlerts[$sid]['post_ids'] ?? [];
+                                $subjectAlerts[$sid] = ['type' => 'red', 'post_ids' => array_merge($prevIds, [$si->id])];
+                            } elseif ($diff <= 2 && ($subjectAlerts[$sid]['type'] ?? '') !== 'red') {
+                                $prevIds = $subjectAlerts[$sid]['post_ids'] ?? [];
+                                $subjectAlerts[$sid] = ['type' => 'yellow', 'post_ids' => array_merge($prevIds, [$si->id])];
+                            }
+                        } catch (\Throwable $e) {}
+                    }
+                }
+            }
+        @endphp
         <div class="overflow-x-auto pb-2">
             <table class="timetable-grid text-center">
                 <colgroup>

@@ -80,7 +80,7 @@
                         $isActive = $currentTab === $key;
                         $hasSourceNotif = in_array($notif, ['yellow', 'red', 'blue'], true) && $isActive;
                         $tabCount = $safeItems->filter(function ($it) use ($key) {
-                            $t = strtolower(trim((string) ($it->type ?? $it->jenis ?? $it->tipe ?? 'catatan')));
+                            $t = strtolower(trim((string) ($it->category ?? $it->kategori ?? $it->type ?? $it->jenis ?? $it->tipe ?? 'catatan')));
                             return $t === $key;
                         })->count();
                     @endphp
@@ -110,14 +110,14 @@
         @foreach($tabs as $key => $label)
             @php
                 $tabItems = $safeItems->filter(function ($it) use ($key) {
-                    $rawType = strtolower(trim((string) ($it->type ?? $it->jenis ?? $it->tipe ?? 'catatan')));
+                    $rawType = strtolower(trim((string) ($it->category ?? $it->kategori ?? $it->type ?? $it->jenis ?? $it->tipe ?? 'catatan')));
                     return $rawType === $key;
                 });
             @endphp
             <div id="panel-{{ $key }}" class="subject-tab-panel space-y-3 sm:space-y-4 {{ $currentTab === $key ? '' : 'hidden' }}">
                 @forelse($tabItems as $item)
                     @php
-                        $itemType = strtolower(trim((string) ($item->type ?? $item->jenis ?? $item->tipe ?? $key)));
+                        $itemType = strtolower(trim((string) ($item->category ?? $item->kategori ?? $item->type ?? $item->jenis ?? $item->tipe ?? $key)));
                         if (!array_key_exists($itemType, $tabs)) {
                             $itemType = $key;
                         }
