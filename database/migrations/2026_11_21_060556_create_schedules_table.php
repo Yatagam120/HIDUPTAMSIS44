@@ -1,32 +1,89 @@
 <?php
 
-use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
+namespace Database\Seeders;
 
-return new class extends Migration
+use App\Models\User;
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+
+class DatabaseSeeder extends Seeder
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
+    public function run(): void
     {
-        Schema::dropIfExists('schedules');
-        Schema::create('schedules', function (Blueprint $table) {
-            $table->id();
-            $table->enum('hari', ['Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat']);
-            $table->foreignId('subject_id')->constrained()->onDelete('cascade');
-            $table->integer('jam_mulai');
-            $table->integer('jam_selesai');
-            $table->timestamps();
-        });
-    }
+        // 1. Akun Admin Default
+        User::updateOrCreate(
+            ['email' => 'schrodinger453@gmail.com'],
+            [
+                'name' => 'Admin XI RPL 1',
+                'password' => Hash::make('password123'),
+                'role' => 'admin',
+                'is_approved' => true,
+            ]
+        );
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('schedules');
+        // 2. Daftar Mata Pelajaran (sesuaikan kode & nama mapel aslimu)
+        $mapelList = [
+            'MBJ'    => 'Muatan Bahasa Jepang',
+            'PP'     => 'Pendidikan Pancasila',
+            'B.Ing'  => 'Bahasa Inggris',
+            'BK'     => 'Bimbingan Konseling',
+            'BI'     => 'Bahasa Indonesia',
+            'MTK'    => 'Matematika',
+            'KDI'    => 'Kreativitas & Desain Interaktif',
+            'Penjas' => 'Pendidikan Jasmani',
+        ];
+
+        $subjects = [];
+        $now = now();
+        foreach ($mapelList as $kode => $nama) {
+            DB::table('subjects')->updateOrInsert(
+                ['kode_mapel' => $kode],
+                [
+                    'nama_mapel' => $nama,
+                    'updated_at' => $now,
+                    'created_at' => $now,
+                ]
+            );
+            $subjects[$kode] = DB::table('subjects')
+                ->where('kode_mapel', $kode)
+                ->value('id');
+        }
+
+        // 3. Pengisian Jadwal Pelajaran (Senin - Jumat)
+        // Format: ['hari', 'kode_mapel', jam_mulai, jam_selesai]
+        $jadwalList = [
+            ['Senin',  'PP',     1, 2],
+            ['Senin',  'MTK',    3, 5],
+            ['Senin',  'B.Ing',  6, 8],
+            ['Selasa', 'KDI',    1, 4],
+            ['Selasa', 'BI',     5, 7],
+            ['Rabu',   'MTK',    1, 3],
+            ['Rabu',   'MBJ',    4, 6],
+            ['Kamis',  'Penjas', 1, 3],
+            ['Kamis',  'BK',     4, 5],
+            ['Jumat',  'BI',     1, 3],
+            ['Jumat',  'KDI',    4, 6],
+        ];
+
+        foreach ($jadwalList as [$hari, $kode, $jamMulai, $jamSelesai]) {
+            $subjectId = $subjects[$kode] ?? null;
+            if (!$subjectId) {
+                continue;
+            }
+
+            DB::table('schedules')->updateOrInsert(
+                [
+                    'hari'       => $hari,
+                    'jam_mulai'  => $jamMulai,
+                    'jam_selesai'=> $jamSelesai,
+                ],
+                [
+                    'subject_id' => $subjectId,
+                    'updated_at' => $now,
+                    'created_at' => $now,
+                ]
+            );
+        }
     }
-};
+}

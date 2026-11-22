@@ -237,7 +237,8 @@
             background-color: rgba(255, 255, 255, 0.85);
             color: #0f172a;
         }
-            /* Navbar Solid & Selalu Di Lapisan Paling Atas (Anti Tertimpa Konten) */
+
+        /* Navbar Solid & Selalu Di Lapisan Paling Atas (Anti Tertimpa Konten) */
         nav.main-tamsis-nav {
             position: sticky;
             top: 0;
@@ -289,7 +290,6 @@
             box-sizing: border-box;
         }
 
-        /* Tablet (641px - 1024px): Grid adaptif & jarak aman dari navbar */
         @media (max-width: 1024px) {
             nav.main-tamsis-nav > div {
                 padding-left: 1rem !important;
@@ -308,7 +308,6 @@
             }
         }
 
-        /* HP / Mobile (<= 640px): Kompak, anti-overflow, mudah di-tap */
         @media (max-width: 640px) {
             nav.main-tamsis-nav > div {
                 padding-left: 0.75rem !important;
@@ -342,7 +341,6 @@
                 padding: 5px 10px !important;
                 font-size: 11px !important;
             }
-            /* Tabel jadwal di HP/Tablet tetap bisa di-scroll horizontal di dalam kontainernya */
             table th, table td {
                 font-size: 11px !important;
                 padding: 6px 8px !important;
@@ -357,7 +355,6 @@
             }
         }
 
-        /* Hindari bentrok klik saat user mengklik kontrol play/volume pada <video> */
         video {
             position: relative;
             z-index: 15;
@@ -365,9 +362,6 @@
         }
     </style>
     <style id="tamsis-orientation-suite">
-        /* =========================================================
-           LAPTOP / DESKTOP (>= 1025px)
-           ========================================================= */
         @media (min-width: 1025px) {
             #tamsis-lightbox-modal .h-\[72vh\],
             #tamsis-lightbox-modal .h-\[62vh\],
@@ -376,9 +370,6 @@
             }
         }
 
-        /* =========================================================
-           TABLET PORTRAIT (641px - 1024px & orientation: portrait)
-           ========================================================= */
         @media (min-width: 641px) and (max-width: 1024px) and (orientation: portrait) {
             main.page-animate-in {
                 padding: 1.15rem !important;
@@ -393,9 +384,6 @@
             }
         }
 
-        /* =========================================================
-           TABLET LANDSCAPE (768px - 1280px & orientation: landscape)
-           ========================================================= */
         @media (min-width: 768px) and (max-width: 1280px) and (orientation: landscape) {
             main.page-animate-in {
                 padding-left: 1.25rem !important;
@@ -412,9 +400,6 @@
             }
         }
 
-        /* =========================================================
-           HP PORTRAIT (<= 640px & orientation: portrait)
-           ========================================================= */
         @media (max-width: 640px) and (orientation: portrait) {
             nav.main-tamsis-nav > div {
                 padding: 0.6rem 0.75rem !important;
@@ -429,9 +414,6 @@
             }
         }
 
-        /* =========================================================
-           HP LANDSCAPE (layar pendek <= 520px & orientation: landscape)
-           ========================================================= */
         @media (max-height: 520px) and (orientation: landscape) {
             nav.main-tamsis-nav > div {
                 padding-top: 0.35rem !important;
@@ -468,9 +450,12 @@
              onerror="this.style.display='none'"
              alt="Logo Tamsis"
              style="width: 68px; height: 68px; object-fit: contain; margin-bottom: 12px;">
-        <span style="display:inline-flex;align-items:center;gap:8px;vertical-align:middle;flex-shrink:0;"><img src="{{ asset('images/tamsis.jpeg') }}" onerror="this.src='{{ asset('images/logo-tamsis.png') }}'" alt="Logo Perguruan Tamansiswa" style="width:36px;height:36px;border-radius:9999px;object-fit:cover;flex-shrink:0;" class="border border-white/30 shadow"><div style="font-size: 17px; font-weight: 800; letter-spacing: 0.04em;">
-            PELAJAR TAMAN SISWA HEBAT!
-        </div></span>
+        <span style="display:inline-flex;align-items:center;gap:8px;vertical-align:middle;flex-shrink:0;">
+            <img src="{{ asset('images/tamsis.jpeg') }}" onerror="this.src='{{ asset('images/logo-tamsis.png') }}'" alt="Logo Perguruan Tamansiswa" style="width:36px;height:36px;border-radius:9999px;object-fit:cover;flex-shrink:0;" class="border border-white/30 shadow">
+            <div style="font-size: 17px; font-weight: 800; letter-spacing: 0.04em;">
+                PELAJAR TAMAN SISWA HEBAT!
+            </div>
+        </span>
         <div style="font-size: 11px; opacity: 0.85; margin-top: 4px;" data-i18n="splash_sub">
             Memuat Jadwal & Ruang Kelas XI RPL 1...
         </div>
@@ -484,18 +469,21 @@
         }
     </script>
 
-    <!-- Navbar Utama (Bebas Scrollbar Putih) -->
+    <!-- Navbar Utama -->
     <nav class="main-tamsis-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[56px] py-1.5 flex flex-wrap items-center justify-between gap-3">
-<a href="{{ route('dashboard') }}" onclick="playSfx('click')" class="flex items-center gap-2 shrink-0" style="gap:8px;">
+            <a href="{{ route('dashboard') }}" onclick="playSfx('click')" class="flex items-center gap-2 shrink-0" style="gap:8px;">
                 <img src="{{ asset('images/logo-tamsis.png') }}"
                      onerror="this.style.display='none'"
                      alt="Logo"
                      class="w-8 h-8 rounded-full object-contain">
                 <div class="leading-tight">
-                    <span style="display:inline-flex;align-items:center;gap:8px;vertical-align:middle;flex-shrink:0;"><img src="{{ asset('images/tamsis.jpeg') }}" onerror="this.src='{{ asset('images/logo-tamsis.png') }}'" alt="Logo Perguruan Tamansiswa" style="width:36px;height:36px;border-radius:9999px;object-fit:cover;flex-shrink:0;" class="border border-white/30 shadow"><div class="text-xs sm:text-sm font-extrabold tracking-wide" style="color: var(--primary);">
-                        PELAJAR TAMAN SISWA HEBAT!
-                    </div></span>
+                    <span style="display:inline-flex;align-items:center;gap:8px;vertical-align:middle;flex-shrink:0;">
+                        <img src="{{ asset('images/tamsis.jpeg') }}" onerror="this.src='{{ asset('images/logo-tamsis.png') }}'" alt="Logo Perguruan Tamansiswa" style="width:36px;height:36px;border-radius:9999px;object-fit:cover;flex-shrink:0;" class="border border-white/30 shadow">
+                        <div class="text-xs sm:text-sm font-extrabold tracking-wide" style="color: var(--primary);">
+                            PELAJAR TAMAN SISWA HEBAT!
+                        </div>
+                    </span>
                     <div class="text-[9px] opacity-70 hidden md:block">
                         Pelajar Tamsis Harus: N (Niat), N (Nalar), I (Ikhlas), U (Unggul), N (Nasionalis)
                     </div>
@@ -885,7 +873,13 @@
             color: var(--text-main);
             cursor: pointer;
             user-select: none;
-            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+                        background-color 0.24s ease,
+                        color 0.24s ease,
+                        border-color 0.24s ease,
+                        box-shadow 0.24s ease,
+                        opacity 0.24s ease !important;
+            will-change: transform;
         }
         body[data-theme="teal-growth"] .j-filter-btn,
         body[data-theme="creative-spark"] .j-filter-btn,
@@ -899,24 +893,15 @@
             transform: translateY(-2px);
             border-color: var(--primary);
         }
-            @keyframes filterUnselectPop {
-        0%   { transform: scale(1.06); }
-        45%  { transform: scale(0.95); }
-        100% { transform: scale(1); }
-    }
-    .j-filter-btn {
-        transition: transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
-                    background-color 0.24s ease,
-                    color 0.24s ease,
-                    border-color 0.24s ease,
-                    box-shadow 0.24s ease,
-                    opacity 0.24s ease !important;
-        will-change: transform;
-    }
-    .j-filter-btn.is-unselecting {
-        animation: filterUnselectPop 0.26s cubic-bezier(0.22, 1, 0.36, 1) !important;
-    }
-.j-filter-btn.active {
+        @keyframes filterUnselectPop {
+            0%   { transform: scale(1.06); }
+            45%  { transform: scale(0.95); }
+            100% { transform: scale(1); }
+        }
+        .j-filter-btn.is-unselecting {
+            animation: filterUnselectPop 0.26s cubic-bezier(0.22, 1, 0.36, 1) !important;
+        }
+        .j-filter-btn.active {
             background: var(--primary) !important;
             color: #ffffff !important;
             border-color: #ffffff !important;
@@ -938,9 +923,8 @@
         }
     </style>
 
-    
-    <!-- Modal Lightbox Slide & Zoom (Tanpa Buka Tab Baru) -->
-    <div id="tamsis-lightbox-modal" class="hidden fixed inset-0 z-[9997] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 select-none">
+    <!-- Modal Lightbox Slide & Zoom (Tersembunyi Secara Default) -->
+    <div id="tamsis-lightbox-modal" style="display: none;" class="hidden fixed inset-0 z-[9997] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 select-none">
         <div class="w-full max-w-5xl flex items-center justify-between text-white mb-3 gap-2">
             <div class="text-xs sm:text-sm font-bold">
                 <span id="lb-counter">1 / 1</span>
@@ -976,8 +960,8 @@
         <div id="lb-thumbs" class="flex items-center gap-2 mt-3 overflow-x-auto max-w-full py-1"></div>
     </div>
 
-    <!-- Modal Editor Gambar (Crop, Coret, & Atur Posisi Sebelum Upload) -->
-    <div id="tamsis-img-editor-modal" class="hidden fixed inset-0 z-[9998] bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
+    <!-- Modal Editor Gambar (Tersembunyi Secara Default) -->
+    <div id="tamsis-img-editor-modal" style="display: none;" class="hidden fixed inset-0 z-[9998] bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
         <div class="theme-card rounded-2xl border theme-border shadow-2xl max-w-3xl w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto">
             <div class="flex items-center justify-between gap-2">
                 <div>
@@ -1037,7 +1021,7 @@
     </div>
 
     <script>
-                // ==========================================
+        // ==========================================
         // 1. LIGHTBOX SLIDE & ZOOM (SEMUA FOTO & VIDEO)
         // ==========================================
         let lbItems = [];
@@ -1060,9 +1044,7 @@
         }
 
         function collectCardMedia(el) {
-            // Cari pembungkus kartu postingan terdekat (hindari mengambil seluruh halaman)
             let card = el.closest('article, .rounded-2xl, .rounded-xl, .border, .shadow') || el.parentElement;
-            // Naik sedikit jika kartu terlalu kecil (hanya pembungkus 1 thumbnail)
             for (let i = 0; i < 3; i++) {
                 if (!card || !card.parentElement) break;
                 const found = card.querySelectorAll('img[src*="/storage/"], video source[src*="/storage/"], video[src*="/storage/"], a[href*="/storage/"]');
@@ -1143,14 +1125,18 @@
             if (typeof playSfx === 'function') playSfx('click');
             lbItems = items;
             lbIndex = Math.max(0, Math.min(startIndex, items.length - 1));
-            document.getElementById('tamsis-lightbox-modal').classList.remove('hidden');
+            const modal = document.getElementById('tamsis-lightbox-modal');
+            modal.classList.remove('hidden');
+            modal.style.display = 'flex';
             renderLightboxSlide();
         }
 
         function closeTamsisLightbox() {
             const vidEl = document.getElementById('lb-video');
             if (vidEl) vidEl.pause();
-            document.getElementById('tamsis-lightbox-modal').classList.add('hidden');
+            const modal = document.getElementById('tamsis-lightbox-modal');
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
         }
 
         function lbSlide(dir) {
@@ -1244,11 +1230,11 @@
         let edInputEl = null;
         let edOriginalFile = null;
         let edImg = new Image();
-        let edMode = 'move'; // 'move' | 'draw' | 'crop'
+        let edMode = 'move';
         let edPosX = 0;
         let edPosY = 0;
         let edScale = 1;
-        let edStrokes = []; // array of { color, size, points: [{x, y}] }
+        let edStrokes = [];
         let edActiveStroke = null;
         let edCropRect = { x: 60, y: 40, w: 520, h: 300 };
         let edDragging = false;
@@ -1304,11 +1290,9 @@
             const ctx = canvas.getContext('2d');
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Latar gelap
             ctx.fillStyle = '#090d16';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Gambar dengan posisi & skala
             if (edImg.complete && edImg.width > 0) {
                 const baseRatio = Math.min(canvas.width / edImg.width, canvas.height / edImg.height);
                 const drawW = edImg.width * baseRatio * edScale;
@@ -1316,7 +1300,6 @@
                 ctx.drawImage(edImg, edPosX, edPosY, drawW, drawH);
             }
 
-            // Coretan
             edStrokes.forEach(st => {
                 if (!st.points || st.points.length < 2) return;
                 ctx.save();
@@ -1333,7 +1316,6 @@
                 ctx.restore();
             });
 
-            // Overlay area crop
             ctx.save();
             ctx.fillStyle = 'rgba(0, 0, 0, 0.45)';
             ctx.fillRect(0, 0, canvas.width, edCropRect.y);
@@ -1422,7 +1404,9 @@
                 edImg.onload = () => {
                     setEditorMode('move');
                     resetEditorCrop();
-                    document.getElementById('tamsis-img-editor-modal').classList.remove('hidden');
+                    const modal = document.getElementById('tamsis-img-editor-modal');
+                    modal.classList.remove('hidden');
+                    modal.style.display = 'flex';
                 };
                 edImg.src = ev.target.result;
             };
@@ -1430,7 +1414,9 @@
         }
 
         function closeImgEditor() {
-            document.getElementById('tamsis-img-editor-modal').classList.add('hidden');
+            const modal = document.getElementById('tamsis-img-editor-modal');
+            modal.classList.add('hidden');
+            modal.style.display = 'none';
         }
 
         function skipEditOriginal() {
@@ -1444,7 +1430,6 @@
                 return;
             }
 
-            // Render hasil crop dari canvas ke canvas output bersih
             const outCanvas = document.createElement('canvas');
             outCanvas.width = Math.max(1, Math.round(edCropRect.w));
             outCanvas.height = Math.max(1, Math.round(edCropRect.h));
@@ -1465,7 +1450,6 @@
 
                 try {
                     const dt = new DataTransfer();
-                    // Pertahankan file lain jika ada, ganti file gambar pertama yang diedit
                     Array.from(edInputEl.files || []).forEach((f, idx) => {
                         if (f === edOriginalFile || (idx === 0 && f.type.startsWith('image/'))) {
                             dt.items.add(editedFile);
@@ -1482,7 +1466,6 @@
             }, 'image/png', 0.95);
         }
 
-        // Otomatis buka Editor Gambar saat user memilih file gambar di form Catatan / PR / Tugas / Event
         document.addEventListener('change', (e) => {
             const input = e.target.closest('input[type="file"]');
             if (!input || !input.files || input.files.length === 0) return;
@@ -1498,7 +1481,7 @@
             }
         });
     </script>
-        <script>
+    <script>
         (function() {
             let isRestoring = false;
             const snapshots = new Map();
@@ -1704,115 +1687,113 @@
             });
         })();
     </script>
-<script>
-    (function() {
-        function pad2(n) { return String(n).padStart(2, '0'); }
+    <script>
+        (function() {
+            function pad2(n) { return String(n).padStart(2, '0'); }
 
-        function getCreateFormElements() {
-            const form = document.querySelector('form[action*="kalender"][method="POST"], form[action*="calendar"][method="POST"]');
-            if (!form) return { form: null, wrapper: null, headingEl: null };
+            function getCreateFormElements() {
+                const form = document.querySelector('form[action*="kalender"][method="POST"], form[action*="calendar"][method="POST"]');
+                if (!form) return { form: null, wrapper: null, headingEl: null };
 
-            const headingEl = Array.from(document.querySelectorAll('h1, h2, h3, h4, p, div, span')).find(el => {
-                const txt = (el.textContent || '').trim();
-                return (txt === 'Tandai Tanggal Kalender' || txt.toLowerCase().includes('tandai tanggal')) && !el.closest('#edit-calendar-modal');
-            });
-
-            // Cari pembungkus khusus form create (pastikan tidak menyembunyikan daftar "Agenda Bulan")
-            let wrapper = form.parentElement;
-            if (headingEl && headingEl.parentElement && headingEl.parentElement.contains(form)) {
-                wrapper = headingEl.parentElement;
-            }
-            return { form, wrapper, headingEl };
-        }
-
-        function setCreateFormVisible(visible) {
-            const { form, wrapper, headingEl } = getCreateFormElements();
-            if (!form) return;
-
-            const disp = visible ? '' : 'none';
-            form.style.display = disp;
-            if (headingEl && headingEl !== wrapper && !headingEl.textContent.toLowerCase().includes('agenda bulan')) {
-                headingEl.style.display = disp;
-            }
-            // Jika wrapper juga memuat "Agenda Bulan", sembunyikan elemen saudara sebelum Agenda Bulan saja
-            if (wrapper && !(wrapper.textContent || '').includes('Agenda Bulan')) {
-                wrapper.style.display = disp;
-            } else if (wrapper) {
-                Array.from(wrapper.children).forEach(child => {
-                    const cText = child.textContent || '';
-                    if (child === form || (headingEl && (child === headingEl || child.contains(headingEl))) || (!cText.includes('Agenda Bulan') && child.querySelector('input, select, textarea'))) {
-                        child.style.display = disp;
-                    }
+                const headingEl = Array.from(document.querySelectorAll('h1, h2, h3, h4, p, div, span')).find(el => {
+                    const txt = (el.textContent || '').trim();
+                    return (txt === 'Tandai Tanggal Kalender' || txt.toLowerCase().includes('tandai tanggal')) && !el.closest('#edit-calendar-modal');
                 });
-            }
-        }
 
-        function detectMonthYear() {
-            const monthMap = {
-                januari: 1, jan: 1, january: 1,
-                februari: 2, feb: 2, february: 2,
-                maret: 3, mar: 3, march: 3,
-                april: 4, apr: 4,
-                mei: 5, may: 5,
-                juni: 6, jun: 6, june: 6,
-                juli: 7, jul: 7, july: 7,
-                agustus: 8, agu: 8, agt: 8, august: 8, aug: 8,
-                september: 9, sep: 9,
-                oktober: 10, okt: 10, october: 10, oct: 10,
-                november: 11, nov: 11,
-                desember: 12, des: 12, december: 12, dec: 12
-            };
-            const allText = Array.from(document.querySelectorAll('h1, h2, h3, div, span')).map(e => (e.textContent || '').trim());
-            for (const t of allText) {
-                const m = t.toLowerCase().match(/\b(januari|january|jan|februari|february|feb|maret|march|mar|april|apr|mei|may|juni|june|jun|juli|july|jul|agustus|august|agu|agt|aug|september|sep|oktober|october|okt|oct|november|nov|desember|december|des|dec)\s+(20\d{2})\b/);
-                if (m) return { month: monthMap[m[1]], year: parseInt(m[2], 10) };
-            }
-            const now = new Date();
-            return { month: now.getMonth() + 1, year: now.getFullYear() };
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            const isCalPage = window.location.pathname.includes('kalender') || window.location.pathname.includes('calendar') || !!document.querySelector('form[action*="kalender"], form[action*="calendar"]');
-            if (!isCalPage) return;
-
-            const hasErr = !!document.querySelector('.text-red-500, .text-red-400, .alert-danger');
-            if (!hasErr) {
-                setCreateFormVisible(false);
+                let wrapper = form.parentElement;
+                if (headingEl && headingEl.parentElement && headingEl.parentElement.contains(form)) {
+                    wrapper = headingEl.parentElement;
+                }
+                return { form, wrapper, headingEl };
             }
 
-            const { month, year } = detectMonthYear();
-            const dateInp = document.querySelector('input[type="date"][name*="tanggal"], input[type="date"][name*="date"], form[action*="kalender"] input[type="date"], form[action*="calendar"] input[type="date"]');
-            const judulInp = document.querySelector('input[name*="judul"], input[name*="title"], form[action*="kalender"] input[type="text"], form[action*="calendar"] input[type="text"]');
+            function setCreateFormVisible(visible) {
+                const { form, wrapper, headingEl } = getCreateFormElements();
+                if (!form) return;
 
-            document.querySelectorAll('table td, .calendar-day, [data-date]').forEach(cell => {
-                if (cell.closest('thead')) return;
-                const rawAttr = (cell.getAttribute('data-date') || '').trim();
-                const dayMatch = (cell.innerText || '').trim().match(/^(\d{1,2})\b/);
-                if (!rawAttr && !dayMatch) return;
+                const disp = visible ? '' : 'none';
+                form.style.display = disp;
+                if (headingEl && headingEl !== wrapper && !headingEl.textContent.toLowerCase().includes('agenda bulan')) {
+                    headingEl.style.display = disp;
+                }
+                if (wrapper && !(wrapper.textContent || '').includes('Agenda Bulan')) {
+                    wrapper.style.display = disp;
+                } else if (wrapper) {
+                    Array.from(wrapper.children).forEach(child => {
+                        const cText = child.textContent || '';
+                        if (child === form || (headingEl && (child === headingEl || child.contains(headingEl))) || (!cText.includes('Agenda Bulan') && child.querySelector('input, select, textarea'))) {
+                            child.style.display = disp;
+                        }
+                    });
+                }
+            }
 
-                cell.style.cursor = 'pointer';
-                cell.addEventListener('click', (e) => {
-                    if (e.target.closest('button, a, form, input, select, textarea')) return;
+            function detectMonthYear() {
+                const monthMap = {
+                    januari: 1, jan: 1, january: 1,
+                    februari: 2, feb: 2, february: 2,
+                    maret: 3, mar: 3, march: 3,
+                    april: 4, apr: 4,
+                    mei: 5, may: 5,
+                    juni: 6, jun: 6, june: 6,
+                    juli: 7, jul: 7, july: 7,
+                    agustus: 8, agu: 8, agt: 8, august: 8, aug: 8,
+                    september: 9, sep: 9,
+                    oktober: 10, okt: 10, october: 10, oct: 10,
+                    november: 11, nov: 11,
+                    desember: 12, des: 12, december: 12, dec: 12
+                };
+                const allText = Array.from(document.querySelectorAll('h1, h2, h3, div, span')).map(e => (e.textContent || '').trim());
+                for (const t of allText) {
+                    const m = t.toLowerCase().match(/\b(januari|january|jan|februari|february|feb|maret|march|mar|april|apr|mei|may|juni|june|jun|juli|july|jul|agustus|august|agu|agt|aug|september|sep|oktober|october|okt|oct|november|nov|desember|december|des|dec)\s+(20\d{2})\b/);
+                    if (m) return { month: monthMap[m[1]], year: parseInt(m[2], 10) };
+                }
+                const now = new Date();
+                return { month: now.getMonth() + 1, year: now.getFullYear() };
+            }
 
-                    let isoDate = rawAttr;
-                    if (!/^\d{4}-\d{2}-\d{2}$/.test(isoDate) && dayMatch) {
-                        const dayNum = parseInt(dayMatch[1], 10);
-                        isoDate = `${year}-${pad2(month)}-${pad2(dayNum)}`;
-                    }
+            document.addEventListener('DOMContentLoaded', () => {
+                const isCalPage = window.location.pathname.includes('kalender') || window.location.pathname.includes('calendar') || !!document.querySelector('form[action*="kalender"], form[action*="calendar"]');
+                if (!isCalPage) return;
 
-                    setCreateFormVisible(true);
-                    if (dateInp && /^\d{4}-\d{2}-\d{2}$/.test(isoDate)) {
-                        dateInp.value = isoDate;
-                        dateInp.dispatchEvent(new Event('change', { bubbles: true }));
-                    }
-                    if (typeof playSfx === 'function') playSfx('click');
-                    if (judulInp) {
-                        setTimeout(() => judulInp.focus(), 100);
-                    }
+                const hasErr = !!document.querySelector('.text-red-500, .text-red-400, .alert-danger');
+                if (!hasErr) {
+                    setCreateFormVisible(false);
+                }
+
+                const { month, year } = detectMonthYear();
+                const dateInp = document.querySelector('input[type="date"][name*="tanggal"], input[type="date"][name*="date"], form[action*="kalender"] input[type="date"], form[action*="calendar"] input[type="date"]');
+                const judulInp = document.querySelector('input[name*="judul"], input[name*="title"], form[action*="kalender"] input[type="text"], form[action*="calendar"] input[type="text"]');
+
+                document.querySelectorAll('table td, .calendar-day, [data-date]').forEach(cell => {
+                    if (cell.closest('thead')) return;
+                    const rawAttr = (cell.getAttribute('data-date') || '').trim();
+                    const dayMatch = (cell.innerText || '').trim().match(/^(\d{1,2})\b/);
+                    if (!rawAttr && !dayMatch) return;
+
+                    cell.style.cursor = 'pointer';
+                    cell.addEventListener('click', (e) => {
+                        if (e.target.closest('button, a, form, input, select, textarea')) return;
+
+                        let isoDate = rawAttr;
+                        if (!/^\d{4}-\d{2}-\d{2}$/.test(isoDate) && dayMatch) {
+                            const dayNum = parseInt(dayMatch[1], 10);
+                            isoDate = `${year}-${pad2(month)}-${pad2(dayNum)}`;
+                        }
+
+                        setCreateFormVisible(true);
+                        if (dateInp && /^\d{4}-\d{2}-\d{2}$/.test(isoDate)) {
+                            dateInp.value = isoDate;
+                            dateInp.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+                        if (typeof playSfx === 'function') playSfx('click');
+                        if (judulInp) {
+                            setTimeout(() => judulInp.focus(), 100);
+                        }
+                    });
                 });
             });
-        });
-    })();
-</script>
+        })();
+    </script>
 </body>
 </html>
