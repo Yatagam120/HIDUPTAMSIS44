@@ -405,10 +405,13 @@
                 padding-right: 4px !important;
                 overflow: visible !important;
             }
+            .mobile-type-tag {
+                display: none !important;
+            }
         }
 
         /* =========================================================
-           KHUSUS MOBILE (<= 640px): SAMA DENGAN JADWAL ASLI & RAPI
+           KHUSUS MOBILE (<= 640px): NOTIF KECIL, MUAT & ADA TAG TUGAS DLL
            ========================================================= */
         @media (max-width: 640px) {
             nav.main-tamsis-nav > div {
@@ -431,7 +434,7 @@
                 white-space: nowrap !important;
             }
             main.page-animate-in {
-                padding: 0.5rem 0.35rem !important;
+                padding: 0.45rem 0.3rem !important;
             }
             .grid-5-cols,
             .grid-4-cols {
@@ -469,19 +472,19 @@
                 max-width: 100% !important;
                 table-layout: fixed !important;
                 border-collapse: separate !important;
-                border-spacing: 2px !important;
+                border-spacing: 1.5px !important;
             }
             .timetable-grid th,
             .timetable-grid td {
-                font-size: 6.5px !important;
-                padding: 1.5px 1px !important;
-                line-height: 1.12 !important;
+                font-size: 6px !important;
+                padding: 1px !important;
+                line-height: 1.1 !important;
                 vertical-align: middle !important;
                 overflow: hidden !important;
             }
             .timetable-grid th:first-child,
             .timetable-grid td:first-child {
-                width: 32px !important;
+                width: 28px !important;
                 font-size: 6.5px !important;
                 text-align: center !important;
             }
@@ -494,23 +497,65 @@
                 justify-content: center !important;
                 text-align: center !important;
                 width: 100% !important;
-                min-height: 38px !important;
-                padding: 10px 2px 3px 2px !important;
-                border-radius: 6px !important;
-                font-size: 6.8px !important;
+                min-height: 42px !important;
+                height: 42px !important;
+                padding: 8px 1px 2px 1px !important;
+                gap: 1.5px !important;
+                border-radius: 5px !important;
+                font-size: 6px !important;
                 font-weight: 800 !important;
-                line-height: 1.1 !important;
-                letter-spacing: -0.01em;
+                line-height: 1.05 !important;
+                letter-spacing: -0.02em !important;
                 white-space: nowrap !important;
                 overflow: hidden !important;
-                text-overflow: clip !important;
             }
+            .timetable-grid a > *:not(span.mobile-notif-dot):not(span.mobile-label-only):not(span.mobile-type-tag),
+            .timetable-grid .subject-box > *:not(span.mobile-notif-dot):not(span.mobile-label-only):not(span.mobile-type-tag) {
+                display: none !important;
+            }
+            .timetable-grid a span.mobile-label-only,
+            .timetable-grid .subject-box span.mobile-label-only {
+                display: block !important;
+                width: 100% !important;
+                overflow: hidden !important;
+                text-overflow: clip !important;
+                white-space: nowrap !important;
+                text-align: center !important;
+                font-size: 6px !important;
+            }
+            .mobile-type-tag {
+                display: inline-block !important;
+                font-size: 4.7px !important;
+                font-weight: 800 !important;
+                line-height: 1 !important;
+                padding: 1px 2.5px !important;
+                border-radius: 3px !important;
+                background: rgba(250, 204, 21, 0.22);
+                color: #fde047;
+                border: 0.5px solid rgba(250, 204, 21, 0.5);
+                letter-spacing: 0.02em;
+                max-width: 100%;
+                overflow: hidden;
+                text-overflow: clip;
+            }
+            /* Notifikasi kuning/merah/hijau di mobile diperkecil & ditaruh di pojok kanan atas */
             .timetable-grid a span.rounded-full,
             .timetable-grid .subject-box span.rounded-full {
-                width: 6px !important;
-                height: 6px !important;
-                top: 2px !important;
-                z-index: 2 !important;
+                position: absolute !important;
+                top: 1.5px !important;
+                right: 1.5px !important;
+                left: auto !important;
+                bottom: auto !important;
+                margin: 0 !important;
+                width: 4.2px !important;
+                height: 4.2px !important;
+                min-width: 4.2px !important;
+                min-height: 4.2px !important;
+                max-width: 4.2px !important;
+                max-height: 4.2px !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                z-index: 5 !important;
             }
         }
     </style>
@@ -655,20 +700,30 @@
             const mapelDict = [
                 ['muatan bahasa jepang', 'MBJ(J)'],
                 ['bahasa jepang', 'MBJ(J)'],
+                ['mbj', 'MBJ(J)'],
+                ['jepa', 'MBJ(J)'],
                 ['pendidikan pancasila', 'PP'],
+                ['ppkn', 'PP'],
                 ['bahasa inggris', 'B.Ing'],
+                ['b.ing', 'B.Ing'],
                 ['bimbingan konseling', 'BK'],
                 ['bahasa indonesia', 'BI'],
+                ['b.ind', 'BI'],
                 ['matematika', 'MTK'],
                 ['kreativitas & desain interaktif', 'KDI'],
                 ['kreativitas dan desain interaktif', 'KDI'],
                 ['pendidikan jasmani', 'Penjas'],
+                ['pjok', 'Penjas'],
                 ['ketamansiswaan', 'KTS'],
+                ['kts', 'KTS'],
                 ['samsung institute tech', 'STI'],
                 ['sistem teknologi informasi', 'STI'],
                 ['pemrograman lanjut', 'PL(RPL1)'],
+                ['pml', 'PL(RPL1)'],
                 ['sejarah indonesia', 'SI'],
+                ['sej', 'SI'],
                 ['kewirausahaan', 'KWH'],
+                ['kwu', 'KWH'],
                 ['pendidikan agama islam', 'PAI'],
             ];
 
@@ -681,33 +736,52 @@
             return cleaned.length > 6 ? cleaned.slice(0, 5).toUpperCase() : cleaned;
         }
 
+        function detectMobileTypeTag(rawHtml, href) {
+            const combined = `${rawHtml || ''} ${href || ''}`.toLowerCase();
+            if (combined.includes('tab=pr') || /\bpr\b/.test(combined)) return 'PR';
+            if (combined.includes('tab=tugas') || combined.includes('tugas')) return 'TGS';
+            if (combined.includes('tab=event') || combined.includes('event')) return 'EVT';
+            if (combined.includes('tab=catatan') || combined.includes('catatan')) return 'CTT';
+            if (combined.includes('bg-yellow-') || combined.includes('bg-amber-') || combined.includes('tenggat')) return 'TGS';
+            return '';
+        }
+
         function shortenSubjectsForMobile() {
             if (window.innerWidth > 640) return;
 
             document.querySelectorAll('table.timetable-grid a, table.timetable-grid .subject-box').forEach(box => {
-                const badges = Array.from(box.querySelectorAll('span.rounded-full'));
-                const textNodes = [];
-                const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT, null);
-                let n;
-                while ((n = walker.nextNode())) {
-                    if (n.nodeValue && n.nodeValue.trim().length > 0) {
-                        textNodes.push(n);
-                    }
-                }
-                if (textNodes.length === 0) return;
+                const dotSpans = Array.from(box.querySelectorAll('span.rounded-full'));
+                dotSpans.forEach(d => d.classList.add('mobile-notif-dot'));
 
                 if (!box.dataset.fullLabel) {
-                    box.dataset.fullLabel = textNodes.map(t => t.nodeValue.trim()).join(' ');
+                    const clone = box.cloneNode(true);
+                    clone.querySelectorAll('span.rounded-full').forEach(d => d.remove());
+                    box.dataset.fullLabel = (clone.textContent || '').replace(/\s+/g, ' ').trim();
                 }
 
-                const shortCode = abbreviateMobileSubject(box.dataset.fullLabel);
-                textNodes.forEach((t, idx) => {
-                    t.nodeValue = idx === 0 ? shortCode : '';
-                });
+                if (!box.dataset.fullLabel) return;
 
-                badges.forEach(b => {
-                    if (b.parentElement !== box) box.prepend(b);
-                });
+                const shortCode = abbreviateMobileSubject(box.dataset.fullLabel);
+                let labelSpan = box.querySelector('span.mobile-label-only');
+                if (!labelSpan) {
+                    labelSpan = document.createElement('span');
+                    labelSpan.className = 'mobile-label-only';
+                    box.appendChild(labelSpan);
+                }
+                labelSpan.textContent = shortCode;
+
+                const typeTag = detectMobileTypeTag(box.dataset.rawHtml || box.innerHTML, box.getAttribute('href') || '');
+                let tagSpan = box.querySelector('span.mobile-type-tag');
+                if (typeTag) {
+                    if (!tagSpan) {
+                        tagSpan = document.createElement('span');
+                        tagSpan.className = 'mobile-type-tag';
+                        box.appendChild(tagSpan);
+                    }
+                    tagSpan.textContent = typeTag;
+                } else if (tagSpan) {
+                    tagSpan.remove();
+                }
             });
         }
 
@@ -761,7 +835,11 @@
                 const href = el.getAttribute('href');
                 if (!href || href === '#') return;
 
-                const htmlLower = (el.innerHTML || '').toLowerCase();
+                if (!el.dataset.rawHtml) {
+                    el.dataset.rawHtml = el.innerHTML || '';
+                }
+
+                const htmlLower = el.dataset.rawHtml.toLowerCase();
                 let sourceTab = '';
                 let badgeColor = '';
 
@@ -788,6 +866,8 @@
                     el.setAttribute('href', `${href}${sep}tab=${sourceTab}${badgeColor ? '&notif=' + badgeColor : ''}`);
                 }
             });
+
+            shortenSubjectsForMobile();
 
             const params = new URLSearchParams(window.location.search);
             const activeTab = params.get('tab');
