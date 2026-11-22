@@ -24,7 +24,14 @@ class DatabaseSeeder extends Seeder
 
         // 2. Daftar Mata Pelajaran
         $mapelList = [
-            // isi daftar mapel kamu di sini sesuai yang sudah ada
+            'MBJ'    => 'Muatan Bahasa Jepang',
+            'PP'     => 'Pendidikan Pancasila',
+            'B.Ing'  => 'Bahasa Inggris',
+            'BK'     => 'Bimbingan Konseling',
+            'BI'     => 'Bahasa Indonesia',
+            'MTK'    => 'Matematika',
+            'KDI'    => 'Kreativitas & Desain Interaktif',
+            'Penjas' => 'Pendidikan Jasmani',
         ];
 
         $subjects = [];
@@ -42,5 +49,44 @@ class DatabaseSeeder extends Seeder
                 ->where('kode_mapel', $kode)
                 ->value('id');
         }
+
+        // 3. Jadwal Pelajaran XI RPL 1 (Senin - Jumat)
+        // Format: ['hari', 'kode_mapel', jam_mulai, jam_selesai]
+        $jadwalList = [
+            ['Senin',  'PP',     1, 2],
+            ['Senin',  'MTK',    3, 5],
+            ['Senin',  'B.Ing',  6, 8],
+            ['Selasa', 'KDI',    1, 4],
+            ['Selasa', 'BI',     5, 7],
+            ['Rabu',   'MTK',    1, 3],
+            ['Rabu',   'MBJ',    4, 6],
+            ['Kamis',  'Penjas', 1, 3],
+            ['Kamis',  'BK',     4, 5],
+            ['Jumat',  'BI',     1, 3],
+            ['Jumat',  'KDI',    4, 6],
+        ];
+
+        foreach ($jadwalList as [$hari, $kode, $jamMulai, $jamSelesai]) {
+            $subjectId = $subjects[$kode] ?? null;
+            if (!$subjectId) {
+                continue;
+            }
+
+            DB::table('schedules')->updateOrInsert(
+                [
+                    'hari'        => $hari,
+                    'jam_mulai'   => $jamMulai,
+                    'jam_selesai' => $jamSelesai,
+                ],
+                [
+                    'subject_id'  => $subjectId,
+                    'updated_at'  => $now,
+                    'created_at'  => $now,
+                ]
+            );
+        }
+
+        // 4. Hirarki & Daftar Siswa XI RPL 1
+        $this->call(StudentSeeder::class);
     }
 }

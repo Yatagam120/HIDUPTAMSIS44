@@ -9,7 +9,7 @@ class StudentSeeder extends Seeder
 {
     public function run(): void
     {
-        Student::truncate(); // Bersihkan data lama jika seeder dijalankan ulang
+        Student::query()->delete();
 
         $anggotaKelas = [
             // === HIRARKI ATAS (Wali Kelas, Ketua Kelas, Wakil Ketua Kelas) ===
@@ -44,7 +44,7 @@ class StudentSeeder extends Seeder
                 'foto' => null,
             ],
 
-            // === DAFTAR SISWA XI RPL 1 (Flora diganti Muhammad Arya Azizan, Archie Lionel di-skip) ===
+            // === DAFTAR SISWA XI RPL 1 ===
             ['nama' => 'Adianku', 'jabatan' => 'siswa'],
             ['nama' => 'Ahmad Rafi', 'jabatan' => 'siswa'],
             ['nama' => 'Amelia Yohana', 'jabatan' => 'siswa'],
@@ -67,7 +67,7 @@ class StudentSeeder extends Seeder
             ['nama' => 'Fazril Saputra', 'jabatan' => 'siswa'],
             ['nama' => 'Febriansyah Frastiago', 'jabatan' => 'siswa'],
             ['nama' => 'Fiorenza Cira Amabel Haloho', 'jabatan' => 'siswa'],
-            ['nama' => 'Muhammad Arya Azizan', 'jabatan' => 'siswa'], // Pengganti Flora
+            ['nama' => 'Muhammad Arya Azizan', 'jabatan' => 'siswa'],
             ['nama' => 'Gugun Gumalayan', 'jabatan' => 'siswa'],
             ['nama' => 'Gwen Adriano Sule', 'jabatan' => 'siswa'],
             ['nama' => 'Hazwan Adji Sasongko Iswat', 'jabatan' => 'siswa'],
