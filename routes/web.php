@@ -20,8 +20,9 @@ Route::middleware(['auth'])->group(function () {
     // Jadwal Utama
     Route::get('/dashboard', [ScheduleController::class, 'index'])->name('dashboard');
 
-    // Mata Pelajaran & Postingan (Catatan, Tugas, PR, Event) -> Sinkron dengan List Tugas & Dashboard
+    // Mata Pelajaran & Postingan (Catatan, Tugas, PR, Event)
     Route::get('/mapel/{subject}', [SubjectController::class, 'show'])->name('subjects.show');
+    Route::get('/subject/{subject}', [SubjectController::class, 'show'])->name('subject.show');
     Route::post('/mapel/{subject}/items', [SubjectController::class, 'storeItem'])->name('subject.items.store');
     Route::patch('/mapel/{subject}/items/{item}', [SubjectController::class, 'updateItem'])->name('subject.items.update');
     Route::delete('/mapel/{subject}/items/{item}', [SubjectController::class, 'destroyItem'])->name('subject.items.destroy');
@@ -35,7 +36,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/posts/{post}/react', [SubjectPostController::class, 'toggleReaction'])->name('posts.react');
 
     // List Tugas Gabungan
-    Route::get('/list-tugas', [SubjectPostController::class, 'allTasks'])->name('tasks.index');
+    Route::get('/list-tugas', [SubjectController::class, 'allTasks'])->name('tasks.index');
 
     // Kalender Interaktif
     Route::get('/kalender', [CalendarController::class, 'index'])->name('calendar.index');

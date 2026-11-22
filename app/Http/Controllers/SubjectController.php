@@ -171,4 +171,37 @@ class SubjectController extends Controller
 
         return back();
     }
+
+    public function allTasks(Request $request)
+    {
+        $table = $this->resolveTargetTable();
+        $subjects = Subject::all()->keyBy('id');
+        $tasks = collect();
+
+        if (Schema::hasTable($table)) {
+            $columns = Schema::getColumnListing($table);
+            $typeCol = collect(['type', 'kategori', 'jenis', 'tipe'])->first(fn($c) => in_array($c, $columns, true));
+
+            $query = DB::table($table)->orderByDesc('id');
+            if ($typeCol) {
+                $query->whereIn($typeCol, ['tugas', 'pr', 'event', 'Tugas', 'PR', 'Event']);
+            }
+
+            $tasks = $query->get()->map(function ($row) use ($subjects) {
+                $row->subject = $subjects->get($row->subject_id);
+                $row->title = $row->title ?? $row->judul ?? 'Tanpa Judul';
+                $row->description = $row->description ?? $row->deskripsi ?? $row->content ?? $row->isi ?? null;
+                $row->type = strtolower((string) ($row->type ?? $row->kategori ?? $row->jenis ?? $row->tipe ?? 'tugas'));
+                $row->due_date = $row->due_date ?? $row->deadline ?? $row->tanggal_deadline ?? $row->tanggal ?? null;
+                return $row;
+            });
+        }
+
+        return view('subjects.tasks', [
+            'tasks' => $tasks,
+            'items' => $tasks,
+            'posts' => $tasks,
+            'subjects' => $subjects->values(),
+        ]);
+    }
 }
