@@ -20,17 +20,31 @@ class Subject extends Model
 
     public function getKodeMapelAttribute($value)
     {
-        return $value
-            ?? ($this->attributes['kode']
-            ?? ($this->attributes['code']
-            ?? ($this->attributes['singkatan'] ?? 'MAPEL')));
+        if (!empty($value)) {
+            return $value;
+        }
+
+        foreach (['kode', 'code', 'singkatan', 'short_name'] as $col) {
+            if (!empty($this->attributes[$col])) {
+                return $this->attributes[$col];
+            }
+        }
+
+        return $this->attributes['nama'] ?? ($this->attributes['name'] ?? 'MAPEL');
     }
 
     public function getNamaMapelAttribute($value)
     {
-        return $value
-            ?? ($this->attributes['nama']
-            ?? ($this->attributes['name']
-            ?? ($this->attributes['judul'] ?? '-')));
+        if (!empty($value)) {
+            return $value;
+        }
+
+        foreach (['nama', 'name', 'judul', 'title'] as $col) {
+            if (!empty($this->attributes[$col])) {
+                return $this->attributes[$col];
+            }
+        }
+
+        return '-';
     }
 }

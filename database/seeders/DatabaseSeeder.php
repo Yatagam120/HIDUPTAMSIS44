@@ -23,20 +23,26 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Deteksi Kolom Tabel 'subjects' & Isi Mapel
+        // 2. Deteksi Kolom Tabel 'subjects' & Isi Seluruh Mapel XI RPL 1
         $cols = Schema::getColumnListing('subjects');
-        $kodeCol = collect(['kode_mapel', 'kode', 'code', 'singkatan'])->first(fn ($c) => in_array($c, $cols));
+        $kodeCol = collect(['kode_mapel', 'kode', 'code', 'singkatan', 'short_name'])->first(fn ($c) => in_array($c, $cols));
         $namaCol = collect(['nama_mapel', 'nama', 'name', 'judul', 'title'])->first(fn ($c) => in_array($c, $cols));
 
         $mapelList = [
-            'MBJ'    => 'Muatan Bahasa Jepang',
-            'PP'     => 'Pendidikan Pancasila',
-            'B.Ing'  => 'Bahasa Inggris',
-            'BK'     => 'Bimbingan Konseling',
-            'BI'     => 'Bahasa Indonesia',
-            'MTK'    => 'Matematika',
-            'KDI'    => 'Kreativitas & Desain Interaktif',
-            'Penjas' => 'Pendidikan Jasmani',
+            'MBJ(J'    => 'Muatan Bahasa Jepang',
+            'PP'       => 'Pendidikan Pancasila',
+            'B.Ing'    => 'Bahasa Inggris',
+            'BK'       => 'Bimbingan Konseling',
+            'BI'       => 'Bahasa Indonesia',
+            'MTK'      => 'Matematika',
+            'KDI'      => 'Kreativitas & Desain Interaktif',
+            'Penjas'   => 'Pendidikan Jasmani',
+            'KTS'      => 'Ketamansiswaan',
+            'STI'      => 'Sistem Teknologi Informasi',
+            'PL(RPL1)' => 'Pemrograman Lanjut (RPL 1)',
+            'SI'       => 'Sejarah Indonesia',
+            'KWH'      => 'Kewirausahaan',
+            'PAI'      => 'Pendidikan Agama Islam',
         ];
 
         $subjects = [];
@@ -69,19 +75,35 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // 3. Isi Jadwal Pelajaran XI RPL 1 (Senin - Jumat)
+        // 3. Isi Jadwal Pelajaran XI RPL 1 Sesuai Tabel Asli (Senin - Jumat)
         $jadwalList = [
-            ['Senin',  'PP',     1, 2],
-            ['Senin',  'MTK',    3, 5],
-            ['Senin',  'B.Ing',  6, 8],
-            ['Selasa', 'KDI',    1, 4],
-            ['Selasa', 'BI',     5, 7],
-            ['Rabu',   'MTK',    1, 3],
-            ['Rabu',   'MBJ',    4, 6],
-            ['Kamis',  'Penjas', 1, 3],
-            ['Kamis',  'BK',     4, 5],
-            ['Jumat',  'BI',     1, 3],
-            ['Jumat',  'KDI',    4, 6],
+            // Senin
+            ['Senin',  'MBJ(J',    1, 2],
+            ['Senin',  'PP',       3, 4],
+            ['Senin',  'B.Ing',    5, 6],
+            ['Senin',  'BK',       7, 7],
+            ['Senin',  'BI',       8, 10],
+
+            // Selasa
+            ['Selasa', 'MTK',      1, 3],
+            ['Selasa', 'KDI',      4, 6],
+            ['Selasa', 'Penjas',   7, 8],
+            ['Selasa', 'KTS',      9, 9],
+            ['Selasa', 'STI',      10, 11],
+
+            // Rabu
+            ['Rabu',   'PL(RPL1)', 1, 5],
+            ['Rabu',   'PL(RPL1)', 6, 10],
+
+            // Kamis
+            ['Kamis',  'SI',       1, 2],
+            ['Kamis',  'KWH',      3, 4],
+            ['Kamis',  'PAI',      5, 7],
+            ['Kamis',  'B.Ing',    8, 9],
+
+            // Jumat
+            ['Jumat',  'PL(RPL1)', 1, 6],
+            ['Jumat',  'PL(RPL1)', 7, 10],
         ];
 
         DB::table('schedules')->delete();
