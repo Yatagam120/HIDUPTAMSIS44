@@ -14,12 +14,21 @@ class FeedbackController extends Controller
         $request->validate([
             'rating'   => ['required', 'numeric', 'min:0', 'max:5'],
             'komentar' => ['required', 'string', 'max:2000'],
-            'media.*'  => ['nullable', 'file', 'mimetypes:image/*,video/*', 'max:102400'],
+            'media'    => ['nullable', 'array', 'max:10'],
+            'media.*'  => ['file', 'mimes:jpg,jpeg,png,webp,gif,mp4,webm,mov,avi,mkv', 'max:102400'],
         ]);
 
         $mediaList = [];
-        if ($request->hasFile('media')) {
-            foreach ($request->file('media') as $file) {
+        $files = $request->file('media');
+        if ($files) {
+            if (!is_array($files)) {
+                $files = [$files];
+            }
+
+            foreach ($files as $file) {
+                if (!$file || !$file->isValid()) {
+                    continue;
+                }
                 $mime = $file->getMimeType() ?? '';
                 $type = str_starts_with($mime, 'video/') ? 'video' : 'image';
                 $path = $file->store('feedback_media', 'public');
@@ -37,12 +46,12 @@ class FeedbackController extends Controller
             'media_paths' => $mediaList,
         ]);
 
-        return back()->with('success', 'Terima kasih! Saran & laporan Anda berhasil dikirim ke Admin Panel.');
+        return redirect()->route('settings')->with('success', 'Terima kasih! Saran & laporan Anda berhasil dikirim ke Admin Panel.');
     }
 
     public function destroy(Feedback $feedback)
     {
-        abort_unless(Auth::user()->role === 'admin', 403);
+        abort_unless(Auth::check() && Auth::user()->role === 'admin', 403);
 
         if (is_array($feedback->media_paths)) {
             foreach ($feedback->media_paths as $item) {
@@ -53,6 +62,6 @@ class FeedbackController extends Controller
         }
 
         $feedback->delete();
-        return back()->with('success', 'Data kritik/saran berhasil dihapus.');
+        return redirect()->route('admin.users')->with('success', 'Data kritik/saran berhasil dihapus.');
     }
 }

@@ -139,7 +139,7 @@
             border-color: var(--border-color);
         }
 
-        /* Animasi Halaman & Kartu Jadwal Seperti Semula */
+        /* Animasi Halaman & Kartu Jadwal */
         @keyframes pageFadeSlide {
             0% { opacity: 0; transform: translateY(10px) scale(0.99); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
@@ -172,7 +172,7 @@
             transform: scale(0.95);
         }
 
-        /* Hilangkan Bug Scrollbar Putih pada Navbar */
+        /* Navbar Links Default */
         .nav-links-wrap {
             display: flex;
             align-items: center;
@@ -184,7 +184,7 @@
             display: none;
         }
 
-        /* Splash Screen Super Kilat (Hanya 1x per sesi) */
+        /* Splash Screen Super Kilat */
         #tamsis-splash {
             position: fixed;
             inset: 0;
@@ -238,7 +238,7 @@
             color: #0f172a;
         }
 
-        /* Navbar Solid & Selalu Di Lapisan Paling Atas (Anti Tertimpa Konten) */
+        /* Navbar Solid & Selalu Di Lapisan Paling Atas */
         nav.main-tamsis-nav {
             position: sticky;
             top: 0;
@@ -260,7 +260,7 @@
             background: rgba(255, 255, 255, 0.96) !important;
         }
 
-        /* Titik Kuning & Merah Deadline Selalu Muncul (Tidak Pernah Hilang) */
+        /* Titik Kuning & Merah Deadline Selalu Muncul */
         @keyframes deadlineDotStay {
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.78; transform: scale(1.18); }
@@ -276,6 +276,7 @@
             z-index: 20 !important;
         }
     </style>
+
     <style>
         /* =========================================================
            INTEGRASI LAYAR HP, TABLET & LAPTOP (RESPONSIVE SUITE)
@@ -310,23 +311,30 @@
 
         @media (max-width: 640px) {
             nav.main-tamsis-nav > div {
-                padding-left: 0.75rem !important;
-                padding-right: 0.75rem !important;
-                gap: 0.5rem !important;
+                padding: 0.45rem 0.5rem !important;
+                gap: 0.35rem !important;
             }
             .nav-links-wrap {
                 width: 100%;
-                justify-content: flex-start;
-                gap: 5px !important;
+                display: flex !important;
+                flex-wrap: nowrap !important;
+                justify-content: space-between;
+                gap: 2.5px !important;
+                overflow-x: auto !important;
+                -ms-overflow-style: none;
+                scrollbar-width: none;
             }
             .nav-btn-anim {
-                padding: 5px 9px !important;
-                font-size: 11px !important;
+                padding: 4px 5.5px !important;
+                font-size: 9.5px !important;
+                border-radius: 7px !important;
+                letter-spacing: -0.02em;
+                flex-shrink: 0;
             }
             main.page-animate-in {
-                padding-left: 0.75rem !important;
-                padding-right: 0.75rem !important;
-                padding-top: 1rem !important;
+                padding-left: 0.65rem !important;
+                padding-right: 0.65rem !important;
+                padding-top: 0.85rem !important;
             }
             .grid-5-cols,
             .grid-4-cols {
@@ -338,16 +346,21 @@
                 gap: 0.5rem !important;
             }
             .j-filter-btn {
-                padding: 5px 10px !important;
-                font-size: 11px !important;
+                padding: 4px 8px !important;
+                font-size: 10px !important;
+            }
+            .timetable-grid {
+                min-width: 640px !important;
+            }
+            .timetable-grid tbody tr {
+                height: 60px !important;
             }
             table th, table td {
-                font-size: 11px !important;
-                padding: 6px 8px !important;
-                white-space: nowrap;
+                font-size: 10px !important;
+                padding: 4px 5px !important;
             }
             #tamsis-lightbox-modal .h-\[72vh\] {
-                height: 54vh !important;
+                height: 52vh !important;
             }
             #tamsis-editor-canvas {
                 width: 100% !important;
@@ -361,11 +374,12 @@
             max-width: 100%;
         }
     </style>
+
     <style id="tamsis-orientation-suite">
         @media (min-width: 1025px) {
             #tamsis-lightbox-modal .h-\[72vh\],
             #tamsis-lightbox-modal .h-\[62vh\],
-            #tamsis-lightbox-modal .h-\[54vh\] {
+            #tamsis-lightbox-modal .h-\[52vh\] {
                 height: 72vh !important;
             }
         }
@@ -379,7 +393,7 @@
             }
             #tamsis-lightbox-modal .h-\[72vh\],
             #tamsis-lightbox-modal .h-\[62vh\],
-            #tamsis-lightbox-modal .h-\[54vh\] {
+            #tamsis-lightbox-modal .h-\[52vh\] {
                 height: 56vh !important;
             }
         }
@@ -395,21 +409,21 @@
             }
             #tamsis-lightbox-modal .h-\[72vh\],
             #tamsis-lightbox-modal .h-\[62vh\],
-            #tamsis-lightbox-modal .h-\[54vh\] {
+            #tamsis-lightbox-modal .h-\[52vh\] {
                 height: 66vh !important;
             }
         }
 
         @media (max-width: 640px) and (orientation: portrait) {
             nav.main-tamsis-nav > div {
-                padding: 0.6rem 0.75rem !important;
+                padding: 0.45rem 0.5rem !important;
             }
             main.page-animate-in {
-                padding: 0.85rem 0.75rem 1.5rem 0.75rem !important;
+                padding: 0.8rem 0.65rem 1.5rem 0.65rem !important;
             }
             #tamsis-lightbox-modal .h-\[72vh\],
             #tamsis-lightbox-modal .h-\[62vh\],
-            #tamsis-lightbox-modal .h-\[54vh\] {
+            #tamsis-lightbox-modal .h-\[52vh\] {
                 height: 50vh !important;
             }
         }
@@ -428,7 +442,7 @@
             }
             #tamsis-lightbox-modal .h-\[72vh\],
             #tamsis-lightbox-modal .h-\[62vh\],
-            #tamsis-lightbox-modal .h-\[54vh\] {
+            #tamsis-lightbox-modal .h-\[52vh\] {
                 height: 58vh !important;
             }
             #tamsis-img-editor-modal > div {
@@ -444,7 +458,7 @@
 </head>
 <body class="antialiased" data-theme="academic-trust" data-font="sans">
 
-    <!-- Splash Screen Kilat (Otomatis dilewati saat pindah antar halaman) -->
+    <!-- Splash Screen Kilat -->
     <div id="tamsis-splash">
         <img src="{{ asset('images/logo-tamsis.png') }}"
              onerror="this.style.display='none'"
@@ -471,16 +485,16 @@
 
     <!-- Navbar Utama -->
     <nav class="main-tamsis-nav">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[56px] py-1.5 flex flex-wrap items-center justify-between gap-3">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[52px] py-1.5 flex flex-wrap items-center justify-between gap-2">
             <a href="{{ route('dashboard') }}" onclick="playSfx('click')" class="flex items-center gap-2 shrink-0" style="gap:8px;">
                 <img src="{{ asset('images/logo-tamsis.png') }}"
                      onerror="this.style.display='none'"
                      alt="Logo"
-                     class="w-8 h-8 rounded-full object-contain">
+                     class="w-7 h-7 sm:w-8 sm:h-8 rounded-full object-contain">
                 <div class="leading-tight">
-                    <span style="display:inline-flex;align-items:center;gap:8px;vertical-align:middle;flex-shrink:0;">
-                        <img src="{{ asset('images/tamsis.jpeg') }}" onerror="this.src='{{ asset('images/logo-tamsis.png') }}'" alt="Logo Perguruan Tamansiswa" style="width:36px;height:36px;border-radius:9999px;object-fit:cover;flex-shrink:0;" class="border border-white/30 shadow">
-                        <div class="text-xs sm:text-sm font-extrabold tracking-wide" style="color: var(--primary);">
+                    <span style="display:inline-flex;align-items:center;gap:7px;vertical-align:middle;flex-shrink:0;">
+                        <img src="{{ asset('images/tamsis.jpeg') }}" onerror="this.src='{{ asset('images/logo-tamsis.png') }}'" alt="Logo Perguruan Tamansiswa" class="w-7 h-7 sm:w-9 sm:h-9 rounded-full object-cover shrink-0 border border-white/30 shadow">
+                        <div class="text-[11px] sm:text-sm font-extrabold tracking-wide" style="color: var(--primary);">
                             PELAJAR TAMAN SISWA HEBAT!
                         </div>
                     </span>
@@ -607,7 +621,7 @@
                 easter_sub: 'Punya kode rahasia kelas XI RPL 1? Masukkan di sini untuk membuka fitur tersembunyi!',
                 klaim_btn: 'Klaim',
                 saran_btn: 'Kasih Saran & Laporan Bug',
-                saran_sub: 'Beri rating bintang (bisa desimal seperti 4.5 / 3.4), komentar, atau kirim foto/video jika menemukan bug.',
+                saran_sub: 'Beri rating bintang (bisa desimal seperti 4.5 / 3.4), komentar, atau kirim banyak foto/video jika menemukan bug.',
                 rating_label: 'Rating Web (0.0 – 5.0 Bintang)',
                 rating_hint: 'Geser slider atau ketik angka desimal seperti 4.5, 3.4, atau 5.0.',
                 komentar_label: 'Komentar / Saran / Detail Bug',
@@ -808,8 +822,9 @@
             applyLanguage(savedLang);
         });
     </script>
+
     <style>
-        /* Titik Kuning (Tenggat), Merah (Deadline), Hijau (Selesai) Permanen Tidak Pernah Hilang */
+        /* Titik Kuning (Tenggat), Merah (Deadline), Hijau (Selesai) Permanen */
         @keyframes dotPulseSafe {
             0%, 100% { transform: scale(1); opacity: 1; }
             50% { transform: scale(1.22); opacity: 0.92; }
@@ -923,7 +938,7 @@
         }
     </style>
 
-    <!-- Modal Lightbox Slide & Zoom (Tersembunyi Secara Default) -->
+    <!-- Modal Lightbox Slide & Zoom -->
     <div id="tamsis-lightbox-modal" style="display: none;" class="hidden fixed inset-0 z-[9997] bg-black/90 backdrop-blur-md flex flex-col items-center justify-center p-4 select-none">
         <div class="w-full max-w-5xl flex items-center justify-between text-white mb-3 gap-2">
             <div class="text-xs sm:text-sm font-bold">
@@ -956,11 +971,10 @@
             </button>
         </div>
 
-        <!-- Thumbnail Strip Jika Media Lebih Dari 1 -->
         <div id="lb-thumbs" class="flex items-center gap-2 mt-3 overflow-x-auto max-w-full py-1"></div>
     </div>
 
-    <!-- Modal Editor Gambar (Tersembunyi Secara Default) -->
+    <!-- Modal Editor Gambar -->
     <div id="tamsis-img-editor-modal" style="display: none;" class="hidden fixed inset-0 z-[9998] bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
         <div class="theme-card rounded-2xl border theme-border shadow-2xl max-w-3xl w-full p-5 sm:p-6 space-y-4 max-h-[92vh] overflow-y-auto">
             <div class="flex items-center justify-between gap-2">
@@ -971,7 +985,6 @@
                 <button type="button" onclick="closeImgEditor()" class="px-3 py-1 rounded-lg border theme-border text-xs font-bold">✕ Batal</button>
             </div>
 
-            <!-- Toolbar Mode & Alat -->
             <div class="flex flex-wrap items-center gap-2">
                 <button type="button" id="ed-mode-move" onclick="setEditorMode('move')" class="px-3.5 py-1.5 rounded-xl text-xs font-extrabold theme-primary">
                     ✋ Atur Posisi
@@ -1002,7 +1015,6 @@
                 </button>
             </div>
 
-            <!-- Canvas Area -->
             <div class="w-full flex justify-center bg-slate-950/80 rounded-2xl border theme-border p-3 overflow-hidden">
                 <canvas id="tamsis-editor-canvas" width="640" height="380"
                         onmousedown="edPointerDown(event)" onmousemove="edPointerMove(event)" onmouseup="edPointerUp()" onmouseleave="edPointerUp()"
@@ -1021,9 +1033,6 @@
     </div>
 
     <script>
-        // ==========================================
-        // 1. LIGHTBOX SLIDE & ZOOM (SEMUA FOTO & VIDEO)
-        // ==========================================
         let lbItems = [];
         let lbIndex = 0;
         let lbScale = 1;
@@ -1224,9 +1233,7 @@
             }
         });
 
-        // ==========================================
-        // 2. EDITOR GAMBAR (CROP, CORET, ATUR POSISI)
-        // ==========================================
+        // Editor Gambar
         let edInputEl = null;
         let edOriginalFile = null;
         let edImg = new Image();
@@ -1469,6 +1476,7 @@
         document.addEventListener('change', (e) => {
             const input = e.target.closest('input[type="file"]');
             if (!input || !input.files || input.files.length === 0) return;
+            if (input.id === 'feedback-media-input') return;
 
             if (input.dataset.skipEditorOnce === '1') {
                 delete input.dataset.skipEditorOnce;
@@ -1481,73 +1489,7 @@
             }
         });
     </script>
-    <script>
-        (function() {
-            let isRestoring = false;
-            const snapshots = new Map();
 
-            document.addEventListener('DOMContentLoaded', () => {
-                const targets = document.querySelectorAll('nav, .jadwal-filter-bar, [data-tamsis-locked="1"]');
-                targets.forEach((el, idx) => {
-                    if (el.closest('#tamsis-lightbox-modal') || el.closest('#tamsis-img-editor-modal')) return;
-                    const key = el.id || `lock_node_${idx}`;
-                    el.dataset.lockKey = key;
-                    snapshots.set(key, {
-                        className: el.className,
-                        styleAttr: el.getAttribute('style') || ''
-                    });
-                });
-
-                const observer = new MutationObserver((mutations) => {
-                    if (isRestoring) return;
-                    isRestoring = true;
-                    try {
-                        for (const m of mutations) {
-                            const target = m.target.nodeType === 1 ? m.target : m.target.parentElement;
-                            const host = target?.closest('[data-lock-key]') || (target?.dataset?.lockKey ? target : null);
-                            if (!host) continue;
-                            const snap = snapshots.get(host.dataset.lockKey);
-                            if (!snap) continue;
-                            if (host.className !== snap.className) {
-                                host.className = snap.className;
-                            }
-                            const curStyle = host.getAttribute('style') || '';
-                            if (curStyle !== snap.styleAttr) {
-                                if (snap.styleAttr) host.setAttribute('style', snap.styleAttr);
-                                else host.removeAttribute('style');
-                            }
-                        }
-                    } finally {
-                        setTimeout(() => { isRestoring = false; }, 50);
-                    }
-                });
-
-                if (document.body) {
-                    observer.observe(document.body, {
-                        attributes: true,
-                        attributeFilter: ['style', 'class', 'hidden']
-                    });
-                }
-            });
-
-            document.addEventListener('contextmenu', (e) => {
-                if (e.target.closest('input, textarea, [contenteditable="true"], canvas')) return;
-                e.preventDefault();
-            });
-
-            document.addEventListener('keydown', (e) => {
-                const key = (e.key || '').toLowerCase();
-                if (
-                    e.key === 'F12' ||
-                    (e.ctrlKey && e.shiftKey && ['i', 'j', 'c', 'k'].includes(key)) ||
-                    (e.ctrlKey && ['u', 's'].includes(key))
-                ) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                }
-            });
-        })();
-    </script>
     <style>
         @keyframes tamsisCheckPop {
             0%   { transform: scale(0.35) rotate(-18deg); opacity: 0; }
@@ -1687,6 +1629,7 @@
             });
         })();
     </script>
+
     <script>
         (function() {
             function pad2(n) { return String(n).padStart(2, '0'); }

@@ -14,9 +14,6 @@ class AdminUserController extends Controller
         abort_unless(Auth::check() && Auth::user()->role === 'admin', 403, 'Hanya Admin yang dapat mengakses Admin Panel.');
     }
 
-    /**
-     * Tampilkan halaman AP (Admin Panel): daftar user/persetujuan + section Kritik/Critic.
-     */
     public function index()
     {
         $this->ensureAdmin();
@@ -30,21 +27,19 @@ class AdminUserController extends Controller
         return view('admin.users', compact('users', 'feedbacks'));
     }
 
-    /**
-     * Setujui akun user baru (jika menggunakan sistem persetujuan is_approved).
-     */
     public function approve(User $user)
     {
         $this->ensureAdmin();
 
-        $user->update(['is_approved' => true]);
+        $user->is_approved = true;
+        if (empty($user->role)) {
+            $user->role = 'murid';
+        }
+        $user->save();
 
-        return back()->with('success', "Akun {$user->name} berhasil disetujui!");
+        return redirect()->route('admin.users')->with('success', "Akun {$user->name} berhasil disetujui!");
     }
 
-    /**
-     * Ubah role user dari Admin Panel.
-     */
     public function updateRole(Request $request, User $user)
     {
         $this->ensureAdmin();
@@ -53,29 +48,27 @@ class AdminUserController extends Controller
             'role' => ['required', 'in:admin,guru,ketua_kelas,wakil_ketua,murid'],
         ]);
 
-        // Cegah admin menurunkan role dirinya sendiri secara tidak sengaja
         if ((int) $user->id === (int) Auth::id() && $request->role !== 'admin') {
-            return back()->with('error', 'Anda tidak dapat menurunkan role Admin milik Anda sendiri.');
+            return redirect()->route('admin.users')->with('error', 'Anda tidak dapat menurunkan role Admin milik Anda sendiri.');
         }
 
-        $user->update(['role' => $request->role]);
+        $user->role = $request->role;
+        $user->is_approved = true;
+        $user->save();
 
-        return back()->with('success', "Role {$user->name} berhasil diubah menjadi " . strtoupper(str_replace('_', ' ', $request->role)) . ".");
+        return redirect()->route('admin.users')->with('success', "Role {$user->name} berhasil diubah menjadi " . strtoupper(str_replace('_', ' ', $request->role)) . ".");
     }
 
-    /**
-     * Hapus akun user dari Admin Panel.
-     */
     public function destroy(User $user)
     {
         $this->ensureAdmin();
 
         if ((int) $user->id === (int) Auth::id()) {
-            return back()->with('error', 'Akun Admin utama tidak dapat dihapus.');
+            return redirect()->route('admin.users')->with('error', 'Akun Admin utama tidak dapat dihapus.');
         }
 
         $user->delete();
 
-        return back()->with('success', "Akun {$user->name} berhasil dihapus.");
+        return redirect()->route('admin.users')->with('success', "Akun {$user->name} berhasil dihapus.");
     }
 }

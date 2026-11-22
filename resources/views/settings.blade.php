@@ -1,6 +1,6 @@
 <x-app-layout>
     <style>
-                .grid-5-cols {
+        .grid-5-cols {
             display: grid;
             grid-template-columns: repeat(5, minmax(0, 1fr));
             gap: 0.75rem;
@@ -16,8 +16,8 @@
             gap: 0.75rem;
         }
         @media (max-width: 768px) {
-            .grid-5-cols, .grid-4-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-            .grid-3-cols { grid-template-columns: 1fr; }
+            .grid-5-cols, .grid-4-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; }
+            .grid-3-cols { grid-template-columns: 1fr; gap: 0.5rem; }
         }
         .setting-pill {
             border: 1.5px solid var(--border-color);
@@ -36,29 +36,29 @@
         }
     </style>
 
-    <div class="max-w-5xl mx-auto space-y-6">
+    <div class="max-w-5xl mx-auto space-y-5">
         @if(session('success'))
-            <div class="p-3.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-sm font-semibold">
+            <div class="p-3.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs sm:text-sm font-semibold">
                 {{ session('success') }}
             </div>
         @endif
 
         @if($errors->any())
-            <div class="p-3.5 rounded-xl bg-red-500/20 text-red-300 border border-red-500/40 text-sm font-semibold">
+            <div class="p-3.5 rounded-xl bg-red-500/20 text-red-300 border border-red-500/40 text-xs sm:text-sm font-semibold">
                 {{ $errors->first() }}
             </div>
         @endif
 
         <!-- Panel Pengaturan Tampilan Lengkap -->
-        <div class="theme-card rounded-2xl shadow-lg p-6 sm:p-8 border theme-border space-y-6">
+        <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-8 border theme-border space-y-5">
             <div>
-                <h1 class="text-xl sm:text-2xl font-extrabold" data-i18n="settings_title">Pengaturan Tampilan</h1>
+                <h1 class="text-lg sm:text-2xl font-extrabold" data-i18n="settings_title">Pengaturan Tampilan</h1>
                 <p class="text-xs sm:text-sm opacity-75 mt-0.5" data-i18n="settings_sub">Sesuaikan tema gradien warna, gaya huruf, suara efek, dan bahasa aplikasi.</p>
             </div>
 
             <!-- Tema Gelap (Gradien) -->
             <div>
-                <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2.5" data-i18n="dark_theme_label">Tema Gelap (Gradien)</h2>
+                <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2" data-i18n="dark_theme_label">Tema Gelap (Gradien)</h2>
                 <div class="grid-5-cols">
                     @foreach([
                         ['id' => 'academic-trust', 'name' => 'Academic Trust', 'dot' => '#2563eb'],
@@ -68,8 +68,8 @@
                         ['id' => 'mode-gelap', 'name' => 'Mode Gelap', 'dot' => '#18181b'],
                     ] as $t)
                         <button type="button" onclick="selectTheme('{{ $t['id'] }}')" data-theme-btn="{{ $t['id'] }}"
-                                class="setting-pill rounded-full px-3.5 py-2.5 flex items-center gap-2.5 text-xs font-bold text-left">
-                            <span class="w-4 h-4 rounded-full shrink-0 border border-white/40" style="background: {{ $t['dot'] }};"></span>
+                                class="setting-pill rounded-full px-3 py-2 flex items-center gap-2 text-[11px] sm:text-xs font-bold text-left">
+                            <span class="w-3.5 h-3.5 rounded-full shrink-0 border border-white/40" style="background: {{ $t['dot'] }};"></span>
                             <span class="truncate">{{ $t['name'] }}</span>
                         </button>
                     @endforeach
@@ -78,7 +78,7 @@
 
             <!-- Tema Terang (Gradien) -->
             <div>
-                <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2.5" data-i18n="light_theme_label">Tema Terang (Gradien)</h2>
+                <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2" data-i18n="light_theme_label">Tema Terang (Gradien)</h2>
                 <div class="grid-5-cols">
                     @foreach([
                         ['id' => 'teal-growth', 'name' => 'Teal Growth', 'dot' => '#2dd4bf'],
@@ -88,8 +88,8 @@
                         ['id' => 'morning-assembly', 'name' => 'Morning Assembly', 'dot' => '#fde047'],
                     ] as $t)
                         <button type="button" onclick="selectTheme('{{ $t['id'] }}')" data-theme-btn="{{ $t['id'] }}"
-                                class="setting-pill rounded-full px-3.5 py-2.5 flex items-center gap-2.5 text-xs font-bold text-left">
-                            <span class="w-4 h-4 rounded-full shrink-0 border border-black/20" style="background: {{ $t['dot'] }};"></span>
+                                class="setting-pill rounded-full px-3 py-2 flex items-center gap-2 text-[11px] sm:text-xs font-bold text-left">
+                            <span class="w-3.5 h-3.5 rounded-full shrink-0 border border-black/20" style="background: {{ $t['dot'] }};"></span>
                             <span class="truncate">{{ $t['name'] }}</span>
                         </button>
                     @endforeach
@@ -98,18 +98,18 @@
 
             <!-- Gaya Huruf -->
             <div>
-                <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2.5" data-i18n="font_style_label">Gaya Huruf</h2>
+                <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2" data-i18n="font_style_label">Gaya Huruf</h2>
                 <div class="grid-3-cols">
                     <button type="button" onclick="selectFont('sans')" data-font-btn="sans"
-                            class="setting-pill rounded-full px-4 py-2.5 text-xs font-bold text-center" style="font-family: 'Figtree', sans-serif;">
+                            class="setting-pill rounded-full px-4 py-2 text-xs font-bold text-center" style="font-family: 'Figtree', sans-serif;">
                         Modern (Sans)
                     </button>
                     <button type="button" onclick="selectFont('serif')" data-font-btn="serif"
-                            class="setting-pill rounded-full px-4 py-2.5 text-xs font-bold text-center" style="font-family: Georgia, serif;">
+                            class="setting-pill rounded-full px-4 py-2 text-xs font-bold text-center" style="font-family: Georgia, serif;">
                         Klasik (Serif)
                     </button>
                     <button type="button" onclick="selectFont('mono')" data-font-btn="mono"
-                            class="setting-pill rounded-full px-4 py-2.5 text-xs font-bold text-center" style="font-family: monospace;">
+                            class="setting-pill rounded-full px-4 py-2 text-xs font-bold text-center" style="font-family: monospace;">
                         Koding (Mono)
                     </button>
                 </div>
@@ -117,21 +117,22 @@
 
             <!-- Bahasa (4 Bahasa Full) -->
             <div>
-                <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2.5" data-i18n="lang_label">Bahasa</h2>
-                <div class="grid-4-cols"><button type="button" onclick="selectLang('id')" data-lang-btn="id"
-                            class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
+                <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2" data-i18n="lang_label">Bahasa</h2>
+                <div class="grid-4-cols">
+                    <button type="button" onclick="selectLang('id')" data-lang-btn="id"
+                            class="setting-pill w-full rounded-full px-3 py-2 text-[11px] sm:text-xs font-bold text-center">
                         🇮🇩 Indonesia
                     </button>
                     <button type="button" onclick="selectLang('en')" data-lang-btn="en"
-                            class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
+                            class="setting-pill w-full rounded-full px-3 py-2 text-[11px] sm:text-xs font-bold text-center">
                         🇬🇧 English
                     </button>
                     <button type="button" onclick="selectLang('ja')" data-lang-btn="ja"
-                            class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
+                            class="setting-pill w-full rounded-full px-3 py-2 text-[11px] sm:text-xs font-bold text-center">
                         🇯🇵 日本語 (Jepang)
                     </button>
                     <button type="button" onclick="selectLang('ru')" data-lang-btn="ru"
-                            class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
+                            class="setting-pill w-full rounded-full px-3 py-2 text-[11px] sm:text-xs font-bold text-center">
                         🇷🇺 Русский (Rusia)
                     </button>
                 </div>
@@ -139,8 +140,8 @@
 
             <!-- Efek Suara (SFX) -->
             <div>
-                <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2.5" data-i18n="sfx_label">Efek Suara (SFX)</h2>
-                <div class="space-y-2">
+                <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2" data-i18n="sfx_label">Efek Suara (SFX)</h2>
+                <div class="grid grid-cols-2 gap-2.5">
                     <button type="button" onclick="selectSfx('active')" data-sfx-btn="active"
                             class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
                         🔊 <span data-i18n="sfx_on">Aktif</span>
@@ -157,11 +158,11 @@
                 <h2 class="text-sm font-extrabold" data-i18n="easter_title">Kode Unik (Easter Egg) 🎁</h2>
                 <p class="text-xs opacity-75 mt-0.5 mb-3" data-i18n="easter_sub">Punya kode rahasia kelas XI RPL 1? Masukkan di sini untuk membuka fitur tersembunyi!</p>
 
-                <div class="flex gap-2.5">
+                <div class="flex gap-2">
                     <input type="text" id="easter-code-input" placeholder="MASUKKAN KODE UNIK..."
-                           class="flex-1 rounded-xl border px-4 py-2.5 text-xs sm:text-sm uppercase tracking-wider font-bold">
+                           class="flex-1 min-w-0 rounded-xl border px-3 py-2 text-xs sm:text-sm uppercase tracking-wider font-bold">
                     <button type="button" onclick="claimEasterEgg()"
-                            class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold theme-primary shadow-md hover:opacity-90 transition"
+                            class="px-4 sm:px-5 py-2 rounded-xl text-xs sm:text-sm font-extrabold theme-primary shadow-md hover:opacity-90 transition shrink-0"
                             data-i18n="klaim_btn">
                         Klaim
                     </button>
@@ -171,15 +172,15 @@
         </div>
 
         <!-- Kasih Saran & Laporan Bug -->
-        <div class="theme-card rounded-2xl shadow-lg p-6 border theme-border">
+        <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-6 border theme-border">
             <div class="flex flex-wrap items-center justify-between gap-3">
                 <div>
                     <h2 class="text-base sm:text-lg font-extrabold" data-i18n="saran_btn">Kasih Saran & Laporan Bug</h2>
-                    <p class="text-xs opacity-75 mt-0.5" data-i18n="saran_sub">Beri rating bintang (bisa desimal seperti 4.5 / 3.4), komentar, atau kirim foto/video jika menemukan bug.</p>
+                    <p class="text-xs opacity-75 mt-0.5" data-i18n="saran_sub">Beri rating bintang (bisa desimal seperti 4.5 / 3.4), komentar, atau kirim banyak foto/video jika menemukan bug.</p>
                 </div>
 
                 <button type="button" onclick="playSfx('click'); document.getElementById('feedback-panel').classList.toggle('hidden')"
-                        class="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold theme-primary shadow-md hover:opacity-90 transition flex items-center gap-1.5">
+                        class="px-4 py-2 rounded-xl text-xs sm:text-sm font-bold theme-primary shadow-md hover:opacity-90 transition flex items-center gap-1.5">
                     <span>⭐</span>
                     <span data-i18n="saran_btn">Kasih Saran & Laporan Bug</span>
                 </button>
@@ -191,16 +192,16 @@
 
                     <div>
                         <label class="block text-xs font-bold mb-1.5" data-i18n="rating_label">Rating Web (0.0 – 5.0 Bintang)</label>
-                        <div class="flex flex-wrap items-center gap-4">
+                        <div class="flex flex-wrap items-center gap-3">
                             <input type="range" id="rating-slider" min="0" max="5" step="0.1" value="5.0"
                                    oninput="syncStarRating(this.value)"
-                                   class="w-48 accent-amber-400 cursor-pointer">
+                                   class="w-40 sm:w-48 accent-amber-400 cursor-pointer">
 
                             <div class="flex items-center gap-2">
                                 <input type="number" id="rating-number" name="rating" min="0" max="5" step="0.1" value="5.0" required
                                        oninput="syncStarRating(this.value)"
                                        class="w-20 rounded-xl border p-2 text-sm font-extrabold text-center">
-                                <span id="star-visual" class="text-amber-400 text-base font-bold tracking-wider">★★★★★ (5.0)</span>
+                                <span id="star-visual" class="text-amber-400 text-sm sm:text-base font-bold tracking-wider">★★★★★ (5.0)</span>
                             </div>
                         </div>
                         <p class="text-[11px] opacity-70 mt-1" data-i18n="rating_hint">Geser slider atau ketik angka desimal seperti 4.5, 3.4, atau 5.0.</p>
@@ -214,9 +215,16 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-bold mb-1" data-i18n="lampiran_bug_label">Lampiran Foto / Video Bug (Opsional)</label>
-                        <input type="file" name="media[]" multiple accept="image/*,video/*"
-                               class="w-full rounded-xl border p-2 text-xs">
+                        <label class="block text-xs font-bold mb-1" data-i18n="lampiran_bug_label">Lampiran Foto / Video Bug (Bisa Lebih Dari 1 File)</label>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <input type="file" id="feedback-media-input" name="media[]" multiple accept="image/*,video/*" class="hidden">
+                            <button type="button" onclick="document.getElementById('feedback-media-input').click()"
+                                    class="px-3.5 py-2 rounded-xl border theme-border theme-soft text-xs font-extrabold hover:opacity-90 transition">
+                                📎 + Tambah Foto / Video
+                            </button>
+                            <span id="feedback-file-count" class="text-xs opacity-75">Belum ada file dipilih</span>
+                        </div>
+                        <div id="feedback-file-list" class="mt-2.5 flex flex-wrap gap-2"></div>
                     </div>
 
                     <button type="submit"
@@ -230,6 +238,55 @@
     </div>
 
     <script>
+        // Akumulasi Multi-File untuk Form Saran (Bisa tambah berkali-kali & hapus satuan)
+        const feedbackDataTransfer = new DataTransfer();
+        const fbMediaInput = document.getElementById('feedback-media-input');
+
+        function renderFeedbackFiles() {
+            const listEl = document.getElementById('feedback-file-list');
+            const countEl = document.getElementById('feedback-file-count');
+            if (!listEl || !countEl) return;
+
+            listEl.innerHTML = '';
+            const files = Array.from(feedbackDataTransfer.files);
+            countEl.textContent = files.length > 0 ? `${files.length} file dipilih` : 'Belum ada file dipilih';
+
+            files.forEach((file, idx) => {
+                const chip = document.createElement('div');
+                chip.className = 'inline-flex items-center gap-2 px-3 py-1.5 rounded-xl border theme-border theme-soft text-[11px] font-bold max-w-full';
+                const icon = file.type.startsWith('video/') ? '🎬' : '🖼️';
+                chip.innerHTML = `
+                    <span>${icon}</span>
+                    <span class="truncate max-w-[160px]">${file.name}</span>
+                    <button type="button" onclick="removeFeedbackFile(${idx})" class="text-red-400 hover:text-red-300 font-extrabold ml-1">✕</button>
+                `;
+                listEl.appendChild(chip);
+            });
+        }
+
+        function removeFeedbackFile(index) {
+            const nextDt = new DataTransfer();
+            Array.from(feedbackDataTransfer.files).forEach((f, i) => {
+                if (i !== index) nextDt.items.add(f);
+            });
+            feedbackDataTransfer.items.clear();
+            Array.from(nextDt.files).forEach(f => feedbackDataTransfer.items.add(f));
+            fbMediaInput.dataset.skipEditorOnce = '1';
+            fbMediaInput.files = feedbackDataTransfer.files;
+            renderFeedbackFiles();
+        }
+
+        if (fbMediaInput) {
+            fbMediaInput.addEventListener('change', () => {
+                Array.from(fbMediaInput.files || []).forEach(f => {
+                    feedbackDataTransfer.items.add(f);
+                });
+                fbMediaInput.dataset.skipEditorOnce = '1';
+                fbMediaInput.files = feedbackDataTransfer.files;
+                renderFeedbackFiles();
+            });
+        }
+
         function refreshActivePills() {
             const curTheme = localStorage.getItem('app_theme') || 'academic-trust';
             const curFont  = localStorage.getItem('app_font') || 'sans';
