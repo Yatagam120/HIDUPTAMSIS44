@@ -45,40 +45,13 @@ class StudentSeeder extends Seeder
             ],
 
             // === ARCHIE LIONEL (Bingkai Emas + Mahkota di /students) ===
-            [
-                'nama' => 'Archie Lionel',
-                'jabatan' => 'siswa',
-                'umur' => null,
-                'tanggal_lahir' => null,
-                'hobi' => null,
-                'skill' => null,
-                'quote' => null,
-                'foto' => null,
-            ],
+            ['nama' => 'Archie Lionel', 'jabatan' => 'siswa'],
 
-            // === CONTOH JABATAN PPTS & EX-PPTS (Ubah jabatan sesuai anggota yang dimaksud) ===
-            [
-                'nama' => 'Adianku',
-                'jabatan' => 'ppts',
-                'umur' => null,
-                'tanggal_lahir' => null,
-                'hobi' => null,
-                'skill' => null,
-                'quote' => null,
-                'foto' => null,
-            ],
-            [
-                'nama' => 'Ahmad Rafi',
-                'jabatan' => 'ex_ppts',
-                'umur' => null,
-                'tanggal_lahir' => null,
-                'hobi' => null,
-                'skill' => null,
-                'quote' => null,
-                'foto' => null,
-            ],
+            // === CONTOH ROLE PPTS & EX-PPTS ===
+            ['nama' => 'Adianku', 'jabatan' => 'ppts'],
+            ['nama' => 'Ahmad Rafi', 'jabatan' => 'ex_ppts'],
 
-            // === DAFTAR SISWA XI RPL 1 (Detail dikosongkan dulu) ===
+            // === DAFTAR SISWA XI RPL 1 (Hobi, skill, quote dikosongkan dulu) ===
             ['nama' => 'Amelia Yohana', 'jabatan' => 'siswa'],
             ['nama' => 'Anisha Putri Andriyani', 'jabatan' => 'siswa'],
             ['nama' => 'Azzahra Ramadana Putri Herawati', 'jabatan' => 'siswa'],
@@ -116,10 +89,10 @@ class StudentSeeder extends Seeder
             Student::create([
                 'nama' => $data['nama'],
                 'jabatan' => $data['jabatan'],
-                'umur' => $data['umur'] ?? null,
-                'tanggal_lahir' => $data['tanggal_lahir'] ?? null,
-                'hobi' => $data['hobi'] ?? null,
-                'skill' => $data['skill'] ?? null,
+                'umur' => $data['umur'] ?? 16,
+                'tanggal_lahir' => $data['tanggal_lahir'] ?? '2009-01-01',
+                'hobi' => $data['hobi'] ?? '-',
+                'skill' => $data['skill'] ?? '-',
                 'quote' => $data['quote'] ?? null,
                 'foto' => $data['foto'] ?? null,
             ]);

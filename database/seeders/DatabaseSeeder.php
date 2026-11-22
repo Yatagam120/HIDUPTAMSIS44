@@ -23,7 +23,11 @@ class DatabaseSeeder extends Seeder
             ]
         );
 
-        // 2. Daftar Mata Pelajaran
+        // 2. Deteksi Kolom Tabel 'subjects'
+        $cols = Schema::getColumnListing('subjects');
+        $kodeCol = collect(['kode_mapel', 'kode', 'code', 'singkatan'])->first(fn ($c) => in_array($c, $cols));
+        $namaCol = collect(['nama_mapel', 'nama', 'name', 'judul', 'title'])->first(fn ($c) => in_array($c, $cols));
+
         $mapelList = [
             'MBJ'    => 'Muatan Bahasa Jepang',
             'PP'     => 'Pendidikan Pancasila',
@@ -35,52 +39,37 @@ class DatabaseSeeder extends Seeder
             'Penjas' => 'Pendidikan Jasmani',
         ];
 
-        $kodeCol = Schema::hasColumn('subjects', 'kode_mapel')
-            ? 'kode_mapel'
-            : (Schema::hasColumn('subjects', 'kode') ? 'kode' : null);
-
-        $namaCol = Schema::hasColumn('subjects', 'nama_mapel')
-            ? 'nama_mapel'
-            : (Schema::hasColumn('subjects', 'nama') ? 'nama' : null);
-
-        $hasCreatedAt = Schema::hasColumn('subjects', 'created_at');
-        $hasUpdatedAt = Schema::hasColumn('subjects', 'updated_at');
-
         $subjects = [];
         $now = now();
 
         foreach ($mapelList as $kode => $nama) {
             $lookup = [];
+            $values = [];
+
             if ($kodeCol) {
                 $lookup[$kodeCol] = $kode;
-            } elseif ($namaCol) {
-                $lookup[$namaCol] = $nama;
-            }
-
-            $values = [];
-            if ($kodeCol) {
                 $values[$kodeCol] = $kode;
             }
             if ($namaCol) {
+                if (empty($lookup)) {
+                    $lookup[$namaCol] = $nama;
+                }
                 $values[$namaCol] = $nama;
             }
-            if ($hasUpdatedAt) {
-                $values['updated_at'] = $now;
-            }
-            if ($hasCreatedAt) {
+            if (in_array('created_at', $cols)) {
                 $values['created_at'] = $now;
+            }
+            if (in_array('updated_at', $cols)) {
+                $values['updated_at'] = $now;
             }
 
             if (!empty($lookup)) {
                 DB::table('subjects')->updateOrInsert($lookup, $values);
-                $subjects[$kode] = DB::table('subjects')
-                    ->where($lookup)
-                    ->value('id');
+                $subjects[$kode] = DB::table('subjects')->where($lookup)->value('id');
             }
         }
 
-        // 3. Jadwal Pelajaran XI RPL 1 (Senin - Jumat)
-        // Format: ['hari', 'kode_mapel', jam_mulai, jam_selesai]
+        // 3. Isi Jadwal Pelajaran XI RPL 1 (Senin - Jumat)
         $jadwalList = [
             ['Senin',  'PP',     1, 2],
             ['Senin',  'MTK',    3, 5],
@@ -95,24 +84,22 @@ class DatabaseSeeder extends Seeder
             ['Jumat',  'KDI',    4, 6],
         ];
 
+        DB::table('schedules')->delete();
+
         foreach ($jadwalList as [$hari, $kode, $jamMulai, $jamSelesai]) {
             $subjectId = $subjects[$kode] ?? null;
             if (!$subjectId) {
                 continue;
             }
 
-            DB::table('schedules')->updateOrInsert(
-                [
-                    'hari'        => $hari,
-                    'jam_mulai'   => $jamMulai,
-                    'jam_selesai' => $jamSelesai,
-                ],
-                [
-                    'subject_id'  => $subjectId,
-                    'updated_at'  => $now,
-                    'created_at'  => $now,
-                ]
-            );
+            DB::table('schedules')->insert([
+                'hari'        => $hari,
+                'subject_id'  => $subjectId,
+                'jam_mulai'   => $jamMulai,
+                'jam_selesai' => $jamSelesai,
+                'created_at'  => $now,
+                'updated_at'  => $now,
+            ]);
         }
 
         // 4. Hirarki & Daftar Siswa XI RPL 1
