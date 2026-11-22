@@ -3,132 +3,172 @@
 namespace App\Http\Controllers;
 
 use App\Models\Subject;
-use App\Models\SubjectItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 class SubjectController extends Controller
 {
-    private function getSubjectItemsCollection(Subject $subject)
+    private function resolveTargetTable(): string
     {
-        try {
-            if (method_exists($subject, 'items')) {
-                return $subject->items()->latest()->get();
-            }
-            if (Schema::hasTable('subject_items')) {
-                $query = SubjectItem::query();
-                if (Schema::hasColumn('subject_items', 'subject_id')) {
-                    $query->where('subject_id', $subject->id);
-                }
-                return $query->latest()->get();
-            }
-        } catch (\Throwable $e) {
-            return collect();
+        if (Schema::hasTable('subject_posts')) {
+            return 'subject_posts';
         }
-
-        return collect();
+        return 'subject_items';
     }
 
-    public function show(Request $request, Subject $subject)
+    public function show($id, Request $request)
     {
-        $items = $this->getSubjectItemsCollection($subject);
+        $subject = Subject::findOrFail($id);
+        $table = $this->resolveTargetTable();
 
-        $activeTab = strtolower((string) $request->query('tab', 'catatan'));
-        if (!in_array($activeTab, ['catatan', 'tugas', 'pr', 'event'], true)) {
-            $activeTab = 'catatan';
+        $items = collect();
+        if (Schema::hasTable($table)) {
+            $items = DB::table($table)
+                ->where('subject_id', $subject->id)
+                ->orderByDesc('id')
+                ->get();
         }
 
-        $notifColor = (string) $request->query('notif', '');
+        $activeTab = $request->query('tab', session('active_tab', 'catatan'));
+        $notifColor = $request->query('notif', '');
 
         return view('subjects.show', compact('subject', 'items', 'activeTab', 'notifColor'));
     }
 
-    public function storeItem(Request $request, Subject $subject)
+    public function storeItem(Request $request, $id)
     {
-        $validated = $request->validate([
-            'type'        => ['required', 'in:catatan,tugas,pr,event'],
-            'title'       => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'due_date'    => ['nullable', 'date'],
+        $subject = Subject::findOrFail($id);
+
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'type' => 'nullable|string|max:50',
+            'description' => 'nullable|string',
+            'due_date' => 'nullable|date',
         ]);
 
-        try {
-            if (method_exists($subject, 'items')) {
-                $subject->items()->create([
-                    'user_id'     => Auth::id(),
-                    'type'        => $validated['type'],
-                    'title'       => $validated['title'],
-                    'description' => $validated['description'] ?? null,
-                    'due_date'    => $validated['due_date'] ?? null,
-                ]);
-            } elseif (Schema::hasTable('subject_items')) {
-                SubjectItem::create([
-                    'subject_id'  => $subject->id,
-                    'user_id'     => Auth::id(),
-                    'type'        => $validated['type'],
-                    'title'       => $validated['title'],
-                    'description' => $validated['description'] ?? null,
-                    'due_date'    => $validated['due_date'] ?? null,
-                ]);
-            }
-        } catch (\Throwable $e) {
-            return back()->withErrors(['msg' => 'Gagal menyimpan postingan: ' . $e->getMessage()]);
+        $type = strtolower(trim($request->input('type', 'catatan')));
+        if (!in_array($type, ['catatan', 'tugas', 'pr', 'event'], true)) {
+            $type = 'catatan';
         }
 
+        $table = $this->resolveTargetTable();
+        if (!Schema::hasTable($table)) {
+            return back()->withErrors(['msg' => "Tabel {$table} tidak ditemukan di database!"]);
+        }
+
+        $columns = Schema::getColumnListing($table);
+        $data = [
+            'subject_id' => $subject->id,
+        ];
+
+        if (in_array('user_id', $columns, true)) {
+            $data['user_id'] = Auth::id() ?? 1;
+        }
+
+        if (in_array('type', $columns, true)) $data['type'] = $type;
+        elseif (in_array('kategori', $columns, true)) $data['kategori'] = $type;
+        elseif (in_array('jenis', $columns, true)) $data['jenis'] = $type;
+        elseif (in_array('tipe', $columns, true)) $data['tipe'] = $type;
+
+        if (in_array('title', $columns, true)) $data['title'] = $request->title;
+        elseif (in_array('judul', $columns, true)) $data['judul'] = $request->title;
+
+        if (in_array('description', $columns, true)) $data['description'] = $request->description;
+        elseif (in_array('deskripsi', $columns, true)) $data['deskripsi'] = $request->description;
+        elseif (in_array('content', $columns, true)) $data['content'] = $request->description;
+        elseif (in_array('isi', $columns, true)) $data['isi'] = $request->description;
+
+        if ($request->filled('due_date')) {
+            if (in_array('due_date', $columns, true)) $data['due_date'] = $request->due_date;
+            elseif (in_array('deadline', $columns, true)) $data['deadline'] = $request->due_date;
+            elseif (in_array('tanggal_deadline', $columns, true)) $data['tanggal_deadline'] = $request->due_date;
+            elseif (in_array('tanggal', $columns, true)) $data['tanggal'] = $request->due_date;
+        }
+
+        if (in_array('completed_by', $columns, true)) {
+            $data['completed_by'] = json_encode([]);
+        }
+        if (in_array('created_at', $columns, true)) {
+            $data['created_at'] = now();
+        }
+        if (in_array('updated_at', $columns, true)) {
+            $data['updated_at'] = now();
+        }
+
+        DB::table($table)->insert($data);
+
         return redirect()
-            ->route('subject.show', ['subject' => $subject->id, 'tab' => $validated['type']])
-            ->with('success', 'Postingan berhasil ditambahkan!');
+            ->route('subjects.show', ['subject' => $subject->id, 'tab' => $type])
+            ->with('active_tab', $type)
+            ->with('success', ucfirst($type) . ' berhasil ditambahkan!');
     }
 
-    public function updateItem(Request $request, Subject $subject, $itemId)
+    public function updateItem(Request $request, $id, $itemId)
     {
-        $item = SubjectItem::findOrFail($itemId);
-        abort_unless((int) $item->user_id === (int) Auth::id(), 403, 'Hanya pembuat postingan yang dapat mengedit item ini.');
-
-        $validated = $request->validate([
-            'title'       => ['required', 'string', 'max:255'],
-            'description' => ['nullable', 'string'],
-            'due_date'    => ['nullable', 'date'],
+        $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'due_date' => 'nullable|date',
         ]);
 
-        $item->update($validated);
+        $table = $this->resolveTargetTable();
+        if (Schema::hasTable($table)) {
+            $columns = Schema::getColumnListing($table);
+            $data = [];
 
-        return redirect()
-            ->route('subject.show', ['subject' => $subject->id, 'tab' => $item->type ?? 'catatan'])
-            ->with('success', 'Postingan berhasil diperbarui!');
+            if (in_array('title', $columns, true)) $data['title'] = $request->title;
+            elseif (in_array('judul', $columns, true)) $data['judul'] = $request->title;
+
+            if (in_array('description', $columns, true)) $data['description'] = $request->description;
+            elseif (in_array('deskripsi', $columns, true)) $data['deskripsi'] = $request->description;
+            elseif (in_array('content', $columns, true)) $data['content'] = $request->description;
+
+            if (in_array('due_date', $columns, true)) $data['due_date'] = $request->due_date ?: null;
+            elseif (in_array('deadline', $columns, true)) $data['deadline'] = $request->due_date ?: null;
+            elseif (in_array('tanggal_deadline', $columns, true)) $data['tanggal_deadline'] = $request->due_date ?: null;
+
+            if (in_array('updated_at', $columns, true)) $data['updated_at'] = now();
+
+            DB::table($table)->where('id', $itemId)->update($data);
+        }
+
+        return back()->with('success', 'Postingan berhasil diperbarui!');
     }
 
-    public function destroyItem(Subject $subject, $itemId)
+    public function destroyItem($id, $itemId)
     {
-        $item = SubjectItem::findOrFail($itemId);
-        abort_unless((int) $item->user_id === (int) Auth::id(), 403, 'Hanya pembuat postingan yang dapat menghapus item ini.');
+        $table = $this->resolveTargetTable();
+        if (Schema::hasTable($table)) {
+            DB::table($table)->where('id', $itemId)->delete();
+        }
 
-        $tab = $item->type ?? 'catatan';
-        $item->delete();
-
-        return redirect()
-            ->route('subject.show', ['subject' => $subject->id, 'tab' => $tab])
-            ->with('success', 'Postingan berhasil dihapus!');
+        return back()->with('success', 'Postingan berhasil dihapus!');
     }
 
     public function toggleComplete($itemId)
     {
-        $item = SubjectItem::findOrFail($itemId);
-        $userId = (int) Auth::id();
-        $completedBy = is_array($item->completed_by ?? null)
-            ? $item->completed_by
-            : (json_decode($item->completed_by ?? '[]', true) ?: []);
+        $table = $this->resolveTargetTable();
+        if (Schema::hasTable($table)) {
+            $item = DB::table($table)->where('id', $itemId)->first();
+            if ($item) {
+                $userId = (int) Auth::id();
+                $completedBy = json_decode($item->completed_by ?? '[]', true) ?: [];
+                $completedBy = array_map('intval', $completedBy);
 
-        $intList = array_map('intval', $completedBy);
-        if (in_array($userId, $intList, true)) {
-            $intList = array_values(array_filter($intList, fn($id) => (int) $id !== $userId));
-        } else {
-            $intList[] = $userId;
+                if (in_array($userId, $completedBy, true)) {
+                    $completedBy = array_values(array_diff($completedBy, [$userId]));
+                } else {
+                    $completedBy[] = $userId;
+                }
+
+                DB::table($table)
+                    ->where('id', $itemId)
+                    ->update(['completed_by' => json_encode($completedBy)]);
+            }
         }
 
-        $item->update(['completed_by' => $intList]);
-
-        return back()->with('success', 'Status pengerjaan diperbarui.');
+        return back();
     }
 }
