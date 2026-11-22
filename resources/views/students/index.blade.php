@@ -19,7 +19,17 @@
         });
 
         $topIds = collect([$walas->id ?? null, $ketuaKelas->id ?? null, $wakilKetua->id ?? null])->filter();
-        $members = $students->reject(fn($s) => $topIds->contains($s->id))->values();
+
+        // Urutkan anggota kelas berdasarkan nomor absen / abjad nama agar Archie Lionel berada setelah Anisha dan sebelum Azzahra (absen 6)
+        $members = $students->reject(fn($s) => $topIds->contains($s->id))
+            ->sortBy(function ($s) {
+                $absen = $s->absen ?? $s->no_absen ?? $s->nomor_absen ?? null;
+                if (!is_null($absen) && is_numeric($absen)) {
+                    return str_pad((string) $absen, 4, '0', STR_PAD_LEFT);
+                }
+                return strtolower(trim((string) ($s->name ?? $s->nama ?? '')));
+            })
+            ->values();
 
         $latestApprovedFrame = \App\Models\FrameChangeRequest::where('status', 'approved')->latest()->first();
 
@@ -80,15 +90,8 @@
             justify-content: center;
             overflow: hidden;
             margin: 0 auto;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
         }
-        .org-node:hover .org-circle {
-            transform: scale(1.06);
-        }
-
-        .ring-default {
-            border: 2px solid rgba(148, 163, 184, 0.55);
-        }
+        .ring-default { border: 2px solid rgba(148, 163, 184, 0.55); }
         .ring-ppts-blue {
             border: 2.5px solid #38bdf8;
             box-shadow: 0 0 14px rgba(56, 189, 248, 0.85), 0 0 26px rgba(59, 130, 246, 0.45);
@@ -101,7 +104,6 @@
             border: 2.5px solid #fbbf24;
             box-shadow: 0 0 14px rgba(251, 191, 36, 0.8), 0 0 24px rgba(245, 158, 11, 0.4);
         }
-
         .role-pill-dark {
             display: inline-block;
             background: rgba(15, 23, 42, 0.78);
@@ -160,14 +162,14 @@
                     ← Jadwal
                 </a>
 
-                @if(Route::has('students.create'))
+                @if($isAdmin && Route::has('students.create'))
                     <a href="{{ route('students.create') }}" class="px-3.5 py-1.5 rounded-lg text-xs font-extrabold theme-primary shadow">
                         + Tambah Siswa
                     </a>
                 @endif
             </div>
 
-            <!-- Puncak: Wali Kelas -->
+            <!-- Wali Kelas -->
             @php $wPayload = $formatStudentPayload($walas, 'Gunadi', 'walas'); @endphp
             <div class="text-center space-y-1.5">
                 <button type="button" onclick='openStudentModal(@json($wPayload))'
@@ -187,7 +189,7 @@
                 <div class="org-hline"></div>
             </div>
 
-            <!-- Tingkat 2: Ketua Kelas & Wakil Ketua Kelas -->
+            <!-- Ketua & Wakil Ketua Kelas -->
             @php
                 $kPayload = $formatStudentPayload($ketuaKelas, 'Agung Ismail', 'ketua_kelas');
                 $vkPayload = $formatStudentPayload($wakilKetua, 'Kayla Nabilla Putri', 'wakil_ketua');
@@ -228,7 +230,7 @@
                 </div>
             </div>
 
-            <!-- Tingkat 3: Anggota Kelas XI RPL 1 -->
+            <!-- Anggota Kelas XI RPL 1 (Urut Absen: Archie setelah Anisha sebelum Azzahra) -->
             <div class="pt-2 space-y-4">
                 <div class="text-center">
                     <span class="text-[11px] font-extrabold tracking-widest uppercase opacity-90">
@@ -260,7 +262,7 @@
         </div>
     </div>
 
-    <!-- Modal Detail Murid + Edit & Hapus (Khusus Admin) -->
+    <!-- Modal Detail Murid -->
     <div id="student-detail-modal" class="fixed inset-0 z-[9995] hidden items-center justify-center bg-black/65 p-4 overflow-y-auto">
         <div class="theme-card rounded-2xl border theme-border shadow-2xl max-w-md w-full p-5 space-y-4 my-auto">
             <div class="flex items-start justify-between gap-2">
@@ -303,7 +305,7 @@
                     </button>
                 </div>
 
-                <!-- Form Edit Data Murid (Tanggal Lahir, Umur, Gender, Quote & Gambar Bingkai) -->
+                <!-- Admin: Bisa edit Tanggal Lahir, Umur, Gender, Quote & PP/Bingkai (tanpa dropdown ubah role) -->
                 <div id="smodal-edit-box" class="hidden pt-3 border-t theme-border space-y-3">
                     <form id="smodal-edit-form" method="POST" action="" enctype="multipart/form-data" class="space-y-3">
                         @csrf
@@ -335,7 +337,7 @@
                         </div>
 
                         <div>
-                            <label class="block text-[11px] font-bold mb-1">Gambar Bingkai (Opsional)</label>
+                            <label class="block text-[11px] font-bold mb-1">Ganti PP / Bingkai (Opsional)</label>
                             <input type="file" name="frame_image" accept="image/*" class="w-full rounded-xl border p-1.5 text-xs">
                         </div>
 
@@ -350,9 +352,10 @@
                     </form>
                 </div>
             @else
+                <!-- Role Murid: Hanya bisa ganti PP murid (tidak bisa ubah nama, umur, gender, quote, maupun role) -->
                 <div class="flex justify-end">
                     <button type="button" onclick="toggleStudentEditForm()" class="px-4 py-2 rounded-xl text-xs font-extrabold theme-primary">
-                        ✏️ Ajukan Bingkai
+                        🖼️ Ganti PP Murid
                     </button>
                 </div>
 
@@ -362,7 +365,7 @@
                         <input type="hidden" id="smodal-student-id" name="student_id" value="">
 
                         <div>
-                            <label class="block text-xs font-bold mb-1">Upload Gambar Bingkai Baru (Menunggu Admin)</label>
+                            <label class="block text-xs font-bold mb-1">Upload PP / Foto Murid Baru</label>
                             <input type="file" name="frame_image" accept="image/*" required class="w-full rounded-xl border p-2 text-xs">
                         </div>
 
@@ -371,7 +374,7 @@
                                 Batal
                             </button>
                             <button type="submit" class="px-4 py-2 rounded-xl text-xs font-extrabold theme-primary">
-                                Ajukan ke Admin
+                                Ajukan PP
                             </button>
                         </div>
                     </form>
@@ -407,12 +410,8 @@
 
             const editForm = document.getElementById('smodal-edit-form');
             const delForm = document.getElementById('smodal-delete-form');
-            if (editForm && data.id) {
-                editForm.action = `/students/${data.id}/profile`;
-            }
-            if (delForm && data.id) {
-                delForm.action = `/students/${data.id}`;
-            }
+            if (editForm && data.id) editForm.action = `/students/${data.id}/profile`;
+            if (delForm && data.id) delForm.action = `/students/${data.id}`;
 
             const birthInput = document.getElementById('sedit-birth-date');
             const ageInput = document.getElementById('sedit-age');

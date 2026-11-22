@@ -9,6 +9,7 @@ use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectPostController;
 use App\Http\Controllers\FrameRequestController;
 use App\Http\Controllers\StudentProfileController;
+use App\Http\Controllers\SubjectController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -72,6 +73,12 @@ Route::middleware(['auth'])->group(function () {
 
     Route::patch('/students/{student}/profile', [StudentProfileController::class, 'update'])->name('students.profile.update');
     Route::delete('/students/{student}', [StudentProfileController::class, 'destroy'])->name('students.destroy');
+
+    Route::get('/mapel/{subject}', [SubjectController::class, 'show'])->name('subjects.show');
+    Route::post('/mapel/{subject}/items', [SubjectController::class, 'storeItem'])->name('subjects.items.store');
+    Route::patch('/mapel/{subject}/items/{item}', [SubjectController::class, 'updateItem'])->name('subjects.items.update');
+    Route::delete('/mapel/{subject}/items/{item}', [SubjectController::class, 'destroyItem'])->name('subjects.items.destroy');
+    Route::post('/items/{item}/toggle-complete', [SubjectController::class, 'toggleComplete'])->name('items.toggle-complete');
 });
 
 require __DIR__.'/auth.php';

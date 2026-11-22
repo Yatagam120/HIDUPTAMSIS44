@@ -1,30 +1,4 @@
 <x-app-layout>
-    <div class="mb-4">
-        <a href="{{ route('dashboard') }}" class="text-sm font-semibold hover:underline" style="color: var(--primary);">
-            ← Kembali ke Jadwal Utama
-        </a>
-    </div>
-
-    <!-- Header Mata Pelajaran -->
-    <div class="theme-card rounded-2xl shadow-md p-6 mb-6 border-l-4 theme-border">
-        <span class="text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full theme-soft border theme-border" style="color: var(--primary);">
-            {{ $subject->kode_mapel }}
-        </span>
-        <h1 class="text-2xl sm:text-3xl font-bold mt-2">{{ $subject->nama_mapel }}</h1>
-    </div>
-
-    @if(session('success'))
-        <div class="mb-4 p-3.5 rounded-xl bg-emerald-100 text-emerald-900 border border-emerald-300 text-sm font-semibold">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if($errors->any())
-        <div class="mb-4 p-3.5 rounded-xl bg-red-500/20 text-red-200 border border-red-500 text-xs sm:text-sm font-semibold">
-            {{ $errors->first() }}
-        </div>
-    @endif
-
     @php
         $tabs = [
             'catatan' => 'Catatan',
@@ -32,270 +6,302 @@
             'pr'      => 'PR',
             'event'   => 'Event',
         ];
-        $isAuthority = in_array(Auth::user()->role, ['admin', 'guru', 'ketua_kelas', 'wakil_ketua']);
+        $currentTab = $activeTab ?? request('tab', 'catatan');
+        $notif = $notifColor ?? request('notif', '');
+        $currentUserId = (int) auth()->id();
     @endphp
 
-    <!-- Baris Tab Navigasi + Tombol "+ Tambah Baru" -->
-    <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
-        <div class="flex flex-wrap gap-2">
-            @foreach($tabs as $key => $label)
-                <a href="{{ route('subject.show', ['subject' => $subject->id, 'tab' => $key]) }}"
-                   class="px-5 py-2.5 rounded-xl text-sm font-bold transition shadow-sm {{ $tab === $key ? 'theme-primary' : 'theme-card hover:opacity-80' }}">
-                    {{ $label }}
-                </a>
-            @endforeach
+    <div class="max-w-5xl mx-auto space-y-5">
+        <div>
+            <a href="{{ route('dashboard') }}" class="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold hover:opacity-80" style="color: var(--primary);">
+                ← Kembali ke Jadwal Utama
+            </a>
         </div>
 
-        <button type="button" id="toggle-create-btn" onclick="toggleCreateForm()"
-                class="px-5 py-2.5 rounded-xl text-sm font-bold theme-primary shadow-md hover:opacity-90 transition flex items-center gap-1.5">
-            <span>+</span>
-            <span>Tambah {{ $tabs[$tab] }} Baru</span>
-        </button>
-    </div>
+        @if(session('success'))
+            <div class="p-3.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs sm:text-sm font-semibold">
+                {{ session('success') }}
+            </div>
+        @endif
 
-    <!-- Form Tambah Konten (Tersembunyi di Awal, Muncul Saat Tombol Diklik) -->
-    <div id="create-post-panel" class="{{ $errors->any() ? '' : 'hidden' }} mb-6">
-        <div class="theme-card rounded-2xl shadow-lg p-6 max-w-2xl mx-auto border-t-4 theme-border">
-            <div class="flex items-center justify-between mb-4">
-                <h2 class="text-lg font-bold">Tambah {{ $tabs[$tab] }} Baru</h2>
-                <button type="button" onclick="toggleCreateForm()"
-                        class="text-xs font-bold px-3 py-1 rounded-lg theme-soft border theme-border hover:opacity-80">
-                    ✕ Tutup
-                </button>
+        @if($errors->any())
+            <div class="p-3.5 rounded-xl bg-red-500/20 text-red-300 border border-red-500/40 text-xs sm:text-sm font-semibold">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
+        <!-- Header Mapel -->
+        <div class="theme-card rounded-2xl p-5 sm:p-7 border theme-border space-y-2">
+            <span class="inline-block px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider theme-soft" style="color: var(--primary);">
+                {{ $subject->name }}
+            </span>
+            <h1 class="text-xl sm:text-3xl font-extrabold">{{ $subject->name }}</h1>
+            @if(!empty($subject->teacher))
+                <p class="text-xs opacity-75">Guru Pengampu: {{ $subject->teacher }}</p>
+            @endif
+        </div>
+
+        <!-- Bar Tab & Tombol Tambah -->
+        <div class="flex flex-wrap items-center justify-between gap-3">
+            <div class="flex flex-wrap items-center gap-2">
+                @foreach($tabs as $key => $label)
+                    @php
+                        $isActive = $currentTab === $key;
+                        $hasSourceNotif = $isActive && in_array($notif, ['yellow', 'red', 'blue']);
+                    @endphp
+                    <button type="button"
+                            data-tab="{{ $key }}"
+                            onclick="switchSubjectTab('{{ $key }}')"
+                            class="subject-tab-btn px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold border theme-border inline-flex items-center {{ $isActive ? 'theme-primary' : 'theme-card' }}">
+                        @if($hasSourceNotif)
+                            <span class="tab-source-badge badge-{{ $notif }}"></span>
+                        @endif
+                        <span>{{ $label }}</span>
+                    </button>
+                @endforeach
             </div>
 
-            <form action="{{ route('subject.posts.store', $subject->id) }}" method="POST" enctype="multipart/form-data" class="space-y-4">
+            <button type="button"
+                    onclick="openNewItemModal()"
+                    id="btn-add-subject-item"
+                    class="px-4 py-2 rounded-xl text-xs sm:text-sm font-extrabold theme-primary shadow">
+                + Tambah {{ $tabs[$currentTab] ?? 'Catatan' }} Baru
+            </button>
+        </div>
+
+        <!-- Daftar Post per Tab -->
+        @foreach($tabs as $key => $label)
+            @php
+                $tabItems = $items->where('type', $key);
+            @endphp
+            <div id="panel-{{ $key }}" class="subject-tab-panel space-y-4 {{ $currentTab === $key ? '' : 'hidden' }}">
+                @forelse($tabItems as $item)
+                    @php
+                        $isOwner = $currentUserId > 0 && (int) $item->user_id === $currentUserId;
+                        $completedBy = is_array($item->completed_by)
+                            ? $item->completed_by
+                            : (json_decode($item->completed_by ?? '[]', true) ?: []);
+                        $isDoneByMe = in_array($currentUserId, array_map('intval', $completedBy), true);
+
+                        $dueText = null;
+                        $dueBadgeClass = '';
+                        if (!empty($item->due_date)) {
+                            $due = \Carbon\Carbon::parse($item->due_date)->startOfDay();
+                            $diffDays = now()->startOfDay()->diffInDays($due, false);
+                            $dueText = $due->translatedFormat('d M Y');
+                            if ($diffDays < 0) {
+                                $dueBadgeClass = 'bg-red-500/20 text-red-300 border-red-500/40';
+                            } elseif ($diffDays <= 2) {
+                                $dueBadgeClass = 'bg-amber-500/20 text-amber-300 border-amber-500/40';
+                            }
+                        }
+                    @endphp
+
+                    <div class="theme-card rounded-2xl p-5 border theme-border space-y-3">
+                        <div class="flex flex-wrap items-start justify-between gap-2">
+                            <div class="space-y-1">
+                                <div class="flex flex-wrap items-center gap-2">
+                                    <h2 class="text-sm sm:text-base font-extrabold uppercase">{{ $item->title }}</h2>
+                                    @if($dueBadgeClass && !$isDoneByMe)
+                                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold border {{ $dueBadgeClass }}">
+                                            ⚠️ TENGGAT ({{ $dueText }})
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="text-xs opacity-75">
+                                    Oleh <strong>{{ $item->user->name ?? 'Siswa' }}</strong>
+                                    @if($dueText)
+                                        • Tenggat: <strong>{{ $dueText }}</strong>
+                                    @endif
+                                </div>
+                            </div>
+
+                            <!-- Hanya pembuat post yang bisa Edit & Hapus -->
+                            @if($isOwner)
+                                <div class="flex items-center gap-3 text-xs font-extrabold">
+                                    <button type="button"
+                                            onclick='openEditItemModal(@json([
+                                                "id" => $item->id,
+                                                "title" => $item->title,
+                                                "description" => $item->description,
+                                                "due_date" => $item->due_date ? \Carbon\Carbon::parse($item->due_date)->format("Y-m-d") : ""
+                                            ]))'
+                                            class="text-indigo-400 hover:underline">
+                                        Edit
+                                    </button>
+                                    <form method="POST"
+                                          action="{{ route('subjects.items.destroy', [$subject->id, $item->id]) }}"
+                                          onsubmit="return confirm('Hapus postingan ini?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-400 hover:underline">
+                                            Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            @endif
+                        </div>
+
+                        @if(!empty($item->description))
+                            <p class="text-xs sm:text-sm opacity-90 whitespace-pre-line">{{ $item->description }}</p>
+                        @endif
+
+                        @if(in_array($key, ['tugas', 'pr']))
+                            <div class="pt-3 border-t theme-border flex items-center justify-between">
+                                <form method="POST" action="{{ route('items.toggle-complete', $item->id) }}">
+                                    @csrf
+                                    <button type="submit"
+                                            class="px-3 py-1.5 rounded-lg text-xs font-extrabold border {{ $isDoneByMe ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40' : 'theme-soft theme-border' }}">
+                                        {{ $isDoneByMe ? '✅ Selesai' : '☑️ Tandai Selesai' }}
+                                    </button>
+                                </form>
+                            </div>
+                        @endif
+                    </div>
+                @empty
+                    <div class="theme-card rounded-2xl p-8 border theme-border text-center text-xs sm:text-sm opacity-70">
+                        Belum ada {{ strtolower($label) }} untuk mata pelajaran ini.
+                    </div>
+                @endforelse
+            </div>
+        @endforeach
+    </div>
+
+    <!-- Modal Tambah Post Baru -->
+    <div id="new-item-modal" class="fixed inset-0 z-[9995] hidden items-center justify-center bg-black/65 p-4">
+        <div class="theme-card rounded-2xl border theme-border shadow-2xl max-w-md w-full p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 id="new-item-modal-title" class="text-base font-extrabold">Tambah Post Baru</h3>
+                <button type="button" onclick="closeNewItemModal()" class="px-2.5 py-1 rounded-lg text-xs font-bold border theme-border">✕</button>
+            </div>
+
+            <form method="POST" action="{{ route('subjects.items.store', $subject->id) }}" class="space-y-3">
                 @csrf
-                <input type="hidden" name="kategori" value="{{ $tab }}">
+                <input type="hidden" id="new-item-type" name="type" value="{{ $currentTab }}">
 
                 <div>
-                    <label class="block text-xs font-bold mb-1">Judul {{ $tabs[$tab] }}</label>
-                    <input type="text" name="judul" required placeholder="Contoh: Bab 2 Trigonometri"
-                           class="w-full rounded-xl border p-2.5 text-sm">
+                    <label class="block text-xs font-bold mb-1">Judul</label>
+                    <input type="text" name="title" required placeholder="Judul..." class="w-full rounded-xl border px-3 py-2 text-xs">
+                </div>
+
+                <div id="new-item-due-wrap">
+                    <label class="block text-xs font-bold mb-1">Tanggal Tenggat</label>
+                    <input type="date" name="due_date" class="w-full rounded-xl border px-3 py-2 text-xs">
                 </div>
 
                 <div>
                     <label class="block text-xs font-bold mb-1">Deskripsi / Keterangan</label>
-                    <textarea name="deskripsi" rows="3" placeholder="Tulis detail materi atau instruksi..."
-                              class="w-full rounded-xl border p-2.5 text-sm"></textarea>
+                    <textarea name="description" rows="3" placeholder="Tulis detail..." class="w-full rounded-xl border p-2.5 text-xs"></textarea>
                 </div>
 
-                <div>
-                    <div class="flex items-center justify-between mb-1">
-                        <label class="block text-xs font-bold">Lampiran Foto / Video</label>
-                        <button type="button" id="clear-files-btn" onclick="clearSelectedFiles()" class="hidden text-[11px] font-bold text-red-500 hover:underline">
-                            Hapus Semua
-                        </button>
-                    </div>
-                    <input type="file" id="media-input" name="media[]" multiple accept="image/*,video/*"
-                           onchange="renderHorizontalPreview(event)"
-                           class="w-full rounded-xl border p-2 text-xs">
-                    <div id="horizontal-preview" class="hidden mt-3 flex flex-wrap gap-2.5"></div>
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeNewItemModal()" class="px-3.5 py-2 rounded-xl text-xs font-bold border theme-border">Batal</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-extrabold theme-primary">Simpan</button>
                 </div>
-
-                <div>
-                    <label class="block text-xs font-bold mb-1">Tanggal / Deadline (Opsional)</label>
-                    <input type="date" name="tanggal_deadline" min="2020-01-01" max="2099-12-31"
-                           oninput="if(this.value.split('-')[0].length > 4) this.value = this.value.slice(0, 10);"
-                           class="w-full rounded-xl border p-2.5 text-sm">
-                </div>
-
-                <button type="submit" class="w-full py-2.5 rounded-xl font-bold text-sm theme-primary shadow-md hover:opacity-90 transition">
-                    Simpan {{ $tabs[$tab] }}
-                </button>
             </form>
         </div>
     </div>
 
-    <!-- Daftar Konten (Lebar Penuh / Full-Width) -->
-    <div class="space-y-4">
-        @forelse($posts as $post)
-            @php
-                $canModifyThisPost = $isAuthority || ((int) $post->user_id === (int) Auth::id());
+    <!-- Modal Edit Post (Hanya Pembuat Post) -->
+    <div id="edit-item-modal" class="fixed inset-0 z-[9995] hidden items-center justify-center bg-black/65 p-4">
+        <div class="theme-card rounded-2xl border theme-border shadow-2xl max-w-md w-full p-5 space-y-4">
+            <div class="flex items-center justify-between">
+                <h3 class="text-base font-extrabold">Edit Postingan</h3>
+                <button type="button" onclick="closeEditItemModal()" class="px-2.5 py-1 rounded-lg text-xs font-bold border theme-border">✕</button>
+            </div>
 
-                $statusBadge = null;
-                if ($post->tanggal_deadline) {
-                    $today = \Carbon\Carbon::today();
-                    $deadline = \Carbon\Carbon::parse($post->tanggal_deadline)->startOfDay();
-                    $diffDays = $today->diffInDays($deadline, false);
+            <form id="edit-item-form" method="POST" action="" class="space-y-3">
+                @csrf
+                @method('PATCH')
 
-                    if ($diffDays <= 0) {
-                        $statusBadge = [
-                            'label' => $today->isSameDay($deadline) ? '🚨 HARI INI DEADLINE' : '🚨 LEWAT DEADLINE',
-                            'style' => 'background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444;',
-                        ];
-                    } elseif ($diffDays <= 2) {
-                        $statusBadge = [
-                            'label' => '⚠️ WAKTU MEPET (' . $diffDays . ' HARI LAGI)',
-                            'style' => 'background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b;',
-                        ];
-                    }
-                }
-            @endphp
-
-            <div class="theme-card rounded-2xl shadow-md p-5 sm:p-6 border border-gray-200/30">
-                <div class="flex flex-wrap justify-between items-start gap-2">
-                    <div>
-                        <div class="flex flex-wrap items-center gap-2">
-                            <h3 class="text-lg sm:text-xl font-bold">{{ $post->judul }}</h3>
-                            @if($statusBadge)
-                                <span style="{{ $statusBadge['style'] }}" class="text-[10px] sm:text-xs font-extrabold px-2.5 py-0.5 rounded-full tracking-wide">
-                                    {{ $statusBadge['label'] }}
-                                </span>
-                            @endif
-                        </div>
-
-                        <p class="text-xs opacity-75 mt-1">
-                            Oleh <strong>{{ $post->user->name }}</strong> ({{ str_replace('_', ' ', $post->user->role) }})
-                            @if($post->tanggal_deadline)
-                                • Tenggat: <span class="font-bold">{{ \Carbon\Carbon::parse($post->tanggal_deadline)->format('d M Y') }}</span>
-                            @endif
-                        </p>
-                    </div>
-
-                    @if($canModifyThisPost)
-                        <div class="flex items-center gap-3">
-                            <a href="{{ route('posts.edit', $post->id) }}" class="text-xs font-bold hover:underline" style="color: var(--primary);">
-                                Edit
-                            </a>
-                            <form action="{{ route('posts.destroy', $post->id) }}" method="POST" onsubmit="return confirm('Hapus item ini?')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="text-xs font-bold text-red-500 hover:underline">Hapus</button>
-                            </form>
-                        </div>
-                    @endif
+                <div>
+                    <label class="block text-xs font-bold mb-1">Judul</label>
+                    <input type="text" id="edit-item-title" name="title" required class="w-full rounded-xl border px-3 py-2 text-xs">
                 </div>
 
-                @if($post->deskripsi)
-                    <p class="mt-3 text-sm leading-relaxed whitespace-pre-line opacity-90">{{ $post->deskripsi }}</p>
-                @endif
-
-                @if($post->attachments && $post->attachments->count() > 0)
-                    <div class="mt-4 flex flex-wrap gap-2.5">
-                        @foreach($post->attachments as $file)
-                            @if($file->file_type === 'video')
-                                <video controls style="width: 180px; height: 110px;" class="rounded-xl border theme-border object-cover">
-                                    <source src="{{ asset('storage/' . $file->file_path) }}">
-                                </video>
-                            @else
-                                <a href="{{ asset('storage/' . $file->file_path) }}" target="_blank">
-                                    <img src="{{ asset('storage/' . $file->file_path) }}" alt="Lampiran"
-                                         style="width: 88px; height: 88px; object-fit: cover;"
-                                         class="rounded-xl border theme-border hover:scale-105 transition">
-                                </a>
-                            @endif
-                        @endforeach
-                    </div>
-                @endif
-
-                <!-- Reaksi Emoji & Checklist Selesai ✅ -->
-                <div class="mt-5 pt-3 border-t border-gray-200/30 flex flex-wrap items-center gap-2">
-                    @php $emojis = ['✅', '👍', '❤️', '🔥', '👏', '😭']; @endphp
-                    @foreach($emojis as $emoji)
-                        @php
-                            $count = $post->reactions->where('emoji', $emoji)->count();
-                            $userReacted = $post->reactions->where('emoji', $emoji)->where('user_id', Auth::id())->isNotEmpty();
-                        @endphp
-                        <form action="{{ route('posts.react', $post->id) }}" method="POST" class="inline">
-                            @csrf
-                            <input type="hidden" name="emoji" value="{{ $emoji }}">
-                            <button type="submit" title="{{ $emoji === '✅' ? 'Tandai Sudah Dikerjakan' : '' }}"
-                                    class="px-2.5 py-1 rounded-full text-xs font-bold border transition flex items-center gap-1 {{ $userReacted ? 'theme-primary border-transparent shadow-sm' : 'theme-soft border-gray-300/40 hover:opacity-80' }}">
-                                <span>{{ $emoji }}</span>
-                                @if($emoji === '✅')
-                                    <span class="text-[10px]">Selesai</span>
-                                @endif
-                                @if($count > 0)
-                                    <span>({{ $count }})</span>
-                                @endif
-                            </button>
-                        </form>
-                    @endforeach
+                <div>
+                    <label class="block text-xs font-bold mb-1">Tanggal Tenggat</label>
+                    <input type="date" id="edit-item-due" name="due_date" class="w-full rounded-xl border px-3 py-2 text-xs">
                 </div>
-            </div>
-        @empty
-            <div class="theme-card rounded-2xl shadow-md p-10 text-center opacity-75">
-                Belum ada data {{ strtolower($tabs[$tab]) }} untuk mata pelajaran ini.
-            </div>
-        @endforelse
+
+                <div>
+                    <label class="block text-xs font-bold mb-1">Deskripsi / Keterangan</label>
+                    <textarea id="edit-item-desc" name="description" rows="3" class="w-full rounded-xl border p-2.5 text-xs"></textarea>
+                </div>
+
+                <div class="flex justify-end gap-2">
+                    <button type="button" onclick="closeEditItemModal()" class="px-3.5 py-2 rounded-xl text-xs font-bold border theme-border">Batal</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs font-extrabold theme-primary">Simpan Perubahan</button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <script>
-        function toggleCreateForm() {
-            const panel = document.getElementById('create-post-panel');
-            panel.classList.toggle('hidden');
-            if (!panel.classList.contains('hidden')) {
-                panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-            }
-        }
+        let currentSubjectTab = @json($currentTab);
+        const tabLabels = {
+            catatan: 'Catatan',
+            tugas: 'Tugas',
+            pr: 'PR',
+            event: 'Event'
+        };
 
-        let selectedFilesList = new DataTransfer();
+        function switchSubjectTab(tab) {
+            currentSubjectTab = tab;
+            document.querySelectorAll('.subject-tab-panel').forEach(p => p.classList.add('hidden'));
+            const activePanel = document.getElementById('panel-' + tab);
+            if (activePanel) activePanel.classList.remove('hidden');
 
-        function renderHorizontalPreview(event) {
-            const files = event.target.files;
-            for (let i = 0; i < files.length; i++) {
-                selectedFilesList.items.add(files[i]);
-            }
-            document.getElementById('media-input').files = selectedFilesList.files;
-            updatePreviewUI();
-        }
-
-        function removeSingleFile(index) {
-            const newTransfer = new DataTransfer();
-            for (let i = 0; i < selectedFilesList.files.length; i++) {
-                if (i !== index) newTransfer.items.add(selectedFilesList.files[i]);
-            }
-            selectedFilesList = newTransfer;
-            document.getElementById('media-input').files = selectedFilesList.files;
-            updatePreviewUI();
-        }
-
-        function clearSelectedFiles() {
-            selectedFilesList = new DataTransfer();
-            document.getElementById('media-input').value = '';
-            updatePreviewUI();
-        }
-
-        function updatePreviewUI() {
-            const container = document.getElementById('horizontal-preview');
-            const clearBtn = document.getElementById('clear-files-btn');
-            container.innerHTML = '';
-
-            if (selectedFilesList.files.length === 0) {
-                container.classList.add('hidden');
-                clearBtn.classList.add('hidden');
-                return;
-            }
-
-            container.classList.remove('hidden');
-            clearBtn.classList.remove('hidden');
-
-            Array.from(selectedFilesList.files).forEach((file, idx) => {
-                const wrapper = document.createElement('div');
-                wrapper.style.cssText = 'position: relative; width: 74px; height: 74px; border-radius: 10px; overflow: hidden; border: 2px solid var(--primary); flex-shrink: 0;';
-
-                if (file.type.startsWith('image/')) {
-                    const img = document.createElement('img');
-                    img.src = URL.createObjectURL(file);
-                    img.style.cssText = 'width: 100%; height: 100%; object-fit: cover;';
-                    wrapper.appendChild(img);
+            document.querySelectorAll('.subject-tab-btn').forEach(btn => {
+                if (btn.getAttribute('data-tab') === tab) {
+                    btn.classList.add('theme-primary');
+                    btn.classList.remove('theme-card');
                 } else {
-                    const vidLabel = document.createElement('div');
-                    vidLabel.textContent = '🎬 Video';
-                    vidLabel.style.cssText = 'width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: bold; background: rgba(0,0,0,0.4); color: #fff;';
-                    wrapper.appendChild(vidLabel);
+                    btn.classList.remove('theme-primary');
+                    btn.classList.add('theme-card');
                 }
-
-                const delBtn = document.createElement('button');
-                delBtn.type = 'button';
-                delBtn.textContent = '×';
-                delBtn.onclick = () => removeSingleFile(idx);
-                delBtn.style.cssText = 'position: absolute; top: 2px; right: 2px; width: 18px; height: 18px; border-radius: 50%; background: #ef4444; color: #fff; font-size: 12px; font-weight: bold; line-height: 1; display: flex; align-items: center; justify-content: center;';
-                wrapper.appendChild(delBtn);
-
-                container.appendChild(wrapper);
             });
+
+            const addBtn = document.getElementById('btn-add-subject-item');
+            if (addBtn) {
+                addBtn.textContent = `+ Tambah ${tabLabels[tab] || 'Catatan'} Baru`;
+            }
+        }
+
+        function openNewItemModal() {
+            document.getElementById('new-item-type').value = currentSubjectTab;
+            document.getElementById('new-item-modal-title').textContent = `Tambah ${tabLabels[currentSubjectTab] || 'Catatan'} Baru`;
+            const dueWrap = document.getElementById('new-item-due-wrap');
+            if (dueWrap) {
+                dueWrap.style.display = currentSubjectTab === 'catatan' ? 'none' : 'block';
+            }
+            const m = document.getElementById('new-item-modal');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+
+        function closeNewItemModal() {
+            const m = document.getElementById('new-item-modal');
+            m.classList.add('hidden');
+            m.classList.remove('flex');
+        }
+
+        function openEditItemModal(item) {
+            const form = document.getElementById('edit-item-form');
+            form.action = `/mapel/{{ $subject->id }}/items/${item.id}`;
+            document.getElementById('edit-item-title').value = item.title || '';
+            document.getElementById('edit-item-due').value = item.due_date || '';
+            document.getElementById('edit-item-desc').value = item.description || '';
+
+            const m = document.getElementById('edit-item-modal');
+            m.classList.remove('hidden');
+            m.classList.add('flex');
+        }
+
+        function closeEditItemModal() {
+            const m = document.getElementById('edit-item-modal');
+            m.classList.add('hidden');
+            m.classList.remove('flex');
         }
     </script>
 </x-app-layout>

@@ -11,12 +11,12 @@
 
     <style>
         :root {
-            --bg-gradient: linear-gradient(135deg, #0a192f 0%, #102a4c 50%, #071120 100%);
-            --bg-card: rgba(15, 32, 60, 0.85);
-            --text-main: #f8fafc;
-            --primary: #3b82f6;
-            --primary-soft: rgba(59, 130, 246, 0.18);
-            --border-color: rgba(96, 165, 250, 0.28);
+            --bg-gradient: linear-gradient(135deg, #09090b 0%, #18181b 55%, #09090b 100%);
+            --bg-card: rgba(24, 24, 27, 0.92);
+            --text-main: #fafafa;
+            --primary: #6366f1;
+            --primary-soft: rgba(99, 102, 241, 0.18);
+            --border-color: rgba(161, 161, 170, 0.25);
             --font-family: 'Figtree', system-ui, -apple-system, sans-serif;
         }
 
@@ -55,7 +55,7 @@
         }
         body[data-theme="mode-gelap"] {
             --bg-gradient: linear-gradient(135deg, #09090b 0%, #18181b 55%, #09090b 100%);
-            --bg-card: rgba(24, 24, 27, 0.9);
+            --bg-card: rgba(24, 24, 27, 0.92);
             --text-main: #fafafa;
             --primary: #6366f1;
             --primary-soft: rgba(99, 102, 241, 0.18);
@@ -104,10 +104,14 @@
             --border-color: rgba(217, 119, 6, 0.28);
         }
 
-        /* Gaya Huruf */
         body[data-font="sans"] { --font-family: 'Figtree', system-ui, -apple-system, sans-serif; }
         body[data-font="serif"] { --font-family: Georgia, 'Times New Roman', serif; }
         body[data-font="mono"] { --font-family: 'Fira Code', 'Consolas', monospace; }
+
+        html, body {
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
 
         body {
             background: var(--bg-gradient);
@@ -116,14 +120,7 @@
             font-family: var(--font-family);
             min-height: 100vh;
             margin: 0;
-            max-width: 100vw;
-            overflow-x: hidden;
             transition: background 0.35s ease, color 0.25s ease;
-        }
-
-        html {
-            max-width: 100vw;
-            overflow-x: hidden;
         }
 
         .theme-card {
@@ -132,26 +129,11 @@
             backdrop-filter: blur(12px);
             transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.25s ease, background-color 0.3s ease;
         }
+        .theme-primary { background-color: var(--primary); color: #ffffff; }
+        .theme-soft { background-color: var(--primary-soft); }
+        .theme-border { border-color: var(--border-color); }
 
-        .theme-primary {
-            background-color: var(--primary);
-            color: #ffffff;
-        }
-
-        .theme-soft {
-            background-color: var(--primary-soft);
-        }
-
-        .theme-border {
-            border-color: var(--border-color);
-        }
-
-        /* 1. LEGACY */
-        body[data-graphic="legacy"] nav.main-tamsis-nav {
-            border-radius: 0;
-        }
-
-        /* 2. MINIMALIST: Simple, tegas & relaks */
+        /* Minimalist */
         body[data-graphic="minimalist"] {
             --bg-gradient: #0f172a;
             --bg-card: #162033;
@@ -166,42 +148,18 @@
             --bg-card: #ffffff;
             --border-color: rgba(15, 23, 42, 0.14);
         }
-        body[data-graphic="minimalist"] nav.main-tamsis-nav {
-            background: var(--bg-card) !important;
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            box-shadow: none !important;
-            border-bottom: 1px solid var(--border-color) !important;
-        }
+        body[data-graphic="minimalist"] nav.main-tamsis-nav,
         body[data-graphic="minimalist"] .theme-card {
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
+            box-shadow: none !important;
             border-radius: 8px !important;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08) !important;
-            border: 1px solid var(--border-color) !important;
-        }
-        body[data-graphic="minimalist"] button,
-        body[data-graphic="minimalist"] .nav-btn-anim,
-        body[data-graphic="minimalist"] .j-filter-btn,
-        body[data-graphic="minimalist"] .setting-pill {
-            border-radius: 7px !important;
-            box-shadow: none !important;
-            font-weight: 600 !important;
-            letter-spacing: 0.01em;
-        }
-        body[data-graphic="minimalist"] .theme-primary {
-            box-shadow: none !important;
-        }
-        body[data-graphic="minimalist"] input,
-        body[data-graphic="minimalist"] select,
-        body[data-graphic="minimalist"] textarea {
-            border-radius: 7px !important;
-            box-shadow: none !important;
         }
 
-        /* 3. STYLE SIMPLE: Otomatis mematikan animasi UI */
+        /* Style Simple (Default user baru) */
         body[data-graphic="simple"] {
-            --bg-gradient: var(--bg-card);
+            --bg-gradient: #121215;
+            --bg-card: #1c1c21;
         }
         body[data-graphic="simple"],
         body[data-graphic="simple"] *,
@@ -210,24 +168,12 @@
             animation: none !important;
             transition: none !important;
         }
-        body[data-graphic="simple"] nav.main-tamsis-nav {
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
-            box-shadow: none !important;
-            border-bottom: 1px solid var(--border-color) !important;
-        }
+        body[data-graphic="simple"] nav.main-tamsis-nav,
         body[data-graphic="simple"] .theme-card {
             backdrop-filter: none !important;
             -webkit-backdrop-filter: none !important;
             box-shadow: none !important;
-            border-radius: 8px !important;
-        }
-        body[data-graphic="simple"] button,
-        body[data-graphic="simple"] .nav-btn-anim,
-        body[data-graphic="simple"] .j-filter-btn,
-        body[data-graphic="simple"] .setting-pill {
-            border-radius: 8px !important;
-            box-shadow: none !important;
+            border-radius: 10px !important;
         }
         body[data-graphic="simple"] #tamsis-splash {
             display: none !important;
@@ -239,46 +185,9 @@
         body[data-anim="off"] *::after {
             animation: none !important;
             transition: none !important;
-            scroll-behavior: auto !important;
-        }
-        body[data-anim="off"] .theme-card,
-        body[data-anim="off"] nav.main-tamsis-nav {
-            backdrop-filter: none !important;
-            -webkit-backdrop-filter: none !important;
         }
         body[data-anim="off"] #tamsis-splash {
             display: none !important;
-        }
-
-        @keyframes pageFadeSlide {
-            0% { opacity: 0; transform: translateY(10px) scale(0.99); }
-            100% { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        .page-animate-in {
-            animation: pageFadeSlide 0.32s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-        }
-
-        table a, .subject-box, .theme-card a[href*="/mapel/"] {
-            transition: transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.22s ease, border-color 0.22s ease, background-color 0.22s ease !important;
-        }
-        table a:hover, .subject-box:hover, .theme-card a[href*="/mapel/"]:hover {
-            transform: translateY(-3px) scale(1.025) !important;
-            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.32) !important;
-            border-color: var(--primary) !important;
-        }
-        table a:active, .subject-box:active {
-            transform: scale(0.97) !important;
-        }
-
-        .nav-btn-anim {
-            transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, background-color 0.2s ease;
-        }
-        .nav-btn-anim:hover {
-            transform: translateY(-2px) scale(1.04);
-            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.28);
-        }
-        .nav-btn-anim:active {
-            transform: scale(0.95);
         }
 
         .nav-links-wrap {
@@ -286,40 +195,29 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 6px;
-            overflow: visible !important;
         }
 
-        #tamsis-splash {
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            background: radial-gradient(circle at center, #0284c7 0%, #0b2447 75%, #061326 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
-            color: #ffffff;
-            transition: opacity 0.22s ease, visibility 0.22s ease;
+        nav.main-tamsis-nav {
+            position: sticky;
+            top: 0;
+            z-index: 9990 !important;
+            background: rgba(18, 18, 22, 0.97) !important;
+            border-bottom: 1px solid var(--border-color);
         }
-        #tamsis-splash.splash-hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
-        @keyframes splashFastBar {
-            0% { width: 20%; }
-            100% { width: 100%; }
-        }
-        .splash-progress-fill {
-            height: 100%;
-            background: #ffffff;
-            border-radius: 9999px;
-            animation: splashFastBar 0.2s ease-out forwards;
+        body[data-theme="academic-trust"] nav.main-tamsis-nav { background: rgba(10, 22, 44, 0.96) !important; }
+        body[data-theme="midnight-scholar"] nav.main-tamsis-nav { background: rgba(19, 17, 48, 0.96) !important; }
+        body[data-theme="deep-ocean"] nav.main-tamsis-nav { background: rgba(4, 34, 56, 0.96) !important; }
+        body[data-theme="forest-academy"] nav.main-tamsis-nav { background: rgba(5, 46, 26, 0.96) !important; }
+        body[data-theme="teal-growth"] nav.main-tamsis-nav,
+        body[data-theme="creative-spark"] nav.main-tamsis-nav,
+        body[data-theme="lavender-dream"] nav.main-tamsis-nav,
+        body[data-theme="soft-berry"] nav.main-tamsis-nav,
+        body[data-theme="morning-assembly"] nav.main-tamsis-nav {
+            background: rgba(255, 255, 255, 0.96) !important;
         }
 
         input, select, textarea {
-            background-color: rgba(15, 23, 42, 0.35);
+            background-color: rgba(15, 23, 42, 0.45);
             color: var(--text-main);
             border-color: var(--border-color);
         }
@@ -338,43 +236,63 @@
         body[data-theme="lavender-dream"] textarea,
         body[data-theme="soft-berry"] textarea,
         body[data-theme="morning-assembly"] textarea {
-            background-color: rgba(255, 255, 255, 0.85);
+            background-color: rgba(255, 255, 255, 0.9);
             color: #0f172a;
         }
 
-        nav.main-tamsis-nav {
-            position: sticky;
-            top: 0;
-            z-index: 9990 !important;
-            background: rgba(10, 22, 44, 0.96) !important;
-            backdrop-filter: blur(16px);
-            border-bottom: 1px solid var(--border-color);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+        /* Badge notifikasi tab sumber pada halaman detail mapel */
+        .tab-source-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 11px;
+            height: 11px;
+            border-radius: 9999px;
+            margin-right: 6px;
+            vertical-align: middle;
+            flex-shrink: 0;
         }
-        body[data-theme="midnight-scholar"] nav.main-tamsis-nav { background: rgba(19, 17, 48, 0.96) !important; }
-        body[data-theme="deep-ocean"] nav.main-tamsis-nav { background: rgba(4, 34, 56, 0.96) !important; }
-        body[data-theme="forest-academy"] nav.main-tamsis-nav { background: rgba(5, 46, 26, 0.96) !important; }
-        body[data-theme="mode-gelap"] nav.main-tamsis-nav { background: rgba(14, 14, 18, 0.97) !important; }
-        body[data-theme="teal-growth"] nav.main-tamsis-nav,
-        body[data-theme="creative-spark"] nav.main-tamsis-nav,
-        body[data-theme="lavender-dream"] nav.main-tamsis-nav,
-        body[data-theme="soft-berry"] nav.main-tamsis-nav,
-        body[data-theme="morning-assembly"] nav.main-tamsis-nav {
-            background: rgba(255, 255, 255, 0.96) !important;
+        .tab-source-badge.badge-yellow {
+            background-color: #facc15;
+            box-shadow: 0 0 8px rgba(250, 204, 21, 0.85);
+        }
+        .tab-source-badge.badge-red {
+            background-color: #ef4444;
+            box-shadow: 0 0 8px rgba(239, 68, 68, 0.85);
+        }
+        .tab-source-badge.badge-blue {
+            background-color: #38bdf8;
+            box-shadow: 0 0 8px rgba(56, 189, 248, 0.85);
         }
 
-        main.page-animate-in {
-            width: 100%;
-            box-sizing: border-box;
+        /* Pill Member Aktif Online (10+) di Jadwal */
+        #online-members-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(16, 185, 129, 0.16);
+            border: 1px solid rgba(16, 185, 129, 0.55);
+            color: #34d399;
+            padding: 4px 10px;
+            border-radius: 9999px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+        #online-members-pill .online-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 9999px;
+            background: #10b981;
+            box-shadow: 0 0 8px #10b981;
         }
 
         /* =========================================================
-           JADWAL HP: MODEL GRID LAPTOP & MUAT DI LAYAR HP TANPA SCROLL SAMPING
+           PERBAIKAN LAYOUT & FILTER HP (MUAT LAYAR & RAPI)
            ========================================================= */
         @media (max-width: 640px) {
             nav.main-tamsis-nav > div {
                 padding: 0.4rem 0.45rem !important;
-                gap: 0.3rem !important;
+                gap: 0.35rem !important;
             }
             .nav-links-wrap {
                 width: 100%;
@@ -385,27 +303,34 @@
                 overflow-x: hidden !important;
             }
             .nav-btn-anim {
-                padding: 3.5px 4.5px !important;
+                padding: 4px 4.5px !important;
                 font-size: 8.5px !important;
                 border-radius: 6px !important;
                 letter-spacing: -0.02em;
-                flex-shrink: 1;
+                white-space: nowrap !important;
             }
             main.page-animate-in {
-                padding-left: 0.35rem !important;
-                padding-right: 0.35rem !important;
-                padding-top: 0.6rem !important;
-            }
-            .grid-5-cols,
-            .grid-4-cols {
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 0.45rem !important;
-            }
-            .grid-3-cols {
-                grid-template-columns: 1fr !important;
-                gap: 0.45rem !important;
+                padding: 0.5rem 0.35rem !important;
             }
 
+            /* Filter jadwal rapi dalam grid 2 kolom di HP */
+            .filter-bar-mobile-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 6px !important;
+                width: 100% !important;
+            }
+            .filter-bar-mobile-grid button,
+            .filter-bar-mobile-grid a {
+                width: 100% !important;
+                justify-content: center !important;
+                padding: 6px 8px !important;
+                font-size: 11px !important;
+                border-radius: 10px !important;
+                margin: 0 !important;
+            }
+
+            /* Tabel jadwal muat layar HP tanpa huruf terpotong per karakter */
             .timetable-wrap-scroll {
                 overflow-x: hidden !important;
                 width: 100% !important;
@@ -416,22 +341,20 @@
                 max-width: 100% !important;
                 table-layout: fixed !important;
                 border-collapse: separate !important;
-                border-spacing: 1px !important;
+                border-spacing: 2px !important;
             }
             .timetable-grid th,
             .timetable-grid td {
                 font-size: 6px !important;
                 padding: 1.5px 1px !important;
-                line-height: 1.05 !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
+                line-height: 1.08 !important;
                 vertical-align: middle !important;
+                overflow: hidden !important;
             }
             .timetable-grid th:first-child,
             .timetable-grid td:first-child {
-                width: 30px !important;
+                width: 32px !important;
                 font-size: 6.5px !important;
-                padding: 2px 1px !important;
                 text-align: center !important;
             }
             .timetable-grid a,
@@ -443,68 +366,57 @@
                 justify-content: center !important;
                 text-align: center !important;
                 width: 100% !important;
-                min-height: 36px !important;
-                padding: 7px 2px 3px 2px !important;
-                border-radius: 4px !important;
-                font-size: 6px !important;
-                line-height: 1.05 !important;
+                min-height: 44px !important;
+                padding: 11px 2px 3px 2px !important;
+                border-radius: 6px !important;
+                font-size: 6.2px !important;
+                line-height: 1.12 !important;
                 white-space: normal !important;
-                word-break: break-word !important;
-                overflow-wrap: anywhere !important;
+                word-break: normal !important;
+                overflow-wrap: break-word !important;
+                hyphens: auto;
             }
-            .timetable-grid a span,
-            .timetable-grid .subject-box span {
-                max-width: 100%;
-                overflow: hidden;
-                text-overflow: ellipsis;
-            }
-        }
-
-        /* =========================================================
-           LAYOUT TABLET (641px - 1024px)
-           ========================================================= */
-        @media (min-width: 641px) and (max-width: 1024px) {
-            main.page-animate-in {
-                padding-left: 0.9rem !important;
-                padding-right: 0.9rem !important;
-            }
-            .timetable-grid th,
-            .timetable-grid td {
-                font-size: 9px !important;
-                padding: 3px 2px !important;
+            .timetable-grid a span.rounded-full,
+            .timetable-grid .subject-box span.rounded-full {
+                width: 7px !important;
+                height: 7px !important;
+                top: 2px !important;
             }
         }
     </style>
 </head>
-<body class="antialiased" data-theme="academic-trust" data-font="sans" data-graphic="legacy" data-anim="on">
-
-    <!-- Splash Screen Kilat -->
-    <div id="tamsis-splash">
-        <img src="{{ asset('images/logo-tamsis.png') }}"
-             onerror="this.style.display='none'"
-             alt="Logo Tamsis"
-             style="width: 68px; height: 68px; object-fit: contain; margin-bottom: 12px;">
-        <div style="font-size: 17px; font-weight: 800; letter-spacing: 0.04em;">
-            PELAJAR TAMAN SISWA HEBAT!
-        </div>
-        <div style="font-size: 11px; opacity: 0.85; margin-top: 4px;" data-i18n="splash_sub">
-            Memuat Jadwal & Ruang Kelas XI RPL 1...
-        </div>
-        <div style="width: 200px; height: 3px; background: rgba(255,255,255,0.25); border-radius: 9999px; overflow: hidden; margin-top: 14px;">
-            <div class="splash-progress-fill"></div>
-        </div>
-    </div>
-    <script>
-        if (sessionStorage.getItem('tamsis_booted') || localStorage.getItem('app_anim') === 'off' || localStorage.getItem('app_graphic') === 'simple') {
-            const sp = document.getElementById('tamsis-splash');
-            if (sp) sp.style.display = 'none';
+<body class="antialiased" data-theme="mode-gelap" data-font="sans" data-graphic="simple" data-anim="off">
+    @php
+        // Hitung jumlah tugas & PR yang belum dikerjakan oleh user saat ini
+        $pendingTaskCount = 0;
+        if (Auth::check() && \Illuminate\Support\Facades\Schema::hasTable('subject_items')) {
+            $userId = Auth::id();
+            $taskItems = \App\Models\SubjectItem::whereIn('type', ['tugas', 'pr'])->get();
+            foreach ($taskItems as $ti) {
+                $doneByList = is_array($ti->completed_by ?? null) ? $ti->completed_by : json_decode($ti->completed_by ?? '[]', true);
+                $isDone = !empty($ti->is_completed) || (is_array($doneByList) && in_array($userId, $doneByList));
+                if (!$isDone) {
+                    $pendingTaskCount++;
+                }
+            }
         }
-    </script>
+
+        // Update aktivitas online user saat ini
+        $onlineUsersCount = 0;
+        if (Auth::check() && \Illuminate\Support\Facades\Schema::hasColumn('users', 'last_seen_at')) {
+            \App\Models\User::where('id', Auth::id())->update(['last_seen_at' => now()]);
+            $onlineUsersCount = \App\Models\User::where('last_seen_at', '>=', now()->subMinutes(5))->count();
+        } elseif (\Illuminate\Support\Facades\Schema::hasTable('sessions')) {
+            $onlineUsersCount = \Illuminate\Support\Facades\DB::table('sessions')
+                ->where('last_activity', '>=', now()->subMinutes(5)->timestamp)
+                ->count();
+        }
+    @endphp
 
     <!-- Navbar Utama -->
     <nav class="main-tamsis-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[52px] py-1.5 flex flex-wrap items-center justify-between gap-2">
-            <a href="{{ route('dashboard') }}" onclick="playSfx('click')" class="flex items-center gap-2 shrink-0" style="gap:8px;">
+            <a href="{{ route('dashboard') }}" onclick="playSfx('click')" class="flex items-center gap-2 shrink-0">
                 <img src="{{ asset('images/tamsis.jpeg') }}" onerror="this.src='{{ asset('images/logo-tamsis.png') }}'" alt="Logo Perguruan Tamansiswa" class="w-7 h-7 sm:w-9 sm:h-9 rounded-full object-cover shrink-0 border border-white/30 shadow">
                 <div class="leading-tight">
                     <div class="text-[11px] sm:text-sm font-extrabold tracking-wide" style="color: var(--primary);">
@@ -520,33 +432,28 @@
                 @if(Auth::check() && Auth::user()->role === 'admin')
                     <a href="{{ route('admin.users') }}" onclick="playSfx('enter')"
                        class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-extrabold whitespace-nowrap {{ request()->routeIs('admin.*') ? 'theme-primary shadow-sm' : 'border theme-border' }}"
-                       style="{{ request()->routeIs('admin.*') ? '' : 'background-color: var(--primary-soft); color: var(--primary);' }}"
-                       data-i18n="nav_ap">AP</a>
+                       style="{{ request()->routeIs('admin.*') ? '' : 'background-color: var(--primary-soft); color: var(--primary);' }}">AP</a>
                 @endif
 
                 <a href="{{ route('dashboard') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('dashboard') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
-                   data-i18n="nav_jadwal">Jadwal</a>
+                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('dashboard') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">Jadwal</a>
 
                 <a href="{{ route('tasks.index') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('tasks.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
-                   data-i18n="nav_list_tugas">List Tugas</a>
+                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('tasks.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">
+                    {{ $pendingTaskCount > 0 ? "({$pendingTaskCount}) Tugas" : 'List Tugas' }}
+                </a>
 
                 <a href="{{ route('calendar.index') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('calendar.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
-                   data-i18n="nav_kalender">Kalender</a>
+                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('calendar.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">Kalender</a>
 
                 <a href="{{ route('siswa.index') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('siswa.*') || request()->routeIs('students.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
-                   data-i18n="nav_siswa">Siswa</a>
+                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('siswa.*') || request()->routeIs('students.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">Siswa</a>
 
                 <a href="{{ route('profile.edit') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('profile.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
-                   data-i18n="nav_profile">Profil</a>
+                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('profile.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">Profil</a>
 
                 <a href="{{ route('settings') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('settings') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
-                   data-i18n="nav_pengaturan">Pengaturan</a>
+                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('settings') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">Pengaturan</a>
             </div>
         </div>
     </nav>
@@ -558,10 +465,11 @@
 
     <script>
         function applySavedAppearance() {
-            const savedTheme   = localStorage.getItem('app_theme') || 'academic-trust';
+            // Default user baru/fresh: Mode Gelap + Grafik Simple
+            const savedTheme   = localStorage.getItem('app_theme') || 'mode-gelap';
             const savedFont    = localStorage.getItem('app_font') || 'sans';
-            const savedGraphic = localStorage.getItem('app_graphic') || 'legacy';
-            const savedAnim    = savedGraphic === 'simple' ? 'off' : (localStorage.getItem('app_anim') || 'on');
+            const savedGraphic = localStorage.getItem('app_graphic') || 'simple';
+            const savedAnim    = savedGraphic === 'simple' ? 'off' : (localStorage.getItem('app_anim') || 'off');
 
             document.body.setAttribute('data-theme', savedTheme);
             document.body.setAttribute('data-font', savedFont);
@@ -570,7 +478,8 @@
         }
         applySavedAppearance();
 
-        function initMobileTimetableLayout() {
+        // 1. Rapikan bar filter & tabel jadwal di HP
+        function enhanceScheduleMobileLayout() {
             document.querySelectorAll('table.timetable-grid, main table').forEach(tbl => {
                 if (tbl.closest('.overflow-x-auto')) {
                     tbl.closest('.overflow-x-auto').classList.add('timetable-wrap-scroll');
@@ -579,62 +488,107 @@
                     tbl.classList.add('timetable-grid');
                 }
             });
+
+            // Temukan baris tombol filter jadwal (Tenggat, Deadline, Selesai, Reset)
+            const resetBtn = Array.from(document.querySelectorAll('button, a')).find(el => el.textContent.trim() === 'Reset');
+            if (resetBtn && resetBtn.parentElement) {
+                const container = resetBtn.parentElement.parentElement && resetBtn.parentElement.parentElement.querySelectorAll('button, a').length >= 3
+                    ? resetBtn.parentElement.parentElement
+                    : resetBtn.parentElement;
+                container.classList.add('filter-bar-mobile-grid');
+            }
         }
 
-        function syncScheduleLinksWithMarkers() {
+        // 2. Tampilkan indikator Member Aktif (10+) di pojok atas Jadwal/Dashboard
+        function renderOnlineMemberPill() {
+            const isDashboard = {{ request()->routeIs('dashboard') ? 'true' : 'false' }};
+            const onlineCount = {{ (int) $onlineUsersCount }};
+            if (!isDashboard || onlineCount < 10) return;
+
+            const heading = document.querySelector('main h1, main h2');
+            if (!heading || document.getElementById('online-members-pill')) return;
+
+            const headerRow = heading.parentElement;
+            if (headerRow) {
+                headerRow.style.display = 'flex';
+                headerRow.style.flexWrap = 'wrap';
+                headerRow.style.alignItems = 'center';
+                headerRow.style.justifyContent = 'space-between';
+                headerRow.style.gap = '8px';
+
+                const pill = document.createElement('div');
+                pill.id = 'online-members-pill';
+                pill.innerHTML = `<span class="online-dot"></span><span>${onlineCount} Member Aktif</span>`;
+                headerRow.appendChild(pill);
+            }
+        }
+
+        // 3. Sinkronkan tanda/notif kuning-merah jadwal ke tab sumber di dalam halaman mapel
+        function syncScheduleMarkersAndSourceTab() {
             const links = document.querySelectorAll('table.timetable-grid a, .subject-box a, a.subject-box');
             links.forEach(el => {
                 const href = el.getAttribute('href');
                 if (!href || href === '#') return;
 
-                let focusTab = '';
                 const htmlLower = (el.innerHTML || '').toLowerCase();
-                const textLower = (el.textContent || '').toLowerCase();
+                let sourceTab = '';
+                let badgeColor = '';
 
-                if (htmlLower.includes('pr') || textLower.includes(' pr')) {
-                    focusTab = 'pr';
-                } else if (htmlLower.includes('tugas') || textLower.includes('tugas')) {
-                    focusTab = 'tugas';
-                } else if (htmlLower.includes('deadline') || htmlLower.includes('bg-red-') || htmlLower.includes('merah')) {
-                    focusTab = 'deadline';
-                } else if (htmlLower.includes('tenggat') || htmlLower.includes('bg-amber-') || htmlLower.includes('bg-yellow-') || htmlLower.includes('kuning')) {
-                    focusTab = 'tenggat';
-                } else if (htmlLower.includes('event') || htmlLower.includes('acara')) {
-                    focusTab = 'event';
+                if (htmlLower.includes('pr')) {
+                    sourceTab = 'pr';
+                } else if (htmlLower.includes('tugas')) {
+                    sourceTab = 'tugas';
+                } else if (htmlLower.includes('event')) {
+                    sourceTab = 'event';
                 } else if (htmlLower.includes('catatan')) {
-                    focusTab = 'catatan';
+                    sourceTab = 'catatan';
                 }
 
-                if (focusTab && !href.includes('tab=') && !href.includes('focus=')) {
+                if (htmlLower.includes('bg-red-') || htmlLower.includes('deadline')) {
+                    badgeColor = 'red';
+                    if (!sourceTab) sourceTab = 'tugas';
+                } else if (htmlLower.includes('bg-yellow-') || htmlLower.includes('bg-amber-') || htmlLower.includes('tenggat') || el.querySelector('span')) {
+                    badgeColor = 'yellow';
+                    if (!sourceTab) sourceTab = 'tugas';
+                }
+
+                if (sourceTab && !href.includes('tab=')) {
                     const sep = href.includes('?') ? '&' : '?';
-                    el.setAttribute('href', `${href}${sep}tab=${focusTab}`);
+                    el.setAttribute('href', `${href}${sep}tab=${sourceTab}${badgeColor ? '&notif=' + badgeColor : ''}`);
                 }
             });
 
+            // Jika sedang berada di halaman detail mapel (/mapel/{id}?tab=tugas&notif=yellow)
             const params = new URLSearchParams(window.location.search);
-            const activeTab = params.get('tab') || params.get('focus');
+            const activeTab = params.get('tab');
+            const notifColor = params.get('notif') || 'yellow';
+
             if (activeTab) {
-                const target = document.querySelector(`[data-tab="${activeTab}"], [data-filter="${activeTab}"], #tab-${activeTab}, #filter-${activeTab}`);
-                if (target && typeof target.click === 'function') {
-                    setTimeout(() => target.click(), 60);
+                const tabCandidates = Array.from(document.querySelectorAll('main button, main a'));
+                const tabBtn = tabCandidates.find(btn => {
+                    const txt = btn.textContent.trim().toLowerCase();
+                    return txt === activeTab.toLowerCase() || btn.getAttribute('data-tab') === activeTab;
+                });
+
+                if (tabBtn) {
+                    if (!tabBtn.querySelector('.tab-source-badge')) {
+                        const dot = document.createElement('span');
+                        dot.className = `tab-source-badge badge-${notifColor}`;
+                        dot.title = 'Sumber notifikasi dari jadwal';
+                        tabBtn.prepend(dot);
+                    }
+                    if (typeof tabBtn.click === 'function') {
+                        setTimeout(() => tabBtn.click(), 50);
+                    }
                 }
             }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
-            initMobileTimetableLayout();
-            syncScheduleLinksWithMarkers();
+            enhanceScheduleMobileLayout();
+            renderOnlineMemberPill();
+            syncScheduleMarkersAndSourceTab();
         });
-
-        function hideTamsisSplash() {
-            sessionStorage.setItem('tamsis_booted', '1');
-            const splash = document.getElementById('tamsis-splash');
-            if (splash && !splash.classList.contains('splash-hidden')) {
-                splash.classList.add('splash-hidden');
-                setTimeout(() => splash.remove(), 220);
-            }
-        }
-        setTimeout(hideTamsisSplash, 200);
 
         function playSfx(type = 'click') {
             if (localStorage.getItem('app_sfx') === 'muted') return;
@@ -643,265 +597,15 @@
                 const osc = ctx.createOscillator();
                 const gain = ctx.createGain();
                 osc.type = 'triangle';
-                if (type === 'enter') {
-                    osc.frequency.setValueAtTime(587.33, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.09);
-                } else if (type === 'secret') {
-                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
-                    osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.07);
-                    osc.frequency.setValueAtTime(1046.5, ctx.currentTime + 0.14);
-                } else {
-                    osc.frequency.setValueAtTime(620, ctx.currentTime);
-                    osc.frequency.exponentialRampToValueAtTime(440, ctx.currentTime + 0.06);
-                }
-                gain.gain.setValueAtTime(0.05, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.18);
+                osc.frequency.setValueAtTime(type === 'enter' ? 680 : 540, ctx.currentTime);
+                gain.gain.setValueAtTime(0.04, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.12);
                 osc.connect(gain);
                 gain.connect(ctx.destination);
                 osc.start();
-                osc.stop(ctx.currentTime + 0.19);
+                osc.stop(ctx.currentTime + 0.13);
             } catch (e) {}
         }
-
-        const translations = {
-            id: {
-                splash_sub: 'Memuat Jadwal & Ruang Kelas XI RPL 1...',
-                nav_ap: 'AP',
-                nav_jadwal: 'Jadwal',
-                nav_list_tugas: 'List Tugas',
-                nav_kalender: 'Kalender',
-                nav_siswa: 'Siswa',
-                nav_profile: 'Profil',
-                nav_pengaturan: 'Pengaturan',
-                settings_title: 'Pengaturan Tampilan',
-                settings_sub: 'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, dan bahasa aplikasi.',
-                dark_theme_label: 'Tema Gelap (Gradien)',
-                light_theme_label: 'Tema Terang (Gradien)',
-                font_style_label: 'Gaya Huruf',
-                lang_label: 'Bahasa',
-                sfx_label: 'Efek Suara (SFX)',
-                sfx_on: 'Aktif',
-                sfx_off: 'Senyap',
-                easter_title: 'Kode Unik (Easter Egg) 🎁',
-                easter_sub: 'Punya kode rahasia kelas XI RPL 1? Masukkan di sini untuk membuka fitur tersembunyi!',
-                klaim_btn: 'Klaim',
-                saran_btn: 'Kasih Saran & Laporan Bug',
-                saran_sub: 'Beri rating bintang (bisa desimal seperti 4.5 / 3.4), komentar, atau kirim banyak foto/video jika menemukan bug.',
-                rating_label: 'Rating Web (0.0 – 5.0 Bintang)',
-                rating_hint: 'Geser slider atau ketik angka desimal seperti 4.5, 3.4, atau 5.0.',
-                komentar_label: 'Komentar / Saran / Detail Bug',
-                lampiran_bug_label: 'Lampiran Foto / Video Bug (Bisa Lebih Dari 1 File)',
-                kirim_saran_btn: 'Kirim Saran ke Admin',
-                ap_title: 'Admin Panel (AP)',
-                ap_sub: 'Kelola persetujuan akun, role pengguna, izin bingkai siswa, dan tinjau kritik dari kelas XI RPL 1.',
-                critic_title: 'Kritik',
-                critic_sub: 'Ulasan bintang, masukan, dan laporan bug dari pengguna web kelas.',
-                avg_rating_label: 'Rata-rata Rating Web',
-                critic_empty: 'Belum ada kritik, saran, atau laporan bug yang masuk.',
-            },
-            en: {
-                splash_sub: 'Loading XI RPL 1 Timetable & Classroom...',
-                nav_ap: 'AP',
-                nav_jadwal: 'Schedule',
-                nav_list_tugas: 'Task List',
-                nav_kalender: 'Calendar',
-                nav_siswa: 'Students',
-                nav_profile: 'Profile',
-                nav_pengaturan: 'Settings',
-                settings_title: 'Display Settings',
-                settings_sub: 'Customize color gradients, graphics style, animations, sound effects, and language.',
-                dark_theme_label: 'Dark Theme (Gradient)',
-                light_theme_label: 'Light Theme (Gradient)',
-                font_style_label: 'Font Style',
-                lang_label: 'Language',
-                sfx_label: 'Sound Effects (SFX)',
-                sfx_on: 'Active',
-                sfx_off: 'Muted',
-                easter_title: 'Unique Code (Easter Egg) 🎁',
-                easter_sub: 'Have a secret XI RPL 1 class code? Enter it here to unlock hidden features!',
-                klaim_btn: 'Claim',
-                saran_btn: 'Send Feedback & Bug Report',
-                saran_sub: 'Rate with stars (decimals like 4.5 / 3.4 supported), leave a comment, or attach photos/videos of bugs.',
-                rating_label: 'Web Rating (0.0 – 5.0 Stars)',
-                rating_hint: 'Drag the slider or enter a decimal value such as 4.5, 3.4, or 5.0.',
-                komentar_label: 'Comment / Suggestion / Bug Details',
-                lampiran_bug_label: 'Bug Photo / Video Attachment (Multiple Files Supported)',
-                kirim_saran_btn: 'Submit Feedback to Admin',
-                ap_title: 'Admin Panel (AP)',
-                ap_sub: 'Manage account approvals, user roles, frame approvals, and class feedback.',
-                critic_title: 'Critic',
-                critic_sub: 'Star ratings, feedback, and bug reports submitted by class users.',
-                avg_rating_label: 'Average Web Rating',
-                critic_empty: 'No feedback, criticism, or bug reports submitted yet.',
-            },
-            ja: {
-                splash_sub: 'XI RPL 1の時間割とクラスルームを読み込んでいます...',
-                nav_ap: '管理',
-                nav_jadwal: '時間割',
-                nav_list_tugas: '課題一覧',
-                nav_kalender: 'カレンダー',
-                nav_siswa: '生徒',
-                nav_profile: 'プロフィール',
-                nav_pengaturan: '設定',
-                settings_title: '表示設定',
-                settings_sub: 'カラーテーマ、グラフィックスタイル、アニメーション、効果音、言語をカスタマイズします。',
-                dark_theme_label: 'ダークテーマ（グラデーション）',
-                light_theme_label: 'ライトテーマ（グラデーション）',
-                font_style_label: 'フォントスタイル',
-                lang_label: '言語',
-                sfx_label: '効果音 (SFX)',
-                sfx_on: 'オン',
-                sfx_off: 'ミュート',
-                easter_title: 'シークレットコード 🎁',
-                easter_sub: 'XI RPL 1の秘密コードを入力して隠し機能を開放しよう！',
-                klaim_btn: '適用',
-                saran_btn: 'ご意見・バグ報告',
-                saran_sub: '星評価（4.5などの小数も可）、コメント、バグの画像・動画を送信できます。',
-                rating_label: 'Web評価 (0.0 – 5.0)',
-                rating_hint: 'スライダーまたは4.5、3.4などの数値を入力してください。',
-                komentar_label: 'コメント / ご意見 / バグ詳細',
-                lampiran_bug_label: 'バグ画像・動画の添付（複数選択可）',
-                kirim_saran_btn: '管理者に送信',
-                ap_title: '管理者パネル (AP)',
-                ap_sub: 'アカウント承認、権限管理、生徒フレーム承認、フィードバックを確認します。',
-                critic_title: 'フィードバック',
-                critic_sub: 'クラスメンバーからの評価、意見、バグ報告一覧。',
-                avg_rating_label: '平均評価',
-                critic_empty: 'まだフィードバックやバグ報告はありません。',
-            },
-            ru: {
-                splash_sub: 'Загрузка расписания и класса XI RPL 1...',
-                nav_ap: 'АП',
-                nav_jadwal: 'Расписание',
-                nav_list_tugas: 'Задания',
-                nav_kalender: 'Календарь',
-                nav_siswa: 'Ученики',
-                nav_profile: 'Профиль',
-                nav_pengaturan: 'Настройки',
-                settings_title: 'Настройки отображения',
-                settings_sub: 'Настройте цветовую тему, стиль графики, анимацию, звуковые эффекты и язык.',
-                dark_theme_label: 'Тёмная тема (Градиент)',
-                light_theme_label: 'Светлая тема (Градиент)',
-                font_style_label: 'Шрифт',
-                lang_label: 'Язык',
-                sfx_label: 'Звуковые эффекты (SFX)',
-                sfx_on: 'Вкл',
-                sfx_off: 'Без звука',
-                easter_title: 'Секретный код (Пасхалка) 🎁',
-                easter_sub: 'Есть секретный код класса XI RPL 1? Введите его здесь!',
-                klaim_btn: 'Активировать',
-                saran_btn: 'Отзыв и отчёт об ошибке',
-                saran_sub: 'Поставьте оценку (можно дробную, например 4.5), оставьте комментарий или прикрепите фото/видео.',
-                rating_label: 'Оценка сайта (0.0 – 5.0)',
-                rating_hint: 'Передвиньте ползунок или введите число, например 4.5 или 3.4.',
-                komentar_label: 'Комментарий / Предложение / Описание ошибки',
-                lampiran_bug_label: 'Фото / видео ошибки (можно несколько файлов)',
-                kirim_saran_btn: 'Отправить администратору',
-                ap_title: 'Панель администратора (AP)',
-                ap_sub: 'Управление аккаунтами, ролями, рамками учеников и отзывами класса XI RPL 1.',
-                critic_title: 'Отзывы',
-                critic_sub: 'Оценки, предложения и отчёты об ошибках от пользователей класса.',
-                avg_rating_label: 'Средняя оценка сайта',
-                critic_empty: 'Отзывов и отчётов об ошибках пока нет.',
-            }
-        };
-
-        const phraseDictionaries = {
-            ja: {
-                'Jadwal Pelajaran XI RPL 1': 'XI RPL 1 授業時間割',
-                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': '科目ボックスをクリックしてメモ・課題・宿題・予定を確認します。',
-                'Hari / Jam': '曜日 / 時限',
-                'Senin': '月曜日',
-                'Selasa': '火曜日',
-                'Rabu': '水曜日',
-                'Kamis': '木曜日',
-                'Jumat': '金曜日',
-                'Catatan': 'メモ',
-                'Tugas': '課題',
-                'PR': '宿題',
-                'Event': 'イベント',
-                'Tenggat': '締切間近',
-                'Deadline': '締切',
-                'Selesai': '完了',
-                'Reset': 'リセット',
-                'Tambah Siswa': '生徒を追加',
-                '+ Tambah Siswa': '+ 生徒を追加',
-                'Anggota Kelas XI RPL 1': 'XI RPL 1 クラスメンバー',
-                'Manajemen Akun Pengguna': 'ユーザーアカウント管理',
-                'Persetujuan Ganti Bingkai Siswa': '生徒フレーム変更の承認',
-            },
-            ru: {
-                'Jadwal Pelajaran XI RPL 1': 'Расписание уроков XI RPL 1',
-                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, или Acara.': 'Нажмите на предмет, чтобы посмотреть заметки, задания, ДЗ или события.',
-                'Hari / Jam': 'День / Урок',
-                'Senin': 'Понедельник',
-                'Selasa': 'Вторник',
-                'Rabu': 'Среда',
-                'Kamis': 'Четверг',
-                'Jumat': 'Пятница',
-                'Catatan': 'Заметка',
-                'Tugas': 'Задание',
-                'PR': 'ДЗ',
-                'Event': 'Событие',
-                'Tenggat': 'Срок',
-                'Deadline': 'Дедлайн',
-                'Selesai': 'Готово',
-                'Reset': 'Сброс',
-                'Tambah Siswa': 'Добавить ученика',
-                '+ Tambah Siswa': '+ Добавить ученика',
-                'Anggota Kelas XI RPL 1': 'УЧЕНИКИ КЛАССА XI RPL 1',
-                'Manajemen Akun Pengguna': 'Управление аккаунтами',
-                'Persetujuan Ganti Bingkai Siswa': 'Одобрение смены рамки ученика',
-            }
-        };
-
-        function applyPhraseTranslation(lang) {
-            const dict = phraseDictionaries[lang];
-            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
-            let node;
-            while ((node = walker.nextNode())) {
-                if (!node.parentElement || ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT'].includes(node.parentElement.tagName)) continue;
-                const raw = node.nodeValue;
-                const trimmed = raw.trim();
-                if (!trimmed) continue;
-
-                if (!node._origText) {
-                    node._origText = raw;
-                }
-
-                if (lang === 'id') {
-                    node.nodeValue = node._origText;
-                } else if (dict && dict[trimmed]) {
-                    node.nodeValue = raw.replace(trimmed, dict[trimmed]);
-                } else if (node._origText) {
-                    const origTrimmed = node._origText.trim();
-                    if (dict && dict[origTrimmed]) {
-                        node.nodeValue = node._origText.replace(origTrimmed, dict[origTrimmed]);
-                    } else {
-                        node.nodeValue = node._origText;
-                    }
-                }
-            }
-        }
-
-        function applyLanguage(lang) {
-            if (!translations[lang]) lang = 'id';
-            localStorage.setItem('app_lang', lang);
-            document.documentElement.setAttribute('lang', lang);
-
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[lang][key]) {
-                    el.textContent = translations[lang][key];
-                }
-            });
-
-            applyPhraseTranslation(lang);
-        }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            applyLanguage(localStorage.getItem('app_lang') || 'id');
-        });
     </script>
 </body>
 </html>
