@@ -20,7 +20,7 @@
 
         $topIds = collect([$walas->id ?? null, $ketuaKelas->id ?? null, $wakilKetua->id ?? null])->filter();
 
-        // Urutkan anggota kelas berdasarkan nomor absen / abjad nama agar Archie Lionel berada setelah Anisha dan sebelum Azzahra (absen 6)
+        // Urutkan anggota kelas berdasarkan nomor absen / abjad nama agar Archie Lionel berada setelah Anisha dan sebelum Azzahra
         $members = $students->reject(fn($s) => $topIds->contains($s->id))
             ->sortBy(function ($s) {
                 $absen = $s->absen ?? $s->no_absen ?? $s->nomor_absen ?? null;
@@ -230,7 +230,7 @@
                 </div>
             </div>
 
-            <!-- Anggota Kelas XI RPL 1 (Urut Absen: Archie setelah Anisha sebelum Azzahra) -->
+            <!-- Anggota Kelas XI RPL 1 -->
             <div class="pt-2 space-y-4">
                 <div class="text-center">
                     <span class="text-[11px] font-extrabold tracking-widest uppercase opacity-90">
@@ -240,7 +240,7 @@
 
                 <div class="grid grid-cols-4 sm:grid-cols-6 md:grid-cols-8 gap-y-5 gap-x-2 text-center">
                     @foreach($members as $member)
-                        @php $mPayload = $formatStudentPayload($member, 'Siswa', 'siswa'); @endphp
+                        @php $mPayload = $formatStudentPayload($member, 'Siswa', 'murid'); @endphp
                         <button type="button" onclick='openStudentModal(@json($mPayload))'
                                 class="org-node flex flex-col items-center gap-1 min-w-0 cursor-pointer focus:outline-none">
                             <div class="org-circle {{ $mPayload['ring'] }}">
@@ -305,11 +305,23 @@
                     </button>
                 </div>
 
-                <!-- Admin: Bisa edit Tanggal Lahir, Umur, Gender, Quote & PP/Bingkai (tanpa dropdown ubah role) -->
+                <!-- Admin: Bisa atur Role/Status (PPTS, EX PPTS, Murid, dll.), Tanggal Lahir, Umur, Gender, Quote & PP/Bingkai -->
                 <div id="smodal-edit-box" class="hidden pt-3 border-t theme-border space-y-3">
                     <form id="smodal-edit-form" method="POST" action="" enctype="multipart/form-data" class="space-y-3">
                         @csrf
                         @method('PATCH')
+
+                        <div>
+                            <label class="block text-[11px] font-bold mb-1">Role / Status Siswa</label>
+                            <select id="sedit-role-tag" name="role_tag" class="w-full rounded-xl border px-2.5 py-1.5 text-xs font-bold">
+                                <option value="murid">Murid (Standar)</option>
+                                <option value="ppts">PPTS (Outline Biru Glowing)</option>
+                                <option value="ex_ppts">EX PPTS (Outline Abu-abu)</option>
+                                <option value="ketua_kelas">Ketua Kelas</option>
+                                <option value="wakil_ketua">Wakil Ketua Kelas</option>
+                                <option value="walas">Wali Kelas</option>
+                            </select>
+                        </div>
 
                         <div class="grid grid-cols-2 gap-2.5">
                             <div>
@@ -352,7 +364,7 @@
                     </form>
                 </div>
             @else
-                <!-- Role Murid: Hanya bisa ganti PP murid (tidak bisa ubah nama, umur, gender, quote, maupun role) -->
+                <!-- Role Murid: Hanya bisa ganti PP murid -->
                 <div class="flex justify-end">
                     <button type="button" onclick="toggleStudentEditForm()" class="px-4 py-2 rounded-xl text-xs font-extrabold theme-primary">
                         🖼️ Ganti PP Murid
@@ -390,7 +402,7 @@
             const avatar = document.getElementById('smodal-avatar');
 
             document.getElementById('smodal-name').textContent = data.name || '-';
-            document.getElementById('smodal-role').textContent = (data.role || 'siswa').toUpperCase();
+            document.getElementById('smodal-role').textContent = (data.role || 'murid').toUpperCase();
             document.getElementById('smodal-nis').textContent = 'NIS: ' + (data.nis && data.nis !== '' ? data.nis : '-');
 
             document.getElementById('smodal-birth-date').textContent = data.birth_date || '-';
@@ -412,6 +424,13 @@
             const delForm = document.getElementById('smodal-delete-form');
             if (editForm && data.id) editForm.action = `/students/${data.id}/profile`;
             if (delForm && data.id) delForm.action = `/students/${data.id}`;
+
+            const roleTagInput = document.getElementById('sedit-role-tag');
+            if (roleTagInput) {
+                const rawRole = (data.role || 'murid').toLowerCase().trim().replace(/\s+/g, '_');
+                const allowed = ['murid', 'ppts', 'ex_ppts', 'ketua_kelas', 'wakil_ketua', 'walas'];
+                roleTagInput.value = rawRole === 'exppts' ? 'ex_ppts' : (allowed.includes(rawRole) ? rawRole : 'murid');
+            }
 
             const birthInput = document.getElementById('sedit-birth-date');
             const ageInput = document.getElementById('sedit-age');

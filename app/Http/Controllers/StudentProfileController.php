@@ -21,6 +21,7 @@ class StudentProfileController extends Controller
         $this->ensureAdmin();
 
         $validated = $request->validate([
+            'role_tag'    => ['nullable', 'string', 'max:50'],
             'birth_date'  => ['nullable', 'date'],
             'age'         => ['nullable', 'integer', 'min:1', 'max:120'],
             'gender'      => ['nullable', 'string', 'max:20'],
@@ -34,6 +35,13 @@ class StudentProfileController extends Controller
         }
 
         $updateData = [];
+        if (!empty($validated['role_tag'])) {
+            foreach (['hierarchy', 'role', 'jabatan'] as $roleCol) {
+                if (Schema::hasColumn('students', $roleCol)) {
+                    $updateData[$roleCol] = $validated['role_tag'];
+                }
+            }
+        }
         if (Schema::hasColumn('students', 'birth_date')) {
             $updateData['birth_date'] = $validated['birth_date'] ?? null;
         }

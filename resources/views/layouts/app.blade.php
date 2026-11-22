@@ -353,7 +353,6 @@
             box-sizing: border-box;
         }
 
-        /* Badge notifikasi tab sumber pada halaman detail mapel */
         .tab-source-badge {
             display: inline-flex;
             align-items: center;
@@ -378,7 +377,6 @@
             box-shadow: 0 0 8px rgba(56, 189, 248, 0.85);
         }
 
-        /* Pill Member Aktif Online (10+) di Jadwal */
         #online-members-pill {
             display: inline-flex;
             align-items: center;
@@ -400,8 +398,79 @@
         }
 
         /* =========================================================
-           LAYOUT & FILTER HP (MUAT LAYAR & RAPI)
+           KHUSUS TABLET & MOBILE (<= 1024px): RUANG LEGA & SINGKAT MAPEL
            ========================================================= */
+        @media (max-width: 1024px) {
+            .filter-bar-mobile-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+                gap: 6px !important;
+                width: 100% !important;
+            }
+            .filter-bar-mobile-grid button,
+            .filter-bar-mobile-grid a {
+                width: 100% !important;
+                justify-content: center !important;
+                padding: 6px 8px !important;
+                font-size: 11px !important;
+                border-radius: 10px !important;
+                margin: 0 !important;
+            }
+
+            .timetable-wrap-scroll {
+                overflow-x: hidden !important;
+                width: 100% !important;
+            }
+            .timetable-grid {
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                table-layout: fixed !important;
+                border-collapse: separate !important;
+                border-spacing: 2px !important;
+            }
+            .timetable-grid th,
+            .timetable-grid td {
+                font-size: 7.5px !important;
+                padding: 2px 1px !important;
+                line-height: 1.15 !important;
+                vertical-align: middle !important;
+                overflow: hidden !important;
+            }
+            .timetable-grid th:first-child,
+            .timetable-grid td:first-child {
+                width: 38px !important;
+                font-size: 7.5px !important;
+                text-align: center !important;
+            }
+            .timetable-grid a,
+            .timetable-grid .subject-box {
+                position: relative !important;
+                display: flex !important;
+                flex-direction: column !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                width: 100% !important;
+                min-height: 40px !important;
+                padding: 12px 2px 3px 2px !important;
+                border-radius: 6px !important;
+                font-size: 8px !important;
+                font-weight: 800 !important;
+                line-height: 1.1 !important;
+                letter-spacing: 0.02em;
+                white-space: nowrap !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+            }
+            .timetable-grid a span.rounded-full,
+            .timetable-grid .subject-box span.rounded-full {
+                width: 7px !important;
+                height: 7px !important;
+                top: 2px !important;
+            }
+        }
+
         @media (max-width: 640px) {
             nav.main-tamsis-nav > div {
                 padding: 0.4rem 0.45rem !important;
@@ -434,85 +503,20 @@
                 grid-template-columns: 1fr !important;
                 gap: 0.45rem !important;
             }
-
-            .filter-bar-mobile-grid {
-                display: grid !important;
-                grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 6px !important;
-                width: 100% !important;
-            }
-            .filter-bar-mobile-grid button,
-            .filter-bar-mobile-grid a {
-                width: 100% !important;
-                justify-content: center !important;
-                padding: 6px 8px !important;
-                font-size: 11px !important;
-                border-radius: 10px !important;
-                margin: 0 !important;
-            }
-
-            .timetable-wrap-scroll {
-                overflow-x: hidden !important;
-                width: 100% !important;
-            }
-            .timetable-grid {
-                width: 100% !important;
-                min-width: 0 !important;
-                max-width: 100% !important;
-                table-layout: fixed !important;
-                border-collapse: separate !important;
-                border-spacing: 2px !important;
-            }
             .timetable-grid th,
             .timetable-grid td {
-                font-size: 6px !important;
+                font-size: 6.5px !important;
                 padding: 1.5px 1px !important;
-                line-height: 1.08 !important;
-                vertical-align: middle !important;
-                overflow: hidden !important;
             }
             .timetable-grid th:first-child,
             .timetable-grid td:first-child {
                 width: 32px !important;
                 font-size: 6.5px !important;
-                text-align: center !important;
             }
             .timetable-grid a,
             .timetable-grid .subject-box {
-                position: relative !important;
-                display: flex !important;
-                flex-direction: column !important;
-                align-items: center !important;
-                justify-content: center !important;
-                text-align: center !important;
-                width: 100% !important;
-                min-height: 44px !important;
-                padding: 11px 2px 3px 2px !important;
-                border-radius: 6px !important;
-                font-size: 6.2px !important;
-                line-height: 1.12 !important;
-                white-space: normal !important;
-                word-break: normal !important;
-                overflow-wrap: break-word !important;
-                hyphens: auto;
-            }
-            .timetable-grid a span.rounded-full,
-            .timetable-grid .subject-box span.rounded-full {
-                width: 7px !important;
-                height: 7px !important;
-                top: 2px !important;
-            }
-        }
-
-        @media (min-width: 641px) and (max-width: 1024px) {
-            main.page-animate-in {
-                padding-left: 0.9rem !important;
-                padding-right: 0.9rem !important;
-            }
-            .timetable-grid th,
-            .timetable-grid td {
-                font-size: 9px !important;
-                padding: 3px 2px !important;
+                min-height: 38px !important;
+                font-size: 7px !important;
             }
         }
     </style>
@@ -648,6 +652,74 @@
         }
         applySavedAppearance();
 
+        function abbreviateSubjectLabel(rawText) {
+            const cleaned = rawText.replace(/\s+/g, ' ').trim();
+            if (!cleaned || cleaned.length <= 5) return cleaned;
+
+            const lower = cleaned.toLowerCase();
+            const mapelDict = [
+                ['pemrograman lanjut', 'PML'],
+                ['pendidikan pancasila', 'PPKN'],
+                ['bimbingan konseling', 'BK'],
+                ['bahasa indonesia', 'B.IND'],
+                ['bahasa inggris', 'B.ING'],
+                ['muatan bahasa jepang', 'JEPANG'],
+                ['bahasa jepang', 'JEPANG'],
+                ['pendidikan jasmani', 'PJOK'],
+                ['kreativitas & desain interaktif', 'KDI'],
+                ['kreativitas dan desain interaktif', 'KDI'],
+                ['sistem teknologi informasi', 'STI'],
+                ['sejarah indonesia', 'SEJ'],
+                ['kewirausahaan', 'KWU'],
+                ['pendidikan agama islam', 'PAI'],
+                ['matematika', 'MTK'],
+            ];
+
+            for (const [key, abbr] of mapelDict) {
+                if (lower.includes(key)) {
+                    return abbr;
+                }
+            }
+
+            const words = cleaned
+                .replace(/[()]/g, ' ')
+                .split(/\s+/)
+                .filter(w => w.length > 0 && !['dan', '&', 'rpl', '1', 'xi'].includes(w.toLowerCase()));
+
+            if (words.length >= 2) {
+                return words.slice(0, 3).map(w => w[0].toUpperCase()).join('');
+            }
+            return cleaned.slice(0, 4).toUpperCase();
+        }
+
+        function shortenSubjectsForMobileAndTablet() {
+            if (window.innerWidth > 1024) return;
+
+            document.querySelectorAll('table.timetable-grid a, table.timetable-grid .subject-box').forEach(box => {
+                const badges = Array.from(box.querySelectorAll('span.rounded-full'));
+                const textNodes = [];
+                const walker = document.createTreeWalker(box, NodeFilter.SHOW_TEXT, null);
+                let n;
+                while ((n = walker.nextNode())) {
+                    if (n.nodeValue && n.nodeValue.trim().length > 0) {
+                        textNodes.push(n);
+                    }
+                }
+                if (textNodes.length === 0) return;
+
+                const fullLabel = textNodes.map(t => t.nodeValue.trim()).join(' ');
+                const shortCode = abbreviateSubjectLabel(fullLabel);
+
+                textNodes.forEach((t, idx) => {
+                    t.nodeValue = idx === 0 ? shortCode : '';
+                });
+
+                badges.forEach(b => {
+                    if (b.parentElement !== box) box.prepend(b);
+                });
+            });
+        }
+
         function enhanceScheduleMobileLayout() {
             document.querySelectorAll('table.timetable-grid, main table').forEach(tbl => {
                 if (tbl.closest('.overflow-x-auto')) {
@@ -665,6 +737,8 @@
                     : resetBtn.parentElement;
                 container.classList.add('filter-bar-mobile-grid');
             }
+
+            shortenSubjectsForMobileAndTablet();
         }
 
         function renderOnlineMemberPill() {
@@ -795,31 +869,6 @@
                 nav_siswa: 'Siswa',
                 nav_profile: 'Profil',
                 nav_pengaturan: 'Pengaturan',
-                settings_title: 'Pengaturan Tampilan',
-                settings_sub: 'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, dan bahasa aplikasi.',
-                dark_theme_label: 'Tema Gelap (Gradien)',
-                light_theme_label: 'Tema Terang (Gradien)',
-                font_style_label: 'Gaya Huruf',
-                lang_label: 'Bahasa',
-                sfx_label: 'Efek Suara (SFX)',
-                sfx_on: 'Aktif',
-                sfx_off: 'Senyap',
-                easter_title: 'Kode Unik (Easter Egg) 🎁',
-                easter_sub: 'Punya kode rahasia kelas XI RPL 1? Masukkan di sini untuk membuka fitur tersembunyi!',
-                klaim_btn: 'Klaim',
-                saran_btn: 'Kasih Saran & Laporan Bug',
-                saran_sub: 'Beri rating bintang (bisa desimal seperti 4.5 / 3.4), komentar, atau kirim banyak foto/video jika menemukan bug.',
-                rating_label: 'Rating Web (0.0 – 5.0 Bintang)',
-                rating_hint: 'Geser slider atau ketik angka desimal seperti 4.5, 3.4, atau 5.0.',
-                komentar_label: 'Komentar / Saran / Detail Bug',
-                lampiran_bug_label: 'Lampiran Foto / Video Bug (Bisa Lebih Dari 1 File)',
-                kirim_saran_btn: 'Kirim Saran ke Admin',
-                ap_title: 'Admin Panel (AP)',
-                ap_sub: 'Kelola persetujuan akun, role pengguna, izin bingkai siswa, dan tinjau kritik dari kelas XI RPL 1.',
-                critic_title: 'Kritik',
-                critic_sub: 'Ulasan bintang, masukan, dan laporan bug dari pengguna web kelas.',
-                avg_rating_label: 'Rata-rata Rating Web',
-                critic_empty: 'Belum ada kritik, saran, atau laporan bug yang masuk.',
             },
             en: {
                 splash_sub: 'Loading XI RPL 1 Timetable & Classroom...',
@@ -829,31 +878,6 @@
                 nav_siswa: 'Students',
                 nav_profile: 'Profile',
                 nav_pengaturan: 'Settings',
-                settings_title: 'Display Settings',
-                settings_sub: 'Customize color gradients, graphics style, animations, sound effects, and language.',
-                dark_theme_label: 'Dark Theme (Gradient)',
-                light_theme_label: 'Light Theme (Gradient)',
-                font_style_label: 'Font Style',
-                lang_label: 'Language',
-                sfx_label: 'Sound Effects (SFX)',
-                sfx_on: 'Active',
-                sfx_off: 'Muted',
-                easter_title: 'Unique Code (Easter Egg) 🎁',
-                easter_sub: 'Have a secret XI RPL 1 class code? Enter it here to unlock hidden features!',
-                klaim_btn: 'Claim',
-                saran_btn: 'Send Feedback & Bug Report',
-                saran_sub: 'Rate with stars (decimals like 4.5 / 3.4 supported), leave a comment, or attach photos/videos of bugs.',
-                rating_label: 'Web Rating (0.0 – 5.0 Stars)',
-                rating_hint: 'Drag the slider or enter a decimal value such as 4.5, 3.4, or 5.0.',
-                komentar_label: 'Comment / Suggestion / Bug Details',
-                lampiran_bug_label: 'Bug Photo / Video Attachment (Multiple Files Supported)',
-                kirim_saran_btn: 'Submit Feedback to Admin',
-                ap_title: 'Admin Panel (AP)',
-                ap_sub: 'Manage account approvals, user roles, frame approvals, and class feedback.',
-                critic_title: 'Critic',
-                critic_sub: 'Star ratings, feedback, and bug reports submitted by class users.',
-                avg_rating_label: 'Average Web Rating',
-                critic_empty: 'No feedback, criticism, or bug reports submitted yet.',
             },
             ja: {
                 splash_sub: 'XI RPL 1の時間割とクラスルームを読み込んでいます...',
@@ -863,31 +887,6 @@
                 nav_siswa: '生徒',
                 nav_profile: 'プロフィール',
                 nav_pengaturan: '設定',
-                settings_title: '表示設定',
-                settings_sub: 'カラーテーマ、グラフィックスタイル、アニメーション、効果音、言語をカスタマイズします。',
-                dark_theme_label: 'ダークテーマ（グラデーション）',
-                light_theme_label: 'ライトテーマ（グラデーション）',
-                font_style_label: 'フォントスタイル',
-                lang_label: '言語',
-                sfx_label: '効果音 (SFX)',
-                sfx_on: 'オン',
-                sfx_off: 'ミュート',
-                easter_title: 'シークレットコード 🎁',
-                easter_sub: 'XI RPL 1の秘密コードを入力して隠し機能を開放しよう！',
-                klaim_btn: '適用',
-                saran_btn: 'ご意見・バグ報告',
-                saran_sub: '星評価（4.5などの小数も可）、コメント、バグの画像・動画を送信できます。',
-                rating_label: 'Web評価 (0.0 – 5.0)',
-                rating_hint: 'スライダーまたは4.5、3.4などの数値を入力してください。',
-                komentar_label: 'コメント / ご意見 / バグ詳細',
-                lampiran_bug_label: 'バグ画像・動画の添付（複数選択可）',
-                kirim_saran_btn: '管理者に送信',
-                ap_title: '管理者パネル (AP)',
-                ap_sub: 'アカウント承認、権限管理、生徒フレーム承認、フィードバックを確認します。',
-                critic_title: 'フィードバック',
-                critic_sub: 'クラスメンバーからの評価、意見、バグ報告一覧。',
-                avg_rating_label: '平均評価',
-                critic_empty: 'まだフィードバックやバグ報告はありません。',
             },
             ru: {
                 splash_sub: 'Загрузка расписания и класса XI RPL 1...',
@@ -897,31 +896,6 @@
                 nav_siswa: 'Ученики',
                 nav_profile: 'Профиль',
                 nav_pengaturan: 'Настройки',
-                settings_title: 'Настройки отображения',
-                settings_sub: 'Настройте цветовую тему, стиль графики, анимацию, звуковые эффекты и язык.',
-                dark_theme_label: 'Тёмная тема (Градиент)',
-                light_theme_label: 'Светлая тема (Градиент)',
-                font_style_label: 'Шрифт',
-                lang_label: 'Язык',
-                sfx_label: 'Звуковые эффекты (SFX)',
-                sfx_on: 'Вкл',
-                sfx_off: 'Без звука',
-                easter_title: 'Секретный код (Пасхалка) 🎁',
-                easter_sub: 'Есть секретный код класса XI RPL 1? Введите его здесь!',
-                klaim_btn: 'Активировать',
-                saran_btn: 'Отзыв и отчёт об ошибке',
-                saran_sub: 'Поставьте оценку (можно дробную, например 4.5), оставьте комментарий или прикрепите фото/видео.',
-                rating_label: 'Оценка сайта (0.0 – 5.0)',
-                rating_hint: 'Передвиньте ползунок или введите число, например 4.5 или 3.4.',
-                komentar_label: 'Комментарий / Предложение / Описание ошибки',
-                lampiran_bug_label: 'Фото / видео ошибки (можно несколько файлов)',
-                kirim_saran_btn: 'Отправить администратору',
-                ap_title: 'Панель администратора (AP)',
-                ap_sub: 'Управление аккаунтами, ролями, рамками учеников и отзывами класса XI RPL 1.',
-                critic_title: 'Отзывы',
-                critic_sub: 'Оценки, предложения и отчёты об ошибках от пользователей класса.',
-                avg_rating_label: 'Средняя оценка сайта',
-                critic_empty: 'Отзывов и отчётов об ошибках пока нет.',
             }
         };
 
@@ -935,19 +909,10 @@
                 'Rabu': '水曜日',
                 'Kamis': '木曜日',
                 'Jumat': '金曜日',
-                'Catatan': 'メモ',
-                'Tugas': '課題',
-                'PR': '宿題',
-                'Event': 'イベント',
                 'Tenggat': '締切間近',
                 'Deadline': '締切',
                 'Selesai': '完了',
                 'Reset': 'リセット',
-                'Tambah Siswa': '生徒を追加',
-                '+ Tambah Siswa': '+ 生徒を追加',
-                'Anggota Kelas XI RPL 1': 'XI RPL 1 クラスメンバー',
-                'Manajemen Akun Pengguna': 'ユーザーアカウント管理',
-                'Persetujuan Ganti Bingkai Siswa': '生徒フレーム変更の承認',
             },
             ru: {
                 'Jadwal Pelajaran XI RPL 1': 'Расписание уроков XI RPL 1',
@@ -958,19 +923,10 @@
                 'Rabu': 'Среда',
                 'Kamis': 'Четверг',
                 'Jumat': 'Пятница',
-                'Catatan': 'Заметка',
-                'Tugas': 'Задание',
-                'PR': 'ДЗ',
-                'Event': 'Событие',
                 'Tenggat': 'Срок',
                 'Deadline': 'Дедлайн',
                 'Selesai': 'Готово',
                 'Reset': 'Сброс',
-                'Tambah Siswa': 'Добавить ученика',
-                '+ Tambah Siswa': '+ Добавить ученика',
-                'Anggota Kelas XI RPL 1': 'УЧЕНИКИ КЛАССА XI RPL 1',
-                'Manajemen Akun Pengguna': 'Управление аккаунтами',
-                'Persetujuan Ganti Bingkai Siswa': 'Одобрение смены рамки ученика',
             }
         };
 
@@ -1016,6 +972,7 @@
             });
 
             applyPhraseTranslation(lang);
+            shortenSubjectsForMobileAndTablet();
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -1023,6 +980,10 @@
             enhanceScheduleMobileLayout();
             renderOnlineMemberPill();
             syncScheduleMarkersAndSourceTab();
+        });
+
+        window.addEventListener('resize', () => {
+            shortenSubjectsForMobileAndTablet();
         });
     </script>
 </body>
