@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Feedback;
+use App\Models\FrameChangeRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,12 @@ class AdminUserController extends Controller
 
         $feedbacks = Feedback::with('user')->latest()->get();
 
-        return view('admin.users', compact('users', 'feedbacks'));
+        $frameRequests = FrameChangeRequest::with('user')
+            ->where('status', 'pending')
+            ->latest()
+            ->get();
+
+        return view('admin.users', compact('users', 'feedbacks', 'frameRequests'));
     }
 
     public function approve(User $user)
@@ -55,7 +61,6 @@ class AdminUserController extends Controller
         }
 
         try {
-            // Pastikan tipe kolom role di MySQL mendukung seluruh nilai role
             if (DB::getDriverName() === 'mysql' && Schema::hasColumn('users', 'role')) {
                 DB::statement("ALTER TABLE `users` MODIFY COLUMN `role` VARCHAR(50) NOT NULL DEFAULT 'murid'");
             }

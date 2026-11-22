@@ -1,237 +1,117 @@
 <x-app-layout>
-    <style>
-        @keyframes goldRingGlow {
-            0%, 100% { box-shadow: 0 0 10px rgba(251, 191, 36, 0.85), 0 0 20px rgba(245, 158, 11, 0.45); }
-            50% { box-shadow: 0 0 16px rgba(253, 224, 71, 1), 0 0 28px rgba(251, 191, 36, 0.75); }
-        }
-        @keyframes pptsBlueGlow {
-            0%, 100% { box-shadow: 0 0 8px rgba(59, 130, 246, 0.8), 0 0 16px rgba(37, 99, 235, 0.45); }
-            50% { box-shadow: 0 0 14px rgba(96, 165, 250, 1), 0 0 24px rgba(59, 130, 246, 0.7); }
-        }
-
-        .org-circle {
-            width: 48px;
-            height: 48px;
-            border-radius: 50%;
-            object-fit: cover;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            transition: transform 0.2s ease;
-        }
-        .org-item:hover .org-circle {
-            transform: scale(1.08);
-        }
-
-        .avatar-default-bg {
-            background: #2b4c65;
-            border: 1.5px solid rgba(96, 165, 250, 0.3);
-            color: #5eead4;
-        }
-
-        /* Bingkai Lingkaran Emas Archie L */
-        .ring-archie-gold {
-            border: 2.5px solid #fbbf24 !important;
-            animation: goldRingGlow 2.4s infinite ease-in-out;
-        }
-
-        /* Bingkai Lingkaran Biru (PPTS) */
-        .ring-ppts-blue {
-            border: 3px solid #3b82f6 !important;
-            animation: pptsBlueGlow 2.4s infinite ease-in-out;
-        }
-
-        /* Bingkai Lingkaran Biru Tua (Ex-PPTS) */
-        .ring-exppts-darkblue {
-            border: 3px solid #1e3a8a !important;
-            box-shadow: 0 0 8px rgba(30, 58, 138, 0.85), inset 0 0 4px rgba(29, 78, 216, 0.5);
-        }
-
-        /* Flex Center: 8 kolom per baris & baris terakhir otomatis di tengah */
-        .org-members-flex {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 16px 14px;
-            max-width: 780px;
-            margin: 0 auto;
-        }
-        .org-member-slot {
-            width: 82px;
-            flex: 0 0 82px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .org-member-name {
-            width: 100%;
-            font-size: 9.5px;
-            font-weight: 700;
-            margin-top: 5px;
-            line-height: 1.2;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            text-align: center;
-        }
-    </style>
-
     @php
-        $isAuthority = in_array(Auth::user()->role, ['admin', 'guru', 'ketua_kelas', 'wakil_ketua']);
-
-        $formatShortName = function ($fullName) {
-            $parts = preg_split('/\s+/', trim($fullName));
-            if (count($parts) <= 1) {
-                return $parts[0];
-            }
-            $first = $parts[0];
-            if (mb_strlen($first) > 9) {
-                $first = mb_substr($first, 0, 7) . '...';
-            }
-            $initials = '';
-            for ($i = 1; $i < count($parts); $i++) {
-                $initials .= mb_strtoupper(mb_substr($parts[$i], 0, 1));
-            }
-            return $first . ' ' . $initials;
-        };
+        $students = $students ?? \App\Models\Student::orderBy('id')->get();
+        $myPendingFrame = \App\Models\FrameChangeRequest::where('user_id', auth()->id())->where('status', 'pending')->latest()->first();
+        $latestApprovedFrame = \App\Models\FrameChangeRequest::where('status', 'approved')->latest()->first();
     @endphp
 
-    @if(session('success'))
-        <div class="mb-3 p-2.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-semibold max-w-3xl mx-auto">
-            {{ session('success') }}
-        </div>
-    @endif
+    <div class="max-w-6xl mx-auto space-y-6">
+        @if(session('success'))
+            <div class="p-3.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs sm:text-sm font-semibold">
+                {{ session('success') }}
+            </div>
+        @endif
 
-    <!-- Tombol + Tambah Siswa di Pojok Kanan Atas (Tanpa Legenda PPTS/Ex-PPTS) -->
-    @if($isAuthority)
-        <div class="max-w-4xl mx-auto flex justify-end px-2 mb-1">
-            <a href="{{ route('students.create') }}"
-               class="px-3.5 py-1 rounded-full text-[11px] font-bold theme-primary shadow-sm hover:opacity-90 transition">
-                + Tambah Siswa
+        @if($errors->any())
+            <div class="p-3.5 rounded-xl bg-red-500/20 text-red-300 border border-red-500/40 text-xs sm:text-sm font-semibold">
+                {{ $errors->first() }}
+            </div>
+        @endif
+
+        <!-- Header Daftar Siswa -->
+        <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-6 border theme-border flex flex-wrap items-center justify-between gap-3">
+            <div>
+                <h1 class="text-lg sm:text-2xl font-extrabold">Anggota Kelas XI RPL 1</h1>
+                <p class="text-xs sm:text-sm opacity-75 mt-0.5">Daftar siswa dan struktur pengurus kelas XI RPL 1.</p>
+            </div>
+            <a href="{{ route('dashboard') }}" class="px-4 py-2 rounded-xl text-xs font-extrabold border theme-border theme-soft hover:opacity-90">
+                ← Kembali ke Jadwal Utama
             </a>
         </div>
-    @endif
 
-    <!-- Tech Tree Struktur Organisasi Kelas -->
-    <div class="px-2 text-center select-none">
-
-        <!-- 1. WALI KELAS -->
-        @if($walas)
-            <div class="flex flex-col items-center">
-                <a href="{{ route('students.show', $walas->id) }}" class="org-item inline-block">
-                    @if($walas->foto)
-                        <img src="{{ asset('storage/' . $walas->foto) }}" alt="{{ $walas->nama }}"
-                             class="org-circle border-2 theme-border shadow-md">
-                    @else
-                        <div class="org-circle avatar-default-bg shadow-md">
-                            <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-                            </svg>
-                        </div>
-                    @endif
-                    <div class="text-[10px] font-bold mt-1">{{ $walas->nama }}</div>
-                </a>
-
-                <!-- Garis Tech Tree T-Branch -->
-                <div style="width: 1.5px; height: 14px; background: rgba(148, 163, 184, 0.45); margin-top: 4px;"></div>
-                <div style="width: 220px; height: 1.5px; background: rgba(148, 163, 184, 0.45);"></div>
-            </div>
-        @endif
-
-        <!-- 2. KETUA KELAS & WAKIL KETUA KELAS -->
-        @if($ketua || $wakil)
-            <div style="display: flex; justify-content: center; align-items: flex-start; gap: 56px; margin: 10px auto 16px auto;">
-                @if($ketua)
-                    <a href="{{ route('students.show', $ketua->id) }}" class="org-item flex flex-col items-center" style="min-width: 135px;">
-                        <span style="padding: 4px 16px; border-radius: 9999px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.05em;"
-                              class="uppercase border theme-border theme-soft mb-2 whitespace-nowrap">
-                            Ketua Kelas
-                        </span>
-                        @if($ketua->foto)
-                            <img src="{{ asset('storage/' . $ketua->foto) }}" alt="{{ $ketua->nama }}"
-                                 class="org-circle border-2 theme-border shadow-md">
-                        @else
-                            <div class="org-circle avatar-default-bg shadow-md">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-                                </svg>
-                            </div>
-                        @endif
-                        <div class="text-[10.5px] font-bold mt-1">{{ $ketua->nama }}</div>
-                    </a>
-                @endif
-
-                @if($wakil)
-                    <a href="{{ route('students.show', $wakil->id) }}" class="org-item flex flex-col items-center" style="min-width: 135px;">
-                        <span style="padding: 4px 16px; border-radius: 9999px; font-size: 9.5px; font-weight: 800; letter-spacing: 0.05em;"
-                              class="uppercase border theme-border theme-soft mb-2 whitespace-nowrap">
-                            Wakil Ketua Kelas
-                        </span>
-                        @if($wakil->foto)
-                            <img src="{{ asset('storage/' . $wakil->foto) }}" alt="{{ $wakil->nama }}"
-                                 class="org-circle border-2 theme-border shadow-md">
-                        @else
-                            <div class="org-circle avatar-default-bg shadow-md">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-                                </svg>
-                            </div>
-                        @endif
-                        <div class="text-[10.5px] font-bold mt-1">{{ $wakil->nama }}</div>
-                    </a>
-                @endif
-            </div>
-        @endif
-
-        <!-- 3. ANGGOTA KELAS XI RPL 1 -->
-        <h2 class="text-[11px] font-extrabold uppercase tracking-wider mb-4">
-            Anggota Kelas XI RPL 1
-        </h2>
-
-        <div class="org-members-flex">
-            @foreach($murid as $s)
+        <!-- Grid Kartu Siswa -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            @forelse($students as $student)
                 @php
-                    $isArchie = stripos($s->nama, 'Archie Lionel') !== false;
-                    $isPpts   = $s->jabatan === 'ppts';
-                    $isExPpts = $s->jabatan === 'ex_ppts';
-
-                    $ringClass = '';
-                    if ($isArchie) {
-                        $ringClass = 'ring-archie-gold';
-                    } elseif ($isPpts) {
-                        $ringClass = 'ring-ppts-blue';
-                    } elseif ($isExPpts) {
-                        $ringClass = 'ring-exppts-darkblue';
-                    }
-
-                    $displayName = $isArchie ? 'Archie L' : $formatShortName($s->nama);
+                    $activeFrame = $student->frame_path ?: ($latestApprovedFrame->frame_path ?? null);
                 @endphp
-
-                <a href="{{ route('students.show', $s->id) }}"
-                   class="org-item org-member-slot">
-                    <div class="relative inline-block">
-                        @if($s->foto)
-                            <img src="{{ asset('storage/' . $s->foto) }}" alt="{{ $s->nama }}"
-                                 class="org-circle border theme-border {{ $ringClass }}">
+                <div class="theme-card rounded-2xl shadow-md p-4 border theme-border flex items-center gap-3.5">
+                    <div class="relative w-16 h-16 shrink-0 rounded-2xl overflow-hidden border-2 theme-border theme-soft flex items-center justify-center">
+                        @if($activeFrame)
+                            <img src="{{ asset('storage/' . $activeFrame) }}" alt="Bingkai {{ $student->name }}" class="w-full h-full object-cover">
                         @else
-                            <div class="org-circle avatar-default-bg {{ $ringClass }}">
-                                <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
-                                </svg>
-                            </div>
-                        @endif
-
-                        @if($isArchie)
-                            <span style="position: absolute; top: -9px; right: -4px; font-size: 13px;">👑</span>
+                            <span class="text-lg font-extrabold opacity-80">{{ strtoupper(substr($student->name ?? 'S', 0, 1)) }}</span>
                         @endif
                     </div>
 
-                    <span class="org-member-name {{ $isArchie ? 'text-amber-300' : '' }}">
-                        {{ $displayName }}
+                    <div class="min-w-0 flex-1">
+                        <div class="font-extrabold text-sm truncate">{{ $student->name }}</div>
+                        @if(!empty($student->nis))
+                            <div class="text-xs opacity-75">NIS: {{ $student->nis }}</div>
+                        @endif
+                        @if(!empty($student->jabatan))
+                            <span class="inline-block mt-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold theme-primary">
+                                {{ $student->jabatan }}
+                            </span>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="theme-card rounded-2xl p-6 border theme-border col-span-full text-center text-xs sm:text-sm opacity-75">
+                    Belum ada data siswa yang tercatat.
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Form Pengajuan Ganti Gambar Bingkai Siswa (Wajib Persetujuan Admin) -->
+        <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-6 border theme-border space-y-4">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                    <h2 class="text-base sm:text-lg font-extrabold">🖼️ Ganti Gambar Bingkai Siswa</h2>
+                    <p class="text-xs opacity-75">Murid bisa mengajukan gambar bingkai siswa. Gambar baru baru diproses dan aktif setelah mendapat izin / persetujuan Admin.</p>
+                </div>
+
+                @if($myPendingFrame)
+                    <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-amber-500/20 text-amber-300 border border-amber-400/40">
+                        ⏳ Menunggu Izin Admin
                     </span>
-                </a>
-            @endforeach
+                @elseif($latestApprovedFrame)
+                    <span class="px-3 py-1 rounded-full text-xs font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/40">
+                        ✅ Bingkai Disetujui Admin
+                    </span>
+                @endif
+            </div>
+
+            @if($myPendingFrame)
+                <div class="flex items-center gap-3 p-3 rounded-xl border border-amber-400/40 bg-amber-500/10 text-xs">
+                    <img src="{{ asset('storage/' . $myPendingFrame->frame_path) }}" alt="Bingkai Menunggu Izin" class="w-12 h-12 rounded-xl object-cover border border-amber-400/40">
+                    <div>
+                        <div class="font-extrabold text-amber-300">Permintaan Bingkai Sedang Ditinjau Admin</div>
+                        <div class="opacity-80">Belum diterapkan ke bingkai siswa sebelum Admin menekan Setujui.</div>
+                    </div>
+                </div>
+            @endif
+
+            <form action="{{ route('siswa.frame.request') }}" method="POST" enctype="multipart/form-data" class="grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
+                @csrf
+
+                @if($students->isNotEmpty())
+                    <select name="student_id" class="rounded-xl border px-3 py-2.5 text-xs font-bold">
+                        <option value="">-- Pilih Siswa (Opsional) --</option>
+                        @foreach($students as $st)
+                            <option value="{{ $st->id }}">{{ $st->name }}</option>
+                        @endforeach
+                    </select>
+                @endif
+
+                <input type="file" name="frame_image" accept="image/*" required
+                       class="rounded-xl border p-2 text-xs">
+
+                <button type="submit"
+                        class="px-4 py-2.5 rounded-xl text-xs sm:text-sm font-extrabold theme-primary shadow-md hover:opacity-90 transition">
+                    Ajukan Ganti Bingkai
+                </button>
+            </form>
         </div>
     </div>
 </x-app-layout>

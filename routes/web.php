@@ -7,6 +7,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ScheduleController;
 use App\Http\Controllers\StudentController;
 use App\Http\Controllers\SubjectPostController;
+use App\Http\Controllers\FrameRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -55,6 +56,10 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::view('/pengaturan', 'settings')->name('settings');
+
+    Route::post('/siswa/bingkai-request', [FrameRequestController::class, 'store'])->name('siswa.frame.request');
+    Route::post('/admin/frame-requests/{frameRequest}/approve', [FrameRequestController::class, 'approve'])->name('admin.frame.approve');
+    Route::post('/admin/frame-requests/{frameRequest}/reject', [FrameRequestController::class, 'reject'])->name('admin.frame.reject');
 });
 
 require __DIR__.'/auth.php';

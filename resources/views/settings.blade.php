@@ -53,7 +53,7 @@
         <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-8 border theme-border space-y-5">
             <div>
                 <h1 class="text-lg sm:text-2xl font-extrabold" data-i18n="settings_title">Pengaturan Tampilan</h1>
-                <p class="text-xs sm:text-sm opacity-75 mt-0.5" data-i18n="settings_sub">Sesuaikan tema gradien warna, gaya huruf, suara efek, animasi, dan bahasa aplikasi.</p>
+                <p class="text-xs sm:text-sm opacity-75 mt-0.5" data-i18n="settings_sub">Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, dan bahasa aplikasi.</p>
             </div>
 
             <!-- Tema Gelap (Gradien) -->
@@ -93,6 +93,51 @@
                             <span class="truncate">{{ $t['name'] }}</span>
                         </button>
                     @endforeach
+                </div>
+            </div>
+
+            <!-- Section Grafik (3 Gaya + Toggle Animasi di Legacy & Minimalist) -->
+            <div class="space-y-3 pt-2 border-t border-gray-200/20">
+                <div>
+                    <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85">📊 Grafik</h2>
+                    <p class="text-[11px] opacity-75 mt-0.5">Pilih <b>Legacy</b> (UI saat ini), <b>Minimalist</b> (style kantoran), atau <b>Style Simple</b> (otomatis mematikan animasi UI).</p>
+                </div>
+
+                <div class="grid-3-cols">
+                    <button type="button" onclick="selectGraphicStyle('legacy')" data-graphic-btn="legacy"
+                            class="setting-pill rounded-2xl px-4 py-2.5 text-xs font-extrabold text-left">
+                        <div>🏛️ Legacy</div>
+                        <div class="text-[10px] font-normal opacity-75">UI style sekarang</div>
+                    </button>
+
+                    <button type="button" onclick="selectGraphicStyle('minimalist')" data-graphic-btn="minimalist"
+                            class="setting-pill rounded-2xl px-4 py-2.5 text-xs font-extrabold text-left">
+                        <div>💼 Minimalist</div>
+                        <div class="text-[10px] font-normal opacity-75">Style kantoran bersih & tegas</div>
+                    </button>
+
+                    <button type="button" onclick="selectGraphicStyle('simple')" data-graphic-btn="simple"
+                            class="setting-pill rounded-2xl px-4 py-2.5 text-xs font-extrabold text-left">
+                        <div>⚡ Style Simple</div>
+                        <div class="text-[10px] font-normal opacity-75">Otomatis matikan animasi UI</div>
+                    </button>
+                </div>
+
+                <div id="graphic-anim-control" class="p-3.5 rounded-2xl border theme-border theme-soft flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                        <div class="text-xs font-extrabold">🎬 Animasi UI</div>
+                        <div id="graphic-anim-desc" class="text-[11px] opacity-75">Atur animasi aktif atau nonaktif untuk gaya tampilan terpilih.</div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button type="button" onclick="selectAnim('on')" data-anim-btn="on"
+                                class="setting-pill rounded-full px-3.5 py-1.5 text-xs font-extrabold">
+                            ✨ Aktif
+                        </button>
+                        <button type="button" onclick="selectAnim('off')" data-anim-btn="off"
+                                class="setting-pill rounded-full px-3.5 py-1.5 text-xs font-extrabold">
+                            🔇 Mati
+                        </button>
+                    </div>
                 </div>
             </div>
 
@@ -138,34 +183,18 @@
                 </div>
             </div>
 
-            <!-- Efek Suara (SFX) & Animasi Performa -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                    <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2" data-i18n="sfx_label">Efek Suara (SFX)</h2>
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <button type="button" onclick="selectSfx('active')" data-sfx-btn="active"
-                                class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
-                            🔊 <span data-i18n="sfx_on">Aktif</span>
-                        </button>
-                        <button type="button" onclick="selectSfx('muted')" data-sfx-btn="muted"
-                                class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
-                            🔇 <span data-i18n="sfx_off">Senyap</span>
-                        </button>
-                    </div>
-                </div>
-
-                <div>
-                    <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2" data-i18n="anim_label">Animasi & Efek Visual</h2>
-                    <div class="grid grid-cols-2 gap-2.5">
-                        <button type="button" onclick="selectAnim('on')" data-anim-btn="on"
-                                class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
-                            ✨ <span data-i18n="anim_on">Aktif</span>
-                        </button>
-                        <button type="button" onclick="selectAnim('off')" data-anim-btn="off"
-                                class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
-                            ⚡ <span data-i18n="anim_off">Mati (Ringan)</span>
-                        </button>
-                    </div>
+            <!-- Efek Suara (SFX) -->
+            <div>
+                <h2 class="text-xs font-extrabold uppercase tracking-wider opacity-85 mb-2" data-i18n="sfx_label">Efek Suara (SFX)</h2>
+                <div class="grid grid-cols-2 gap-2.5">
+                    <button type="button" onclick="selectSfx('active')" data-sfx-btn="active"
+                            class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
+                        🔊 <span data-i18n="sfx_on">Aktif</span>
+                    </button>
+                    <button type="button" onclick="selectSfx('muted')" data-sfx-btn="muted"
+                            class="setting-pill w-full rounded-full px-4 py-2 text-xs font-bold text-center">
+                        🔇 <span data-i18n="sfx_off">Senyap</span>
+                    </button>
                 </div>
             </div>
 
@@ -302,23 +331,68 @@
             });
         }
 
+        function syncGraphicControlUI() {
+            const curGraphic = localStorage.getItem('app_graphic') || 'legacy';
+            const curAnim    = curGraphic === 'simple' ? 'off' : (localStorage.getItem('app_anim') || 'on');
+
+            document.querySelectorAll('[data-graphic-btn]').forEach(b => {
+                b.classList.toggle('active-pill', b.dataset.graphicBtn === curGraphic);
+            });
+            document.querySelectorAll('[data-anim-btn]').forEach(b => {
+                b.classList.toggle('active-pill', b.dataset.animBtn === curAnim);
+            });
+
+            const descEl = document.getElementById('graphic-anim-desc');
+            if (descEl) {
+                if (curGraphic === 'simple') {
+                    descEl.textContent = 'Style Simple aktif: Animasi UI otomatis dimatikan.';
+                } else if (curGraphic === 'minimalist') {
+                    descEl.textContent = 'Mode Minimalist (Style Kantoran): Anda bisa mengaktifkan atau mematikan animasi UI.';
+                } else {
+                    descEl.textContent = 'Mode Legacy: Anda bisa mengaktifkan atau mematikan animasi UI.';
+                }
+            }
+        }
+
         function refreshActivePills() {
             const curTheme = localStorage.getItem('app_theme') || 'academic-trust';
             const curFont  = localStorage.getItem('app_font') || 'sans';
             const curLang  = localStorage.getItem('app_lang') || 'id';
             const curSfx   = localStorage.getItem('app_sfx') || 'active';
-            const curAnim  = localStorage.getItem('app_anim') || 'on';
 
             document.querySelectorAll('[data-theme-btn]').forEach(b => b.classList.toggle('active-pill', b.dataset.themeBtn === curTheme));
             document.querySelectorAll('[data-font-btn]').forEach(b => b.classList.toggle('active-pill', b.dataset.fontBtn === curFont));
             document.querySelectorAll('[data-lang-btn]').forEach(b => b.classList.toggle('active-pill', b.dataset.langBtn === curLang));
             document.querySelectorAll('[data-sfx-btn]').forEach(b => b.classList.toggle('active-pill', b.dataset.sfxBtn === curSfx));
-            document.querySelectorAll('[data-anim-btn]').forEach(b => b.classList.toggle('active-pill', b.dataset.animBtn === curAnim));
+            syncGraphicControlUI();
         }
 
         function selectTheme(theme) {
             localStorage.setItem('app_theme', theme);
             document.body.setAttribute('data-theme', theme);
+            playSfx('click');
+            refreshActivePills();
+        }
+
+        function selectGraphicStyle(style) {
+            localStorage.setItem('app_graphic', style);
+            document.body.setAttribute('data-graphic', style);
+
+            if (style === 'simple') {
+                localStorage.setItem('app_anim', 'off');
+                document.body.setAttribute('data-anim', 'off');
+            } else {
+                const savedAnim = localStorage.getItem('app_anim') || 'on';
+                document.body.setAttribute('data-anim', savedAnim);
+            }
+
+            playSfx('click');
+            refreshActivePills();
+        }
+
+        function selectAnim(mode) {
+            localStorage.setItem('app_anim', mode);
+            document.body.setAttribute('data-anim', mode);
             playSfx('click');
             refreshActivePills();
         }
@@ -339,13 +413,6 @@
         function selectSfx(mode) {
             localStorage.setItem('app_sfx', mode);
             if (mode === 'active') playSfx('enter');
-            refreshActivePills();
-        }
-
-        function selectAnim(mode) {
-            localStorage.setItem('app_anim', mode);
-            document.body.setAttribute('data-anim', mode);
-            playSfx('click');
             refreshActivePills();
         }
 
