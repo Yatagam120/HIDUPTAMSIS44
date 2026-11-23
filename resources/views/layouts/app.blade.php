@@ -491,39 +491,68 @@
             }
         }
 
-        /* =========================================================
-           KHUSUS MOBILE (<= 640px): NOTIF KECIL, MUAT & ADA TAG TUGAS DLL
+                /* =========================================================
+           KHUSUS MOBILE (<= 640px): BERSIH, LEGA, ANTI-PUSING
            ========================================================= */
         @media (max-width: 640px) {
             nav.main-tamsis-nav > div {
-                padding: 0.4rem 0.45rem !important;
-                gap: 0.35rem !important;
+                padding: 0.45rem 0.65rem !important;
+                gap: 0.45rem !important;
             }
+
+            /* Navbar 1 baris rapi dengan horizontal scroll halus (tidak patah 2 baris) */
             .nav-links-wrap {
                 width: 100%;
                 display: flex !important;
-                flex-wrap: wrap !important;
-                justify-content: flex-start;
-                gap: 3px !important;
+                flex-wrap: nowrap !important;
+                align-items: center !important;
+                justify-content: flex-start !important;
+                gap: 6px !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                padding-bottom: 2px;
+            }
+            .nav-links-wrap::-webkit-scrollbar {
+                display: none;
             }
             .nav-btn-anim {
-                padding: 4px 6px !important;
-                font-size: 9px !important;
-                border-radius: 6px !important;
-                letter-spacing: -0.01em;
+                padding: 6px 11px !important;
+                font-size: 11px !important;
+                border-radius: 9999px !important;
+                letter-spacing: 0 !important;
                 white-space: nowrap !important;
+                flex-shrink: 0 !important;
             }
+
+            /* Ruang konten & tipografi proporsional di HP */
             main.page-animate-in {
-                padding: 0.45rem 0.3rem !important;
+                padding: 0.65rem 0.6rem 1.5rem 0.6rem !important;
             }
+            main.page-animate-in > div {
+                gap: 0.75rem !important;
+            }
+            main.page-animate-in .theme-card {
+                padding: 0.85rem !important;
+                border-radius: 14px !important;
+            }
+            main.page-animate-in h1 {
+                font-size: 1.05rem !important;
+                line-height: 1.3 !important;
+            }
+            main.page-animate-in h2 {
+                font-size: 0.95rem !important;
+                line-height: 1.3 !important;
+            }
+
             .grid-5-cols,
             .grid-4-cols {
                 grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-                gap: 0.45rem !important;
+                gap: 0.5rem !important;
             }
             .grid-3-cols {
                 grid-template-columns: 1fr !important;
-                gap: 0.45rem !important;
+                gap: 0.5rem !important;
             }
 
             .filter-bar-mobile-grid {
@@ -536,37 +565,45 @@
             .filter-bar-mobile-grid a {
                 width: 100% !important;
                 justify-content: center !important;
-                padding: 6px 8px !important;
+                padding: 7px 8px !important;
                 font-size: 11px !important;
                 border-radius: 10px !important;
                 margin: 0 !important;
             }
 
+            /* Tabel Jadwal HP: Horizontal swipe lega + kolom Hari sticky di kiri */
             .timetable-wrap-scroll {
-                overflow-x: hidden !important;
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch;
                 width: 100% !important;
+                border-radius: 10px;
             }
             .timetable-grid {
-                width: 100% !important;
-                min-width: 0 !important;
-                max-width: 100% !important;
+                width: max-content !important;
+                min-width: 620px !important;
                 table-layout: fixed !important;
                 border-collapse: separate !important;
-                border-spacing: 1.5px !important;
+                border-spacing: 3px !important;
             }
             .timetable-grid th,
             .timetable-grid td {
-                font-size: 6px !important;
-                padding: 1px !important;
-                line-height: 1.1 !important;
+                font-size: 9.5px !important;
+                padding: 2px !important;
+                line-height: 1.2 !important;
                 vertical-align: middle !important;
-                overflow: hidden !important;
             }
             .timetable-grid th:first-child,
             .timetable-grid td:first-child {
-                width: 28px !important;
-                font-size: 6.5px !important;
+                position: sticky !important;
+                left: 0 !important;
+                z-index: 10 !important;
+                width: 52px !important;
+                min-width: 52px !important;
+                background: #141419 !important;
+                font-size: 9.5px !important;
+                font-weight: 800 !important;
                 text-align: center !important;
+                border-radius: 6px;
             }
             .timetable-grid a,
             .timetable-grid .subject-box {
@@ -577,17 +614,15 @@
                 justify-content: center !important;
                 text-align: center !important;
                 width: 100% !important;
-                min-height: 42px !important;
-                height: 42px !important;
-                padding: 8px 1px 2px 1px !important;
-                gap: 1.5px !important;
-                border-radius: 5px !important;
-                font-size: 6px !important;
+                min-height: 46px !important;
+                height: 46px !important;
+                padding: 6px 4px !important;
+                gap: 3px !important;
+                border-radius: 8px !important;
+                font-size: 10px !important;
                 font-weight: 800 !important;
-                line-height: 1.05 !important;
-                letter-spacing: -0.02em !important;
+                line-height: 1.15 !important;
                 white-space: nowrap !important;
-                overflow: hidden !important;
             }
             .timetable-grid a > *:not(span.mobile-notif-dot):not(span.mobile-label-only):not(span.mobile-type-tag),
             .timetable-grid .subject-box > *:not(span.mobile-notif-dot):not(span.mobile-label-only):not(span.mobile-type-tag) {
@@ -598,42 +633,33 @@
                 display: block !important;
                 width: 100% !important;
                 overflow: hidden !important;
-                text-overflow: clip !important;
+                text-overflow: ellipsis !important;
                 white-space: nowrap !important;
                 text-align: center !important;
-                font-size: 6px !important;
+                font-size: 10px !important;
             }
             .mobile-type-tag {
                 display: inline-block !important;
-                font-size: 4.7px !important;
+                font-size: 7.5px !important;
                 font-weight: 800 !important;
                 line-height: 1 !important;
-                padding: 1px 2.5px !important;
-                border-radius: 3px !important;
+                padding: 1.5px 5px !important;
+                border-radius: 4px !important;
                 background: rgba(250, 204, 21, 0.22);
                 color: #fde047;
-                border: 0.5px solid rgba(250, 204, 21, 0.5);
-                letter-spacing: 0.02em;
-                max-width: 100%;
-                overflow: hidden;
-                text-overflow: clip;
+                border: 0.5px solid rgba(250, 204, 21, 0.55);
             }
             .timetable-grid a span.rounded-full,
             .timetable-grid .subject-box span.rounded-full {
                 position: absolute !important;
-                top: 1.5px !important;
-                right: 1.5px !important;
-                left: auto !important;
-                bottom: auto !important;
+                top: 4px !important;
+                right: 4px !important;
                 margin: 0 !important;
-                width: 4.2px !important;
-                height: 4.2px !important;
-                min-width: 4.2px !important;
-                min-height: 4.2px !important;
-                max-width: 4.2px !important;
-                max-height: 4.2px !important;
+                width: 6px !important;
+                height: 6px !important;
+                min-width: 6px !important;
+                min-height: 6px !important;
                 padding: 0 !important;
-                box-shadow: none !important;
                 z-index: 5 !important;
             }
         }
@@ -680,22 +706,35 @@
                             ]);
                         }
 
-                        if ($tStatus === 'approved' && in_array($tType, ['tugas', 'pr'], true) && !$isDone) {
-                            $pendingTaskCount++;
+                        if ($tStatus === 'approved' && in_array($tType, ['tugas', 'pr', 'event'], true) && !$isDone) {
+                            if (in_array($tType, ['tugas', 'pr'], true)) {
+                                $pendingTaskCount++;
+                            }
                             $dueVal = $ti->due_date ?? $ti->deadline ?? $ti->tanggal_deadline ?? null;
+                            $dotColor = '#10b981';
+                            $subLabel = $subjName . ' • ' . strtoupper($tType);
+                            $titlePrefix = strtoupper($tType) . ': ';
+
                             if ($dueVal) {
                                 try {
                                     $diff = now()->startOfDay()->diffInDays(\Carbon\Carbon::parse($dueVal)->startOfDay(), false);
-                                    if ($diff <= 2) {
-                                        $navNotifs->push([
-                                            'title' => ($diff < 0 ? 'LEWAT TENGGAT: ' : 'Tenggat Dekat: ') . ($ti->title ?? $ti->judul ?? 'Tugas'),
-                                            'sub'   => $subjName . ' • ' . \Carbon\Carbon::parse($dueVal)->format('d M Y'),
-                                            'url'   => route('subjects.show', ['subject' => $ti->subject_id, 'tab' => $tType]),
-                                            'dot'   => $diff < 0 ? '#ef4444' : '#facc15',
-                                        ]);
+                                    $subLabel .= ' • ' . \Carbon\Carbon::parse($dueVal)->format('d M Y');
+                                    if ($diff < 0) {
+                                        $dotColor = '#ef4444';
+                                        $titlePrefix = 'LEWAT TENGGAT: ';
+                                    } elseif ($diff <= 2) {
+                                        $dotColor = '#facc15';
+                                        $titlePrefix = 'Tenggat Dekat: ';
                                     }
                                 } catch (\Throwable $e) {}
                             }
+
+                            $navNotifs->push([
+                                'title' => $titlePrefix . ($ti->title ?? $ti->judul ?? 'Tugas'),
+                                'sub'   => $subLabel,
+                                'url'   => route('subjects.show', ['subject' => $ti->subject_id, 'tab' => $tType]),
+                                'dot'   => $dotColor,
+                            ]);
                         }
                     }
                 }
@@ -981,13 +1020,54 @@
             return cleaned.length > 6 ? cleaned.slice(0, 5).toUpperCase() : cleaned;
         }
 
+        @php
+            $mobileSubjectNotifMap = [];
+            if (isset($allItems) && $authUser) {
+                foreach ($allItems as $mi) {
+                    if (($mi->status ?? 'approved') !== 'approved') continue;
+                    $mType = strtolower(trim((string) ($mi->category ?? $mi->kategori ?? $mi->type ?? $mi->jenis ?? 'catatan')));
+                    $mDoneArr = is_array($mi->completed_by ?? null)
+                        ? $mi->completed_by
+                        : (json_decode((string) ($mi->completed_by ?? '[]'), true) ?: []);
+                    $mIsDone = in_array((int) $authUser->id, array_map('intval', $mDoneArr), true);
+                    if ($mIsDone && in_array($mType, ['tugas', 'pr'], true)) continue;
+
+                    $sid = (string) $mi->subject_id;
+                    $tagMap = ['pr' => 'PR', 'tugas' => 'TGS', 'event' => 'EVT', 'catatan' => 'CTT'];
+                    $prioMap = ['PR' => 4, 'TGS' => 3, 'EVT' => 2, 'CTT' => 1];
+                    $candTag = $tagMap[$mType] ?? '';
+                    if ($candTag) {
+                        $curTag = $mobileSubjectNotifMap[$sid]['tag'] ?? '';
+                        if (($prioMap[$candTag] ?? 0) >= ($prioMap[$curTag] ?? 0)) {
+                            $dotHex = $candTag === 'CTT' ? '#38bdf8' : '#facc15';
+                            $dueM = $mi->due_date ?? $mi->deadline ?? null;
+                            if ($dueM) {
+                                try {
+                                    if (now()->startOfDay()->diffInDays(\Carbon\Carbon::parse($dueM)->startOfDay(), false) < 0) {
+                                        $dotHex = '#ef4444';
+                                    }
+                                } catch (\Throwable $e) {}
+                            }
+                            $mobileSubjectNotifMap[$sid] = ['tag' => $candTag, 'dot' => $dotHex, 'tab' => $mType];
+                        }
+                    }
+                }
+            }
+        @endphp
+        const SERVER_SUBJECT_NOTIFS = @json($mobileSubjectNotifMap);
+
         function detectMobileTypeTag(rawHtml, href) {
+            const matchId = (href || '').match(/\/(?:mapel|subject)\/(\d+)/i);
+            if (matchId && SERVER_SUBJECT_NOTIFS[matchId[1]]) {
+                return SERVER_SUBJECT_NOTIFS[matchId[1]].tag;
+            }
             const combined = `${rawHtml || ''} ${href || ''}`.toLowerCase();
-            if (combined.includes('tab=pr') || /\bpr\b/.test(combined)) return 'PR';
-            if (combined.includes('tab=tugas') || combined.includes('tugas')) return 'TGS';
-            if (combined.includes('tab=event') || combined.includes('event')) return 'EVT';
-            if (combined.includes('tab=catatan') || combined.includes('catatan')) return 'CTT';
-            if (combined.includes('bg-yellow-') || combined.includes('bg-amber-') || combined.includes('tenggat')) return 'TGS';
+            if (combined.includes('tab=pr') || combined.includes('notif=pr')) return 'PR';
+            if (combined.includes('tab=tugas') || combined.includes('notif=tugas')) return 'TGS';
+            if (combined.includes('tab=event') || combined.includes('notif=event')) return 'EVT';
+            if (combined.includes('tab=catatan') || combined.includes('notif=catatan')) return 'CTT';
+            if (combined.includes('bg-red-')) return 'DL';
+            if (combined.includes('bg-yellow-') || combined.includes('bg-amber-')) return 'TGS';
             return '';
         }
 
@@ -1015,7 +1095,11 @@
                 }
                 labelSpan.textContent = shortCode;
 
-                const typeTag = detectMobileTypeTag(box.dataset.rawHtml || box.innerHTML, box.getAttribute('href') || '');
+                const hrefVal = box.getAttribute('href') || '';
+                const matchSid = hrefVal.match(/\/(?:mapel|subject)\/(\d+)/i);
+                const serverInfo = matchSid ? SERVER_SUBJECT_NOTIFS[matchSid[1]] : null;
+                const typeTag = serverInfo ? serverInfo.tag : detectMobileTypeTag(box.dataset.rawHtml || box.innerHTML, hrefVal);
+
                 let tagSpan = box.querySelector('span.mobile-type-tag');
                 if (typeTag) {
                     if (!tagSpan) {
@@ -1024,6 +1108,13 @@
                         box.appendChild(tagSpan);
                     }
                     tagSpan.textContent = typeTag;
+
+                    if (!box.querySelector('span.rounded-full')) {
+                        const autoDot = document.createElement('span');
+                        autoDot.className = 'rounded-full mobile-notif-dot';
+                        autoDot.style.backgroundColor = serverInfo ? serverInfo.dot : '#facc15';
+                        box.appendChild(autoDot);
+                    }
                 } else if (tagSpan) {
                     tagSpan.remove();
                 }
@@ -1362,11 +1453,15 @@
             shortenSubjectsForMobile();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
+                document.addEventListener('DOMContentLoaded', () => {
             applyLanguage(localStorage.getItem('app_lang') || 'id');
             enhanceScheduleMobileLayout();
             renderOnlineMemberPill();
             syncScheduleMarkersAndSourceTab();
+            const activeNav = document.querySelector('.nav-links-wrap .theme-primary');
+            if (activeNav && window.innerWidth <= 640) {
+                activeNav.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            }
         });
 
         window.addEventListener('resize', () => {
