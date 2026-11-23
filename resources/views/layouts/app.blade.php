@@ -710,191 +710,9 @@
         }
                     </style>
 
-<!-- DESIGN-SYSTEM-V2-START -->
-<style id="design-system-v2">
-    :root {
-        --ds-bg-main: #090d16;
-        --ds-surface-1: #111827;
-        --ds-surface-2: #1a2334;
-        --ds-surface-input: #0e1524;
-        --ds-border-subtle: rgba(148, 163, 184, 0.16);
-        --ds-text-primary: #f8fafc;
-        --ds-text-secondary: #cbd5e1;
-        --ds-accent-primary: #6366f1;
-        --ds-accent-success: #10b981;
-        --ds-accent-warning: #f59e0b;
-        --ds-accent-danger: #ef4444;
-        --ds-accent-info: #06b6d4;
-    }
 
-    /* Layer surface & typography dasar */
-    html[data-theme="mode-gelap"] body,
-    body {
-        font-size: 14px;
-        line-height: 1.5;
-        background-color: var(--ds-bg-main);
-        color: var(--ds-text-primary);
-    }
 
-    .theme-card {
-        background-color: var(--ds-surface-1);
-        border-color: var(--ds-border-subtle);
-    }
 
-    .theme-soft {
-        background-color: var(--ds-surface-2);
-        border-color: var(--ds-border-subtle);
-        color: var(--ds-text-secondary);
-    }
-
-    main input[type="text"],
-    main input[type="email"],
-    main input[type="password"],
-    main input[type="number"],
-    main input[type="date"],
-    main select,
-    main textarea {
-        background-color: var(--ds-surface-input);
-        border-color: var(--ds-border-subtle);
-        font-size: 14px;
-        line-height: 1.45;
-    }
-
-    /* Hindari teks metadata & label terlalu kecil seperti footnote */
-    main p, main li, main td, main th, main label {
-        font-size: max(12.5px, 1em);
-    }
-
-    main button,
-    main a.rounded-xl,
-    main a.rounded-lg {
-        font-size: max(13px, 0.875rem);
-    }
-
-    /* Warna semantik status */
-    .badge-success, .status-done {
-        background-color: rgba(16, 185, 129, 0.16);
-        color: #6ee7b7;
-        border-color: rgba(16, 185, 129, 0.35);
-    }
-
-    .badge-warning, .status-due {
-        background-color: rgba(245, 158, 11, 0.16);
-        color: #fcd34d;
-        border-color: rgba(245, 158, 11, 0.35);
-    }
-
-    .badge-danger, .status-late {
-        background-color: rgba(239, 68, 68, 0.16);
-        color: #fca5a5;
-        border-color: rgba(239, 68, 68, 0.35);
-    }
-
-    .badge-info {
-        background-color: rgba(6, 182, 212, 0.16);
-        color: #67e8f9;
-        border-color: rgba(6, 182, 212, 0.35);
-    }
-</style>
-<!-- DESIGN-SYSTEM-V2-END -->
-<!-- NAVBAR-POLISH-V3-START -->
-<style id="navbar-polish-v3">
-    nav a, nav button {
-        font-size: 13.5px;
-        line-height: 1.35;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-
-    nav .flex.items-center,
-    nav .flex.gap-1,
-    nav .flex.gap-1\.5,
-    nav .flex.gap-2 {
-        gap: 0.375rem;
-    }
-
-    @media (max-width: 768px) {
-        nav a, nav button {
-            font-size: 12.5px;
-            padding-left: 0.625rem;
-            padding-right: 0.625rem;
-        }
-    }
-</style>
-<!-- NAVBAR-POLISH-V3-END -->
-<!-- SCHEDULE-POLISH-V4-START -->
-<style id="schedule-polish-v4">
-    table.timetable-grid,
-    main table {
-        border-collapse: separate;
-        border-spacing: 4px;
-    }
-
-    main table thead th {
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 1.3;
-        padding: 6px 4px;
-    }
-
-    main table tbody th,
-    main table tbody td:first-child {
-        font-size: 12.5px;
-        font-weight: 700;
-        line-height: 1.3;
-    }
-
-    main table a[href*="/mapel/"],
-    main table a[href*="/subject/"],
-    main table .subject-box {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 2px;
-        min-height: 48px;
-        padding: 6px 5px;
-        border-radius: 10px;
-        font-size: 12.5px;
-        line-height: 1.25;
-        overflow: hidden;
-    }
-
-    @media (max-width: 640px) {
-        main table {
-            border-spacing: 2px;
-            table-layout: fixed;
-            width: 100%;
-        }
-
-        main table thead th {
-            font-size: 9px;
-            padding: 4px 2px;
-            line-height: 1.2;
-        }
-
-        main table tbody th,
-        main table tbody td:first-child {
-            width: 44px;
-            min-width: 44px;
-            max-width: 44px;
-            font-size: 10px;
-            padding: 4px 2px;
-        }
-
-        main table a[href*="/mapel/"],
-        main table a[href*="/subject/"],
-        main table .subject-box {
-            min-height: 40px;
-            height: 40px;
-            padding: 3px 2px;
-            border-radius: 7px;
-            font-size: 9.5px;
-            line-height: 1.15;
-        }
-    }
-</style>
-<!-- SCHEDULE-POLISH-V4-END -->
 </head>
 <body class="antialiased" data-theme="mode-gelap" data-font="sans" data-graphic="simple" data-anim="off">
     @php
@@ -1241,7 +1059,7 @@
                 ['ketamansiswaan', 'KTS'],
                 ['kts', 'KTS'],
                 ['samsung institute tech', 'STI'],
-                ['sistem teknologi informasi', 'STI'],
+                ['Samsung Tech Institute', 'STI'],
                 ['pemrograman lanjut', 'PL(RPL1)'],
                 ['pml', 'PL(RPL1)'],
                 ['sejarah indonesia', 'SI'],
@@ -1967,18 +1785,34 @@
 
         document.addEventListener('DOMContentLoaded', formatDesktopSubjectLabels);
         window.addEventListener('resize', formatDesktopSubjectLabels);
-            <!-- GLOBAL-UI-ENGINE-START -->
-<style id="global-theme-engine-css">
-    /* === TEMA GELAP === */
-    html[data-theme="academic-trust"] body { background: linear-gradient(135deg, #0b132b 0%, #1c2541 55%, #0f172a 100%) !important; color: #f8fafc !important; }
-    html[data-theme="deep-ocean"] body { background: linear-gradient(135deg, #041c2c 0%, #0a3656 55%, #06283d 100%) !important; color: #f0f9ff !important; }
-    html[data-theme="midnight-scholar"] body { background: linear-gradient(135deg, #0f0c29 0%, #302b63 55%, #1a163a 100%) !important; color: #f5f3ff !important; }
-    html[data-theme="forest-academy"] body { background: linear-gradient(135deg, #062118 0%, #0d3b2e 55%, #082920 100%) !important; color: #ecfdf5 !important; }
-    html[data-theme="mode-gelap"] body { background: linear-gradient(135deg, #09090b 0%, #18181b 55%, #0f0f12 100%) !important; color: #fafafa !important; }
+            
 
-    /* === TEMA TERANG === */
-    html[data-theme="tech-growth"] body { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 55%, #e0f2fe 100%) !important; color: #064e3b !important; }
-    html[data-theme="creative-spark"] body { background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 55%, #fef3c7 100%) !important; color: #7c2d12 !important; }
+<!-- GLOBAL-UI-ENGINE-START -->
+<style id="brutal-global-ui-css">
+    :root {
+        --bg-main: #090d16;
+        --card-bg: #111827;
+        --soft-bg: #1e293b;
+        --input-bg: #0f172a;
+        --border-sub: rgba(148, 163, 184, 0.22);
+        --text-main: #f8fafc;
+        --text-sub: #cbd5e1;
+    }
+
+    body {
+        font-size: 14px;
+        line-height: 1.5;
+        color: var(--text-main);
+    }
+
+    html[data-theme="mode-gelap"] body { background: linear-gradient(135deg, #090d16 0%, #111827 60%, #090d16 100%) !important; color: #f8fafc !important; }
+    html[data-theme="academic-trust"] body { background: linear-gradient(135deg, #0b132b 0%, #1c2541 60%, #0f172a 100%) !important; color: #f8fafc !important; }
+    html[data-theme="deep-ocean"] body { background: linear-gradient(135deg, #041c2c 0%, #0a3656 60%, #06283d 100%) !important; color: #f0f9ff !important; }
+    html[data-theme="midnight-scholar"] body { background: linear-gradient(135deg, #0f0c29 0%, #302b63 60%, #1a163a 100%) !important; color: #f5f3ff !important; }
+    html[data-theme="forest-academy"] body { background: linear-gradient(135deg, #062118 0%, #0d3b2e 60%, #082920 100%) !important; color: #ecfdf5 !important; }
+
+    html[data-theme="tech-growth"] body { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 60%, #e0f2fe 100%) !important; color: #064e3b !important; }
+    html[data-theme="creative-spark"] body { background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 60%, #fef3c7 100%) !important; color: #7c2d12 !important; }
     html[data-theme="lavender-dream"] body { background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 55%, #fae8ff 100%) !important; color: #4c1d95 !important; }
     html[data-theme="soft-berry"] body { background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 55%, #fce7f3 100%) !important; color: #881337 !important; }
     html[data-theme="morning-assembly"] body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 55%, #f1f5f9 100%) !important; color: #0f172a !important; }
@@ -1988,56 +1822,53 @@
     html[data-theme="lavender-dream"] .theme-card,
     html[data-theme="soft-berry"] .theme-card,
     html[data-theme="morning-assembly"] .theme-card {
-        background: rgba(255, 255, 255, 0.88) !important;
-        color: inherit !important;
-        border-color: rgba(15, 23, 42, 0.14) !important;
+        background: rgba(255, 255, 255, 0.9) !important;
+        color: #0f172a !important;
+        border-color: rgba(15, 23, 42, 0.16) !important;
     }
 
-    /* === GAYA GRAFIK === */
-    html[data-graphic="legacy"] .theme-card { border-radius: 4px !important; border-width: 2px !important; box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.45) !important; }
+    html[data-graphic="legacy"] .theme-card { border-radius: 4px !important; border-width: 2px !important; box-shadow: 4px 4px 0 rgba(0,0,0,0.5) !important; }
     html[data-graphic="minimalist"] .theme-card { border-radius: 10px !important; box-shadow: none !important; backdrop-filter: none !important; }
-    html[data-graphic="simple"] .theme-card { border-radius: 1rem !important; }
+    html[data-graphic="simple"] .theme-card { border-radius: 14px !important; }
 
-    html[data-graphic="legacy"][data-anim="on"] main,
-    html[data-graphic="minimalist"][data-anim="on"] main,
-    html[data-graphic="legacy"][data-anim="on"] main .theme-card,
-    html[data-graphic="minimalist"][data-anim="on"] main .theme-card {
-        animation: none !important;
-        transition: none !important;
-        transform: none !important;
-    }
     html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] *::after {
         animation: none !important;
         transition: none !important;
     }
 
-    /* === GAYA HURUF === */
     html[data-font="modern"] body, html[data-font="modern"] * { font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif; }
     html[data-font="serif"] body, html[data-font="serif"] * { font-family: Georgia, 'Times New Roman', serif !important; }
     html[data-font="mono"] body, html[data-font="mono"] * { font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace !important; }
 
-    /* === TABEL JADWAL HP: FIT 1 LAYAR === */
+    nav a, nav button { font-size: 13.5px; line-height: 1.35; white-space: nowrap; }
+
+    /* HP Schedule: pastikan isi mapel tidak blank & muat 1 layar */
     @media (max-width: 640px) {
-        table { width: 100% !important; table-layout: fixed !important; border-spacing: 1.5px !important; }
-        table th:first-child, table td:first-child {
+        main table { width: 100% !important; table-layout: fixed !important; border-collapse: separate !important; border-spacing: 1.5px !important; }
+        main table th:first-child, main table td:first-child {
             width: 40px !important; min-width: 40px !important; max-width: 40px !important;
-            font-size: 7.5px !important; padding: 2px 1px !important; white-space: nowrap !important; overflow: visible !important;
+            font-size: 8px !important; padding: 2px 1px !important; white-space: nowrap !important; overflow: visible !important;
         }
-        table a[href*="/mapel/"] { min-height: 38px !important; height: 38px !important; padding: 2px 1px !important; font-size: 7px !important; }
+        main table a[href*="/mapel/"], main table a[href*="/subject/"] {
+            display: flex !important; flex-direction: column !important; align-items: center !important; justify-content: center !important;
+            min-height: 38px !important; height: 38px !important; padding: 2px 1px !important;
+            font-size: 7.5px !important; line-height: 1.1 !important; overflow: visible !important;
+        }
+        main table a[href*="/mapel/"] *, main table a[href*="/subject/"] * {
+            display: block !important; visibility: visible !important; opacity: 1 !important;
+        }
     }
 </style>
 
-<script id="global-theme-engine-js">
+<script id="brutal-global-ui-js">
 (function () {
-    const savedTheme = localStorage.getItem('app_theme') || 'mode-gelap';
-    const savedGraphic = localStorage.getItem('app_graphic') || 'simple';
-    const savedFont = localStorage.getItem('app_font') || 'modern';
-    const savedAnim = localStorage.getItem('app_anim') || 'on';
-
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    document.documentElement.setAttribute('data-graphic', savedGraphic);
-    document.documentElement.setAttribute('data-font', savedFont);
-    document.documentElement.setAttribute('data-anim', savedAnim);
+    const applySavedPrefs = () => {
+        document.documentElement.setAttribute('data-theme', localStorage.getItem('app_theme') || 'mode-gelap');
+        document.documentElement.setAttribute('data-graphic', localStorage.getItem('app_graphic') || 'simple');
+        document.documentElement.setAttribute('data-font', localStorage.getItem('app_font') || 'modern');
+        document.documentElement.setAttribute('data-anim', localStorage.getItem('app_anim') || 'on');
+    };
+    applySavedPrefs();
 
     window.setAppTheme = function (slug) {
         localStorage.setItem('app_theme', slug);
@@ -2058,15 +1889,16 @@
         return nxt;
     };
 
-    const I18N = {
+    const DICT = {
         en: {
             'Jadwal': 'Schedule', 'List Tugas': 'Task List', 'Kalender': 'Calendar', 'Siswa': 'Students',
             'Nmr Guru': 'Teachers', 'Materi': 'Materials', 'Latihan': 'Practice', 'Profil': 'Profile',
-            'Pengaturan': 'Settings', 'JADWAL XI RPL 1': 'XI RPL 1 SCHEDULE',
+            'Pengaturan': 'Settings', 'Komok': 'Komok',
+            'JADWAL XI RPL 1': 'XI RPL 1 SCHEDULE',
             'Catatan': 'Notes', 'Tugas': 'Tasks', 'PR': 'Homework', 'Event': 'Event',
             'Tenggat': 'Due Soon', 'Deadline': 'Overdue', 'Selesai': 'Completed', 'Reset': 'Reset',
             'Pengaturan Tampilan': 'Display Settings',
-            'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Customize gradient color themes, graphic styles, animations, sound effects, class music, and app language.',
+            'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Customize gradient themes, graphic styles, animations, sound effects, class music, and app language.',
             '← Kembali ke Jadwal Utama': '← Back to Main Schedule',
             'TEMA GELAP (GRADIEN)': 'DARK THEMES (GRADIENT)', 'TEMA TERANG (GRADIEN)': 'LIGHT THEMES (GRADIENT)',
             'GRAFIK & ANIMASI': 'GRAPHICS & ANIMATION', 'Animasi Transisi UI': 'UI Transition Animation',
@@ -2078,7 +1910,8 @@
         ja: {
             'Jadwal': '時間割', 'List Tugas': '課題一覧', 'Kalender': 'カレンダー', 'Siswa': '生徒一覧',
             'Nmr Guru': '先生連絡先', 'Materi': '教材', 'Latihan': '練習問題', 'Profil': 'プロフィール',
-            'Pengaturan': '設定', 'JADWAL XI RPL 1': 'XI RPL 1 時間割',
+            'Pengaturan': '設定', 'Komok': 'コモック',
+            'JADWAL XI RPL 1': 'XI RPL 1 時間割',
             'Catatan': 'ノート', 'Tugas': '課題', 'PR': '宿題', 'Event': 'イベント',
             'Tenggat': '締切間近', 'Deadline': '期限切れ', 'Selesai': '完了', 'Reset': 'リセット',
             'Pengaturan Tampilan': '表示設定', '← Kembali ke Jadwal Utama': '← 時間割に戻る',
@@ -2090,7 +1923,8 @@
         ru: {
             'Jadwal': 'Расписание', 'List Tugas': 'Задания', 'Kalender': 'Календарь', 'Siswa': 'Ученики',
             'Nmr Guru': 'Учителя', 'Materi': 'Материалы', 'Latihan': 'Тесты', 'Profil': 'Профиль',
-            'Pengaturan': 'Настройки', 'JADWAL XI RPL 1': 'РАСПИСАНИЕ XI RPL 1',
+            'Pengaturan': 'Настройки', 'Komok': 'Комок',
+            'JADWAL XI RPL 1': 'РАСПИСАНИЕ XI RPL 1',
             'Catatan': 'Заметки', 'Tugas': 'Задания', 'PR': 'ДЗ', 'Event': 'События',
             'Tenggat': 'Скоро срок', 'Deadline': 'Просрочено', 'Selesai': 'Готово', 'Reset': 'Сброс',
             'Pengaturan Tampilan': 'Настройки экрана', '← Kembali ke Jadwal Utama': '← Назад к расписанию',
@@ -2102,25 +1936,81 @@
     };
 
     window.applyLanguage = function (lang) {
-        const dict = I18N[lang] || null;
+        const dict = DICT[lang] || null;
         const keys = dict ? Object.keys(dict).sort((a, b) => b.length - a.length) : [];
         const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
         let n;
         while ((n = walker.nextNode())) {
             const p = n.parentElement;
             if (!p || ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT'].includes(p.tagName)) continue;
-            if (n._orig === undefined) n._orig = n.nodeValue;
-            if (!dict) { n.nodeValue = n._orig; continue; }
-            let val = n._orig;
-            for (const k of keys) {
-                if (val.includes(k)) val = val.split(k).join(dict[k]);
+            if (n._baseText === undefined) n._baseText = n.nodeValue;
+            if (!dict) {
+                n.nodeValue = n._baseText;
+                continue;
             }
-            n.nodeValue = val;
+            let out = n._baseText;
+            for (const k of keys) {
+                if (out.includes(k)) out = out.split(k).join(dict[k]);
+            }
+            n.nodeValue = out;
         }
     };
 
+    function normalizeScheduleBoxes() {
+        const isMobile = window.innerWidth <= 640;
+        const mapelList = [
+            { keys: ['ketamansiswaan', 'etamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
+            { keys: ['samsung tech institute', 'sistem teknologi informasi', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
+            { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
+            { keys: ['kreativitas & desain interaktif', 'kreativitas dan desain interaktif', 'kdi'], code: 'KDI', full: 'Kreativitas & Desain Interaktif' },
+            { keys: ['muatan bahasa jepang', 'bahasa jepang', 'mbj'], code: 'MBJ(J)', full: 'Muatan Bahasa Jepang' },
+            { keys: ['pendidikan pancasila', 'ppkn', 'pp'], code: 'PP', full: 'Pendidikan Pancasila' },
+            { keys: ['bahasa inggris', 'b.ing'], code: 'B.Ing', full: 'Bahasa Inggris' },
+            { keys: ['bahasa indonesia', 'bi'], code: 'BI', full: 'Bahasa Indonesia' },
+            { keys: ['matematika', 'mtk'], code: 'MTK', full: 'Matematika' },
+            { keys: ['pendidikan jasmani', 'pjok', 'penjas'], code: 'Penjas', full: 'Pendidikan Jasmani' },
+            { keys: ['pemrograman lanjut', 'pl(rpl1)', 'pl'], code: 'PL(RPL1)', full: 'Pemrograman Lanjut' },
+            { keys: ['sejarah indonesia', 'sejarah'], code: 'SI', full: 'Sejarah Indonesia' },
+            { keys: ['kewirausahaan', 'pkk', 'kwh'], code: 'KWH', full: 'Kewirausahaan' },
+            { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
+        ];
+
+        document.querySelectorAll('table tr').forEach(tr => {
+            const dayTxt = (tr.firstElementChild?.textContent || '').trim().toLowerCase();
+            const isSelasa = dayTxt.startsWith('sel');
+            const boxes = Array.from(tr.querySelectorAll('a[href*="/mapel/"], a[href*="/subject/"]'));
+
+            boxes.forEach((box, idx) => {
+                const origTxt = box.dataset.origLabel || (box.textContent || '').replace(/\s+/g, ' ').trim();
+                box.dataset.origLabel = origTxt;
+                const lower = origTxt.toLowerCase();
+
+                let hit = null;
+                if (isSelasa && idx === boxes.length - 1) {
+                    hit = { code: 'STI', full: 'Samsung Tech Institute' };
+                } else {
+                    hit = mapelList.find(m => m.keys.some(k => lower.includes(k)));
+                }
+
+                if (hit) {
+                    const dots = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
+                    box.style.position = 'relative';
+                    if (isMobile) {
+                        box.innerHTML = '<span class="font-extrabold leading-none">' + hit.code + '</span>';
+                    } else {
+                        box.innerHTML = '<div class="font-extrabold text-sm leading-tight">' + hit.code + '</div><div class="text-[10px] opacity-75 leading-tight truncate max-w-full px-1">' + hit.full + '</div>';
+                    }
+                    dots.forEach(d => box.appendChild(d));
+                } else if (isMobile && origTxt) {
+                    const dots = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
+                    box.innerHTML = '<span class="font-extrabold leading-none">' + origTxt + '</span>';
+                    dots.forEach(d => box.appendChild(d));
+                }
+            });
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', function () {
-        // 1. Paksa "(X) Tugas" -> "List Tugas"
         document.querySelectorAll('nav a').forEach(a => {
             const t = (a.textContent || '').replace(/\s+/g, ' ').trim();
             if (/^\(\d+\)\s*Tugas$/i.test(t) || /list-tugas/i.test(a.getAttribute('href') || '')) {
@@ -2128,166 +2018,15 @@
             }
         });
 
-        // 2. Singkatan Kotak Jadwal di Desktop (KTS, STI, BK, KDI, MBJ(J), PP, B.Ing, BI, MTK, Penjas, PL(RPL1), SI, KWH, PAI)
-        if (window.innerWidth > 640) {
-            const dict = [
-                { keys: ['ketamansiswaan', 'etamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
-                { keys: ['samsung tech institute', 'sistem teknologi informasi', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
-                { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
-                { keys: ['kreativitas & desain interaktif', 'kreativitas dan desain interaktif', 'kdi'], code: 'KDI', full: 'Kreativitas & Desain Interaktif' },
-                { keys: ['muatan bahasa jepang', 'bahasa jepang', 'mbj'], code: 'MBJ(J)', full: 'Muatan Bahasa Jepang' },
-                { keys: ['pendidikan pancasila', 'ppkn', 'pp'], code: 'PP', full: 'Pendidikan Pancasila' },
-                { keys: ['bahasa inggris', 'b.ing'], code: 'B.Ing', full: 'Bahasa Inggris' },
-                { keys: ['bahasa indonesia', 'bi'], code: 'BI', full: 'Bahasa Indonesia' },
-                { keys: ['matematika', 'mtk'], code: 'MTK', full: 'Matematika' },
-                { keys: ['pendidikan jasmani', 'pjok', 'penjas'], code: 'Penjas', full: 'Pendidikan Jasmani' },
-                { keys: ['pemrograman lanjut', 'pl(rpl1)', 'pl'], code: 'PL(RPL1)', full: 'Pemrograman Lanjut' },
-                { keys: ['sejarah indonesia', 'sejarah'], code: 'SI', full: 'Sejarah Indonesia' },
-                { keys: ['kewirausahaan', 'pkk', 'kwh'], code: 'KWH', full: 'Kewirausahaan' },
-                { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
-            ];
-
-            document.querySelectorAll('table tr').forEach(tr => {
-                const dayTxt = (tr.firstElementChild?.textContent || '').trim().toLowerCase();
-                const isSelasa = dayTxt.startsWith('sel');
-                const boxes = Array.from(tr.querySelectorAll('a[href*="/mapel/"], a[href*="/subject/"]'));
-
-                boxes.forEach((box, idx) => {
-                    const raw = (box.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
-                    let hit = null;
-                    if (isSelasa && idx === boxes.length - 1) {
-                        hit = { code: 'STI', full: 'Samsung Tech Institute' };
-                    } else {
-                        hit = dict.find(d => d.keys.some(k => raw.includes(k)));
-                    }
-                    if (hit) {
-                        const dots = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
-                        box.style.position = 'relative';
-                        box.innerHTML = '<div class="font-extrabold text-sm leading-tight">' + hit.code + '</div><div class="text-[10px] opacity-75 leading-tight truncate max-w-full px-1">' + hit.full + '</div>';
-                        dots.forEach(dt => box.appendChild(dt));
-                    }
-                });
-            });
-        }
-
-        // 3. Lonceng Notifikasi: Pastikan tombol lonceng bisa diklik buka/tutup & angka hilang setelah diklik
-        const bellBtn = document.getElementById('notif-bell-btn') || document.querySelector('button[aria-label*="Notif"], nav button[onclick*="notif"]');
-        const notifMenu = document.getElementById('notif-dropdown') || document.getElementById('notif-menu') || (bellBtn ? bellBtn.parentElement.querySelector('div[class*="absolute"]') : null);
-
-        if (bellBtn) {
-            bellBtn.style.cursor = 'pointer';
-            bellBtn.style.pointerEvents = 'auto';
-            bellBtn.style.zIndex = '60';
-
-            const badge = bellBtn.querySelector('span');
-            const notifLinks = notifMenu ? Array.from(notifMenu.querySelectorAll('a')).map(a => a.textContent.trim()).join('|') : '';
-            const seenSig = localStorage.getItem('notif_seen_sig') || '';
-
-            if (badge && notifLinks && notifLinks === seenSig) {
-                badge.classList.add('hidden');
-            }
-
-            bellBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                if (notifMenu) {
-                    notifMenu.classList.toggle('hidden');
-                }
-                const latest = notifMenu ? Array.from(notifMenu.querySelectorAll('a')).map(a => a.textContent.trim()).join('|') : '';
-                if (latest) localStorage.setItem('notif_seen_sig', latest);
-                if (badge) badge.classList.add('hidden');
-            });
-
-            document.addEventListener('click', function (e) {
-                if (notifMenu && !notifMenu.contains(e.target) && !bellBtn.contains(e.target)) {
-                    notifMenu.classList.add('hidden');
-                }
-            });
-        }
+        normalizeScheduleBoxes();
 
         const curLang = localStorage.getItem('app_lang') || 'id';
         if (curLang !== 'id') window.applyLanguage(curLang);
     });
+
+    window.addEventListener('resize', normalizeScheduleBoxes);
 })();
 </script>
 <!-- GLOBAL-UI-ENGINE-END -->
-<!-- UNIFIED-SYSTEM-PERFECTION-START -->
-<style id="unified-system-perfection-css">
-    :root {
-        --up-bg-base: #090d16;
-        --up-surface-card: #111827;
-        --up-surface-soft: #1a2334;
-        --up-surface-input: #0e1524;
-        --up-border: rgba(148, 163, 184, 0.18);
-        --up-text-main: #f8fafc;
-        --up-text-muted: #cbd5e1;
-    }
-
-    body {
-        font-size: 14px;
-        line-height: 1.55;
-        color: var(--up-text-main);
-    }
-
-    html[data-theme="mode-gelap"] body {
-        background-color: var(--up-bg-base);
-    }
-
-    html[data-theme="mode-gelap"] .theme-card {
-        background-color: var(--up-surface-card);
-        border-color: var(--up-border);
-    }
-
-    html[data-theme="mode-gelap"] .theme-soft {
-        background-color: var(--up-surface-soft);
-        border-color: var(--up-border);
-        color: var(--up-text-muted);
-    }
-
-    main input[type="text"],
-    main input[type="email"],
-    main input[type="password"],
-    main input[type="number"],
-    main input[type="date"],
-    main select,
-    main textarea {
-        font-size: 14px;
-        line-height: 1.45;
-    }
-
-    nav a, nav button {
-        font-size: 13.5px;
-        line-height: 1.35;
-        white-space: nowrap;
-    }
-</style>
-
-<script id="unified-system-perfection-js">
-(function () {
-    const savedTheme = localStorage.getItem('app_theme') || 'mode-gelap';
-    const savedGraphic = localStorage.getItem('app_graphic') || 'simple';
-    const savedFont = localStorage.getItem('app_font') || 'modern';
-    const savedAnim = localStorage.getItem('app_anim') || 'on';
-
-    document.documentElement.setAttribute('data-theme', savedTheme);
-    document.documentElement.setAttribute('data-graphic', savedGraphic);
-    document.documentElement.setAttribute('data-font', savedFont);
-    document.documentElement.setAttribute('data-anim', savedAnim);
-
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('nav a').forEach(a => {
-            const t = (a.textContent || '').replace(/\s+/g, ' ').trim();
-            if (/^\(\d+\)\s*Tugas$/i.test(t) || /list-tugas/i.test(a.getAttribute('href') || '')) {
-                a.textContent = 'List Tugas';
-            }
-        });
-
-        const curLang = localStorage.getItem('app_lang') || 'id';
-        if (curLang !== 'id' && typeof window.applyLanguage === 'function') {
-            window.applyLanguage(curLang);
-        }
-    });
-})();
-</script>
-<!-- UNIFIED-SYSTEM-PERFECTION-END -->
 </body>
 </html>

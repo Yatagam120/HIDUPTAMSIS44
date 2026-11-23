@@ -360,105 +360,7 @@
     </script>
     
 
-<script id="settings-interactive-binding">
-document.addEventListener('DOMContentLoaded', function () {
-    const themeMap = {
-        'academic trust': 'academic-trust',
-        'deep ocean': 'deep-ocean',
-        'midnight scholar': 'midnight-scholar',
-        'forest academy': 'forest-academy',
-        'mode gelap': 'mode-gelap',
-        'tech growth': 'tech-growth',
-        'creative spark': 'creative-spark',
-        'lavender dream': 'lavender-dream',
-        'soft berry': 'soft-berry',
-        'morning assembly': 'morning-assembly'
-    };
-    const graphicMap = { 'legacy': 'legacy', 'minimalist': 'minimalist', 'simple': 'simple' };
-    const fontMap = { 'modern sans': 'modern', 'klasik serif': 'serif', 'coding mono': 'mono' };
-    const langMap = { 'indonesia': 'id', 'english': 'en', '日本語': 'ja', 'jepang': 'ja', 'русский': 'ru', 'rusia': 'ru' };
 
-    function refreshSettingsUI() {
-        const curTheme = localStorage.getItem('app_theme') || 'mode-gelap';
-        const curGraphic = localStorage.getItem('app_graphic') || 'simple';
-        const curFont = localStorage.getItem('app_font') || 'modern';
-        const curLang = localStorage.getItem('app_lang') || 'id';
-        const curAnim = localStorage.getItem('app_anim') || 'on';
-
-        document.querySelectorAll('main button').forEach(btn => {
-            const t = (btn.textContent || '').trim().toLowerCase();
-            for (const [k, slug] of Object.entries(themeMap)) {
-                if (t.includes(k)) {
-                    btn.classList.toggle('theme-primary', slug === curTheme);
-                    btn.classList.toggle('ring-2', slug === curTheme);
-                }
-            }
-            for (const [k, slug] of Object.entries(graphicMap)) {
-                if (t === k) {
-                    btn.classList.toggle('theme-primary', slug === curGraphic);
-                    btn.classList.toggle('theme-soft', slug !== curGraphic);
-                }
-            }
-            for (const [k, slug] of Object.entries(fontMap)) {
-                if (t.includes(k)) {
-                    btn.classList.toggle('theme-primary', slug === curFont);
-                    btn.classList.toggle('theme-soft', slug !== curFont);
-                }
-            }
-            for (const [k, code] of Object.entries(langMap)) {
-                if (t.includes(k)) {
-                    btn.classList.toggle('theme-primary', code === curLang);
-                    btn.classList.toggle('theme-soft', code !== curLang);
-                }
-            }
-            if (t === 'aktif' || t === 'nonaktif') {
-                const rowTxt = (btn.closest('div')?.textContent || '').toLowerCase();
-                if (rowTxt.includes('animasi')) {
-                    btn.textContent = curAnim === 'on' ? 'Aktif' : 'Nonaktif';
-                    btn.classList.toggle('theme-primary', curAnim === 'on');
-                }
-            }
-        });
-    }
-
-    document.querySelectorAll('main button').forEach(btn => {
-        const t = (btn.textContent || '').trim().toLowerCase();
-        const isManaged = Object.keys(themeMap).some(k => t.includes(k))
-            || Object.keys(graphicMap).includes(t)
-            || Object.keys(fontMap).some(k => t.includes(k))
-            || Object.keys(langMap).some(k => t.includes(k))
-            || ((t === 'aktif' || t === 'nonaktif') && (btn.closest('div')?.textContent || '').toLowerCase().includes('animasi'));
-
-        if (isManaged) {
-            btn.removeAttribute('onclick');
-            btn.addEventListener('click', function (e) {
-                e.preventDefault();
-                e.stopImmediatePropagation();
-                const label = (this.textContent || '').trim().toLowerCase();
-
-                for (const [k, slug] of Object.entries(themeMap)) {
-                    if (label.includes(k)) { window.setAppTheme(slug); refreshSettingsUI(); return; }
-                }
-                for (const [k, slug] of Object.entries(graphicMap)) {
-                    if (label === k) { window.setAppGraphic(slug); refreshSettingsUI(); return; }
-                }
-                for (const [k, slug] of Object.entries(fontMap)) {
-                    if (label.includes(k)) { window.setAppFont(slug); refreshSettingsUI(); return; }
-                }
-                for (const [k, code] of Object.entries(langMap)) {
-                    if (label.includes(k)) { localStorage.setItem('app_lang', code); window.applyLanguage(code); refreshSettingsUI(); return; }
-                }
-                if (label === 'aktif' || label === 'nonaktif') {
-                    window.toggleAppAnim();
-                    refreshSettingsUI();
-                }
-            }, true);
-        }
-    });
-
-    refreshSettingsUI();
-});
-</script>
 <!-- MODULE-POLISH-V6-START -->
 <style id="module-polish-v6">
     /* Tugas & Materi: spacing card lebih lega & empty state lebih jelas */
@@ -500,9 +402,10 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 </div>
 <!-- MODULE-POLISH-V6-END -->
+
 <!-- SETTINGS-PERFECTION-START -->
-<script id="settings-perfection-js">
-document.addEventListener('DOMContentLoaded', function () {
+<script id="settings-brutal-js">
+(function () {
     const themeMap = {
         'academic trust': 'academic-trust',
         'deep ocean': 'deep-ocean',
@@ -517,9 +420,16 @@ document.addEventListener('DOMContentLoaded', function () {
     };
     const graphicMap = { 'legacy': 'legacy', 'minimalist': 'minimalist', 'simple': 'simple' };
     const fontMap = { 'modern sans': 'modern', 'klasik serif': 'serif', 'coding mono': 'mono' };
-    const langMap = { 'indonesia': 'id', 'english': 'en', '日本語': 'ja', 'jepang': 'ja', 'русский': 'ru', 'rusia': 'ru' };
+    const langMap = {
+        'indonesia': 'id',
+        'english': 'en',
+        '日本語': 'ja',
+        'jepang': 'ja',
+        'русский': 'ru',
+        'rusia': 'ru'
+    };
 
-    function syncStates() {
+    function paintActiveButtons() {
         const curTheme = localStorage.getItem('app_theme') || 'mode-gelap';
         const curGraphic = localStorage.getItem('app_graphic') || 'simple';
         const curFont = localStorage.getItem('app_font') || 'modern';
@@ -532,95 +442,78 @@ document.addEventListener('DOMContentLoaded', function () {
         document.documentElement.setAttribute('data-anim', curAnim);
 
         document.querySelectorAll('main button').forEach(btn => {
-            const t = (btn.textContent || '').trim().toLowerCase();
+            const raw = (btn.textContent || '').trim().toLowerCase();
 
             for (const [k, slug] of Object.entries(themeMap)) {
-                if (t.includes(k)) {
+                if (raw.includes(k)) {
                     btn.classList.toggle('ring-2', slug === curTheme);
+                    btn.classList.toggle('ring-sky-400', slug === curTheme);
                 }
             }
             for (const [k, slug] of Object.entries(graphicMap)) {
-                if (t === k) {
+                if (raw === k) {
                     btn.classList.toggle('theme-primary', slug === curGraphic);
                     btn.classList.toggle('theme-soft', slug !== curGraphic);
                 }
             }
             for (const [k, slug] of Object.entries(fontMap)) {
-                if (t.includes(k)) {
+                if (raw.includes(k)) {
                     btn.classList.toggle('theme-primary', slug === curFont);
                     btn.classList.toggle('theme-soft', slug !== curFont);
                 }
             }
             for (const [k, code] of Object.entries(langMap)) {
-                if (t.includes(k)) {
+                if (raw.includes(k)) {
                     btn.classList.toggle('theme-primary', code === curLang);
                     btn.classList.toggle('theme-soft', code !== curLang);
                 }
             }
-            if ((t === 'aktif' || t === 'nonaktif') && (btn.closest('div')?.textContent || '').toLowerCase().includes('animasi')) {
+            if ((raw === 'aktif' || raw === 'nonaktif') && (btn.closest('div')?.textContent || '').toLowerCase().includes('animasi')) {
                 btn.textContent = curAnim === 'on' ? 'Aktif' : 'Nonaktif';
                 btn.classList.toggle('theme-primary', curAnim === 'on');
             }
         });
     }
 
-    document.querySelectorAll('main button').forEach(btn => {
-        const t = (btn.textContent || '').trim().toLowerCase();
-        const isManaged = Object.keys(themeMap).some(k => t.includes(k))
-            || Object.keys(graphicMap).includes(t)
-            || Object.keys(fontMap).some(k => t.includes(k))
-            || Object.keys(langMap).some(k => t.includes(k))
-            || ((t === 'aktif' || t === 'nonaktif') && (btn.closest('div')?.textContent || '').toLowerCase().includes('animasi'));
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('main button').forEach(btn => {
+            const raw = (btn.textContent || '').trim().toLowerCase();
+            const isAnimBtn = (raw === 'aktif' || raw === 'nonaktif') && (btn.closest('div')?.textContent || '').toLowerCase().includes('animasi');
+            const matchedTheme = Object.entries(themeMap).find(([k]) => raw.includes(k));
+            const matchedGraphic = Object.entries(graphicMap).find(([k]) => raw === k);
+            const matchedFont = Object.entries(fontMap).find(([k]) => raw.includes(k));
+            const matchedLang = Object.entries(langMap).find(([k]) => raw.includes(k));
 
-        if (!isManaged) return;
+            if (!isAnimBtn && !matchedTheme && !matchedGraphic && !matchedFont && !matchedLang) return;
 
-        btn.removeAttribute('onclick');
-        btn.addEventListener('click', function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            const label = (this.textContent || '').trim().toLowerCase();
+            btn.removeAttribute('onclick');
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
 
-            for (const [k, slug] of Object.entries(themeMap)) {
-                if (label.includes(k)) {
-                    localStorage.setItem('app_theme', slug);
-                    syncStates();
-                    return;
-                }
-            }
-            for (const [k, slug] of Object.entries(graphicMap)) {
-                if (label === k) {
-                    localStorage.setItem('app_graphic', slug);
-                    syncStates();
-                    return;
-                }
-            }
-            for (const [k, slug] of Object.entries(fontMap)) {
-                if (label.includes(k)) {
-                    localStorage.setItem('app_font', slug);
-                    syncStates();
-                    return;
-                }
-            }
-            for (const [k, code] of Object.entries(langMap)) {
-                if (label.includes(k)) {
-                    localStorage.setItem('app_lang', code);
+                if (matchedTheme) {
+                    localStorage.setItem('app_theme', matchedTheme[1]);
+                } else if (matchedGraphic) {
+                    localStorage.setItem('app_graphic', matchedGraphic[1]);
+                } else if (matchedFont) {
+                    localStorage.setItem('app_font', matchedFont[1]);
+                } else if (matchedLang) {
+                    localStorage.setItem('app_lang', matchedLang[1]);
                     if (typeof window.applyLanguage === 'function') {
-                        window.applyLanguage(code);
+                        window.applyLanguage(matchedLang[1]);
                     }
-                    syncStates();
-                    return;
+                } else if (isAnimBtn) {
+                    const nextAnim = (localStorage.getItem('app_anim') || 'on') === 'on' ? 'off' : 'on';
+                    localStorage.setItem('app_anim', nextAnim);
                 }
-            }
-            if (label === 'aktif' || label === 'nonaktif') {
-                const nextAnim = (localStorage.getItem('app_anim') || 'on') === 'on' ? 'off' : 'on';
-                localStorage.setItem('app_anim', nextAnim);
-                syncStates();
-            }
-        }, true);
-    });
 
-    syncStates();
-});
+                paintActiveButtons();
+            }, true);
+        });
+
+        paintActiveButtons();
+    });
+})();
 </script>
 <!-- SETTINGS-PERFECTION-END -->
 </x-app-layout>
