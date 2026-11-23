@@ -708,127 +708,7 @@
         html[data-graphic="minimalist"][data-anim="on"] nav.main-tamsis-nav .nav-btn-anim:hover {
             transform: translateY(-2px) scale(1.03) !important;
         }
-                    /* Jadwal HP: FIT 1 layar utuh tanpa geser, rapi & nama hari (Senin-Jumat) utuh */
-        @media (max-width: 640px) {
-            .timetable-wrap-scroll,
-            div:has(> table.timetable-grid) {
-                overflow-x: hidden !important;
-                width: 100% !important;
-            }
-            table.timetable-grid {
-                width: 100% !important;
-                min-width: 0 !important;
-                max-width: 100% !important;
-                table-layout: fixed !important;
-                border-collapse: separate !important;
-                border-spacing: 2px !important;
-            }
-            table.timetable-grid th,
-            table.timetable-grid td {
-                min-width: 0 !important;
-                padding: 1px !important;
-                font-size: 6.5px !important;
-                line-height: 1.1 !important;
-                vertical-align: middle !important;
-                overflow: hidden !important;
-            }
-            table.timetable-grid th:first-child,
-            table.timetable-grid td:first-child {
-                position: static !important;
-                width: 34px !important;
-                min-width: 34px !important;
-                max-width: 34px !important;
-                padding: 2px 1px !important;
-                font-size: 7.5px !important;
-                font-weight: 800 !important;
-                text-align: center !important;
-                white-space: nowrap !important;
-                letter-spacing: -0.02em !important;
-            }
-            table.timetable-grid a,
-            table.timetable-grid .subject-box {
-                min-width: 0 !important;
-                width: 100% !important;
-                min-height: 40px !important; height: 40px !important;
-                padding: 2px 1px !important;
-                gap: 1.5px !important;
-                border-radius: 5px !important;
-                font-size: 7.2px !important;
-                font-weight: 800 !important;
-                line-height: 1.05 !important;
-            }
-            table.timetable-grid a span.mobile-label-only,
-            table.timetable-grid .subject-box span.mobile-label-only {
-                display: block !important;
-                width: 100% !important;
-                font-size: 7.2px !important;
-                text-align: center !important;
-                overflow: hidden !important;
-                text-overflow: ellipsis !important;
-                white-space: nowrap !important;
-            }
-            .mobile-type-tag {
-                font-size: 5.8px !important; white-space: nowrap !important;
-                padding: 0.5px 2.5px !important;
-                border-radius: 3px !important;
-            }
-            table.timetable-grid a span.rounded-full,
-            table.timetable-grid .subject-box span.rounded-full {
-                top: 2px !important;
-                right: 2px !important;
-                width: 4.5px !important;
-                height: 4.5px !important;
-                min-width: 4.5px !important;
-                min-height: 4.5px !important;
-            }
-        }
-            /* Polish Jadwal HP: Hari Senin-Jumat utuh 100%, padding lega, anti-terpotong */
-        @media (max-width: 640px) {
-            main.page-animate-in {
-                padding-left: 0.45rem !important;
-                padding-right: 0.45rem !important;
-            }
-            main.page-animate-in .theme-card:has(table.timetable-grid) {
-                padding: 0.65rem 0.4rem !important;
-            }
-            table.timetable-grid {
-                border-spacing: 1.5px !important;
-            }
-            table.timetable-grid th:first-child,
-            table.timetable-grid td:first-child {
-                width: 40px !important;
-                min-width: 40px !important;
-                max-width: 40px !important;
-                font-size: 7.5px !important;
-                padding: 2px 1px !important;
-                overflow: visible !important;
-                text-overflow: clip !important;
-            }
-            table.timetable-grid thead th:not(:first-child) {
-                font-size: 5px !important;
-                line-height: 1.05 !important;
-                padding: 2px 0.5px !important;
-                letter-spacing: -0.03em !important;
-            }
-            table.timetable-grid a,
-            table.timetable-grid .subject-box {
-                min-height: 38px !important;
-                height: 38px !important;
-                padding: 2px 1px !important;
-                border-radius: 5px !important;
-            }
-        }
-            @media (min-width: 641px) {
-            table.timetable-grid td, table td {
-                overflow: hidden !important;
-            }
-            table.timetable-grid a, table a[href*="/mapel/"] {
-                padding: 6px 4px !important;
-                text-align: center !important;
-                overflow: hidden !important;
-            }
-        }
-    </style>
+                    </style>
 </head>
 <body class="antialiased" data-theme="mode-gelap" data-font="sans" data-graphic="simple" data-anim="off">
     @php
@@ -1901,284 +1781,285 @@
 
         document.addEventListener('DOMContentLoaded', formatDesktopSubjectLabels);
         window.addEventListener('resize', formatDesktopSubjectLabels);
-            // =========================================================
-        // 1. GLOBAL 4-LANGUAGE TRANSLATOR (ID, EN, JA, RU)
-        // =========================================================
-        const GLOBAL_I18N = {
-            en: {
-                'Jadwal': 'Schedule', 'List Tugas': 'Task List', 'Kalender': 'Calendar', 'Siswa': 'Students',
-                'Nmr Guru': 'Teachers', 'Materi': 'Materials', 'Latihan': 'Practice', 'Profil': 'Profile',
-                'Pengaturan': 'Settings', 'Komok': 'Komok',
-                'JADWAL XI RPL 1': 'XI RPL 1 SCHEDULE',
-                'Catatan': 'Notes', 'Tugas': 'Tasks', 'PR': 'Homework', 'Event': 'Event',
-                'Tenggat': 'Due Soon', 'Deadline': 'Overdue', 'Selesai': 'Completed', 'Reset': 'Reset',
-                'Pengaturan Tampilan': 'Display Settings',
-                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Customize gradient color themes, graphic styles, animations, sound effects, class music, and app language.',
-                '← Kembali ke Jadwal Utama': '← Back to Main Schedule',
-                'TEMA GELAP (GRADIEN)': 'DARK THEMES (GRADIENT)',
-                'TEMA TERANG (GRADIEN)': 'LIGHT THEMES (GRADIENT)',
-                'GRAFIK & ANIMASI': 'GRAPHICS & ANIMATION',
-                'Animasi Transisi UI': 'UI Transition Animation',
-                'GAYA HURUF': 'FONT STYLE',
-                'EFEK SUARA (SFX)': 'SOUND EFFECTS (SFX)',
-                'BAHASA': 'LANGUAGE',
-                'Pemutar Musik Kelas': 'Class Music Player',
-                'Dengarkan musik santai saat belajar. Pengaturan playlist dikelola oleh Admin.': 'Listen to relaxing music while studying. Playlist settings are managed by Admin.',
-                'Tambah Lagu Langsung (Admin)': 'Add Song Directly (Admin)',
-                'Upload & Tayangkan Lagu': 'Upload & Publish Song',
-                'Kasih Saran & Laporan Bug': 'Send Feedback & Bug Report',
-                'List Tugas & Catatan Kelas': 'Class Task & Note List',
-                'Filter berdasarkan Catatan, PR, Tugas, atau Event.': 'Filter by Notes, Homework, Tasks, or Events.',
-                'Semua': 'All', 'Buka & Komentar': 'Open & Comment', 'Tandai Selesai': 'Mark Completed',
-                'Nomor WhatsApp Guru XI RPL 1': 'Teacher WhatsApp Contacts XI RPL 1',
-                'Bank Materi Ujian (AAS, ATS, Ulangan)': 'Exam Study Materials (AAS, ATS, Quizzes)',
-                'Pusat Latihan Soal XI RPL 1': 'Practice Quiz Center XI RPL 1',
-                'Hari / Jam': 'Day / Time', 'Senin': 'Monday', 'Selasa': 'Tuesday', 'Rabu': 'Wednesday', 'Kamis': 'Thursday', 'Jumat': 'Friday'
-            },
-            ja: {
-                'Jadwal': '時間割', 'List Tugas': '課題一覧', 'Kalender': 'カレンダー', 'Siswa': '生徒一覧',
-                'Nmr Guru': '先生連絡先', 'Materi': '教材', 'Latihan': '練習問題', 'Profil': 'プロフィール',
-                'Pengaturan': '設定', 'Komok': 'コモック',
-                'JADWAL XI RPL 1': 'XI RPL 1 時間割',
-                'Catatan': 'ノート', 'Tugas': '課題', 'PR': '宿題', 'Event': 'イベント',
-                'Tenggat': '締切間近', 'Deadline': '期限切れ', 'Selesai': '完了', 'Reset': 'リセット',
-                'Pengaturan Tampilan': '表示設定',
-                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'グラデーションテーマ、グラフィックスタイル、アニメーション、効果音、音楽、言語を設定します。',
-                '← Kembali ke Jadwal Utama': '← 時間割に戻る',
-                'TEMA GELAP (GRADIEN)': 'ダークテーマ（グラデーション）',
-                'TEMA TERANG (GRADIEN)': 'ライトテーマ（グラデーション）',
-                'GRAFIK & ANIMASI': 'グラフィックとアニメーション',
-                'Animasi Transisi UI': 'UIトランジションアニメーション',
-                'GAYA HURUF': 'フォントスタイル',
-                'EFEK SUARA (SFX)': '効果音 (SFX)',
-                'BAHASA': '言語設定',
-                'Pemutar Musik Kelas': 'クラス音楽プレイヤー',
-                'Dengarkan musik santai saat belajar. Pengaturan playlist dikelola oleh Admin.': '勉強中にリラックスできる音楽を聴きましょう。プレイリストは管理者が管理します。',
-                'Tambah Lagu Langsung (Admin)': '曲を追加（管理者）',
-                'Upload & Tayangkan Lagu': '曲をアップロードして公開',
-                'Kasih Saran & Laporan Bug': 'ご意見・バグ報告',
-                'List Tugas & Catatan Kelas': 'クラスの課題・ノート一覧',
-                'Filter berdasarkan Catatan, PR, Tugas, atau Event.': 'ノート・宿題・課題・イベントで絞り込みます。',
-                'Semua': 'すべて', 'Buka & Komentar': '開く・コメント', 'Tandai Selesai': '完了にする',
-                'Nomor WhatsApp Guru XI RPL 1': 'XI RPL 1 先生の連絡先',
-                'Bank Materi Ujian (AAS, ATS, Ulangan)': '試験対策教材バンク',
-                'Pusat Latihan Soal XI RPL 1': 'XI RPL 1 練習問題センター',
-                'Hari / Jam': '曜日 / 時限', 'Senin': '月曜', 'Selasa': '火曜', 'Rabu': '水曜', 'Kamis': '木曜', 'Jumat': '金曜'
-            },
-            ru: {
-                'Jadwal': 'Расписание', 'List Tugas': 'Задания', 'Kalender': 'Календарь', 'Siswa': 'Ученики',
-                'Nmr Guru': 'Учителя', 'Materi': 'Материалы', 'Latihan': 'Тесты', 'Profil': 'Профиль',
-                'Pengaturan': 'Настройки', 'Komok': 'Комок',
-                'JADWAL XI RPL 1': 'РАСПИСАНИЕ XI RPL 1',
-                'Catatan': 'Заметки', 'Tugas': 'Задания', 'PR': 'ДЗ', 'Event': 'События',
-                'Tenggat': 'Скоро срок', 'Deadline': 'Просрочено', 'Selesai': 'Готово', 'Reset': 'Сброс',
-                'Pengaturan Tampilan': 'Настройки экрана',
-                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Настройте градиентные темы, графику, анимацию, звуки, музыку класса и язык.',
-                '← Kembali ke Jadwal Utama': '← Назад к расписанию',
-                'TEMA GELAP (GRADIEN)': 'ТЁМНЫЕ ТЕМЫ (ГРАДИЕНТ)',
-                'TEMA TERANG (GRADIEN)': 'СВЕТЛЫЕ ТЕМЫ (ГРАДИЕНТ)',
-                'GRAFIK & ANIMASI': 'ГРАФИКА И АНИМАЦИЯ',
-                'Animasi Transisi UI': 'Анимация переходов UI',
-                'GAYA HURUF': 'СТИЛЬ ШРИФТА',
-                'EFEK SUARA (SFX)': 'ЗВУКОВЫЕ ЭФФЕКТЫ (SFX)',
-                'BAHASA': 'ЯЗЫК',
-                'Pemutar Musik Kelas': 'Музыкальный плеер класса',
-                'Dengarkan musik santai saat belajar. Pengaturan playlist dikelola oleh Admin.': 'Слушайте спокойную музыку во время учёбы. Плейлист настраивает администратор.',
-                'Tambah Lagu Langsung (Admin)': 'Добавить трек (Админ)',
-                'Upload & Tayangkan Lagu': 'Загрузить и опубликовать',
-                'Kasih Saran & Laporan Bug': 'Отзыв и отчёт об ошибке',
-                'List Tugas & Catatan Kelas': 'Список заданий и заметок',
-                'Filter berdasarkan Catatan, PR, Tugas, atau Event.': 'Фильтр по заметкам, ДЗ, заданиям и событиям.',
-                'Semua': 'Все', 'Buka & Komentar': 'Открыть', 'Tandai Selesai': 'Выполнено',
-                'Nomor WhatsApp Guru XI RPL 1': 'Контакты WhatsApp учителей XI RPL 1',
-                'Bank Materi Ujian (AAS, ATS, Ulangan)': 'Учебные материалы к экзаменам',
-                'Pusat Latihan Soal XI RPL 1': 'Тренировочные тесты XI RPL 1',
-                'Hari / Jam': 'День / Урок', 'Senin': 'Пн', 'Selasa': 'Вт', 'Rabu': 'Ср', 'Kamis': 'Чт', 'Jumat': 'Пт'
-            }
-        };
+            <!-- GLOBAL-UI-ENGINE-START -->
+<style id="global-theme-engine-css">
+    /* === TEMA GELAP === */
+    html[data-theme="academic-trust"] body { background: linear-gradient(135deg, #0b132b 0%, #1c2541 55%, #0f172a 100%) !important; color: #f8fafc !important; }
+    html[data-theme="deep-ocean"] body { background: linear-gradient(135deg, #041c2c 0%, #0a3656 55%, #06283d 100%) !important; color: #f0f9ff !important; }
+    html[data-theme="midnight-scholar"] body { background: linear-gradient(135deg, #0f0c29 0%, #302b63 55%, #1a163a 100%) !important; color: #f5f3ff !important; }
+    html[data-theme="forest-academy"] body { background: linear-gradient(135deg, #062118 0%, #0d3b2e 55%, #082920 100%) !important; color: #ecfdf5 !important; }
+    html[data-theme="mode-gelap"] body { background: linear-gradient(135deg, #09090b 0%, #18181b 55%, #0f0f12 100%) !important; color: #fafafa !important; }
 
-        window.applyLanguage = function (lang) {
-            const dict = GLOBAL_I18N[lang] || null;
-            const sortedKeys = dict ? Object.keys(dict).sort((a, b) => b.length - a.length) : [];
-            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
-            let node;
-            while ((node = walker.nextNode())) {
-                const parent = node.parentElement;
-                if (!parent || ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT'].includes(parent.tagName)) continue;
-                if (node._origText === undefined) {
-                    node._origText = node.nodeValue;
-                }
-                if (!dict) {
-                    node.nodeValue = node._origText;
-                    continue;
-                }
-                let updated = node._origText;
-                for (const k of sortedKeys) {
-                    if (updated.includes(k)) {
-                        updated = updated.split(k).join(dict[k]);
+    /* === TEMA TERANG === */
+    html[data-theme="tech-growth"] body { background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 55%, #e0f2fe 100%) !important; color: #064e3b !important; }
+    html[data-theme="creative-spark"] body { background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 55%, #fef3c7 100%) !important; color: #7c2d12 !important; }
+    html[data-theme="lavender-dream"] body { background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 55%, #fae8ff 100%) !important; color: #4c1d95 !important; }
+    html[data-theme="soft-berry"] body { background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 55%, #fce7f3 100%) !important; color: #881337 !important; }
+    html[data-theme="morning-assembly"] body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 55%, #f1f5f9 100%) !important; color: #0f172a !important; }
+
+    /* Card adaptation untuk Tema Terang vs Gelap */
+    html[data-theme="tech-growth"] .theme-card,
+    html[data-theme="creative-spark"] .theme-card,
+    html[data-theme="lavender-dream"] .theme-card,
+    html[data-theme="soft-berry"] .theme-card,
+    html[data-theme="morning-assembly"] .theme-card {
+        background: rgba(255, 255, 255, 0.86) !important;
+        color: inherit !important;
+        border-color: rgba(15, 23, 42, 0.14) !important;
+    }
+    html[data-theme="tech-growth"] .theme-soft,
+    html[data-theme="creative-spark"] .theme-soft,
+    html[data-theme="lavender-dream"] .theme-soft,
+    html[data-theme="soft-berry"] .theme-soft,
+    html[data-theme="morning-assembly"] .theme-soft {
+        background: rgba(15, 23, 42, 0.06) !important;
+        color: inherit !important;
+    }
+
+    /* === GAYA GRAFIK (Legacy / Minimalist / Simple) === */
+    html[data-graphic="legacy"] .theme-card {
+        border-radius: 4px !important;
+        border-width: 2px !important;
+        box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.45) !important;
+    }
+    html[data-graphic="minimalist"] .theme-card {
+        border-radius: 10px !important;
+        box-shadow: none !important;
+        backdrop-filter: none !important;
+    }
+    html[data-graphic="simple"] .theme-card {
+        border-radius: 1rem !important;
+    }
+
+    /* Legacy & Minimalist: Animasi hanya di Navbar */
+    html[data-graphic="legacy"][data-anim="on"] main,
+    html[data-graphic="minimalist"][data-anim="on"] main,
+    html[data-graphic="legacy"][data-anim="on"] main .theme-card,
+    html[data-graphic="minimalist"][data-anim="on"] main .theme-card {
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+    html[data-anim="off"] *,
+    html[data-anim="off"] *::before,
+    html[data-anim="off"] *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+
+    /* === GAYA HURUF (Font Style) === */
+    html[data-font="modern"] body { font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif !important; }
+    html[data-font="serif"] body { font-family: Georgia, 'Times New Roman', serif !important; }
+    html[data-font="mono"] body { font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace !important; }
+
+    /* === TABEL JADWAL HP: FIT 1 LAYAR PENUH === */
+    @media (max-width: 640px) {
+        table {
+            width: 100% !important;
+            table-layout: fixed !important;
+            border-spacing: 1.5px !important;
+        }
+        table th:first-child,
+        table td:first-child {
+            width: 40px !important;
+            min-width: 40px !important;
+            max-width: 40px !important;
+            font-size: 7.5px !important;
+            padding: 2px 1px !important;
+            white-space: nowrap !important;
+            overflow: visible !important;
+        }
+        table a[href*="/mapel/"] {
+            min-height: 38px !important;
+            height: 38px !important;
+            padding: 2px 1px !important;
+            font-size: 7px !important;
+        }
+    }
+</style>
+
+<script id="global-theme-engine-js">
+(function () {
+    // 1. Apply Saved Preferences Instantly
+    const savedTheme = localStorage.getItem('app_theme') || 'mode-gelap';
+    const savedGraphic = localStorage.getItem('app_graphic') || 'simple';
+    const savedFont = localStorage.getItem('app_font') || 'modern';
+    const savedAnim = localStorage.getItem('app_anim') || 'on';
+
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.documentElement.setAttribute('data-graphic', savedGraphic);
+    document.documentElement.setAttribute('data-font', savedFont);
+    document.documentElement.setAttribute('data-anim', savedAnim);
+
+    window.setAppTheme = function (themeSlug) {
+        localStorage.setItem('app_theme', themeSlug);
+        document.documentElement.setAttribute('data-theme', themeSlug);
+    };
+
+    window.setAppGraphic = function (graphicSlug) {
+        localStorage.setItem('app_graphic', graphicSlug);
+        document.documentElement.setAttribute('data-graphic', graphicSlug);
+    };
+
+    window.setAppFont = function (fontSlug) {
+        localStorage.setItem('app_font', fontSlug);
+        document.documentElement.setAttribute('data-font', fontSlug);
+    };
+
+    window.toggleAppAnim = function () {
+        const cur = document.documentElement.getAttribute('data-anim') || 'on';
+        const nxt = cur === 'on' ? 'off' : 'on';
+        localStorage.setItem('app_anim', nxt);
+        document.documentElement.setAttribute('data-anim', nxt);
+        return nxt;
+    };
+
+    // 2. 4-Language Translator
+    const I18N = {
+        en: {
+            'Jadwal': 'Schedule', 'List Tugas': 'Task List', 'Kalender': 'Calendar', 'Siswa': 'Students',
+            'Nmr Guru': 'Teachers', 'Materi': 'Materials', 'Latihan': 'Practice', 'Profil': 'Profile',
+            'Pengaturan': 'Settings', 'JADWAL XI RPL 1': 'XI RPL 1 SCHEDULE',
+            'Catatan': 'Notes', 'Tugas': 'Tasks', 'PR': 'Homework', 'Event': 'Event',
+            'Tenggat': 'Due Soon', 'Deadline': 'Overdue', 'Selesai': 'Completed', 'Reset': 'Reset',
+            'Pengaturan Tampilan': 'Display Settings',
+            'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Customize gradient color themes, graphic styles, animations, sound effects, class music, and app language.',
+            '← Kembali ke Jadwal Utama': '← Back to Main Schedule',
+            'TEMA GELAP (GRADIEN)': 'DARK THEMES (GRADIENT)',
+            'TEMA TERANG (GRADIEN)': 'LIGHT THEMES (GRADIENT)',
+            'GRAFIK & ANIMASI': 'GRAPHICS & ANIMATION',
+            'Animasi Transisi UI': 'UI Transition Animation',
+            'GAYA HURUF': 'FONT STYLE',
+            'EFEK SUARA (SFX)': 'SOUND EFFECTS (SFX)',
+            'BAHASA': 'LANGUAGE',
+            'Pemutar Musik Kelas': 'Class Music Player',
+            'List Tugas & Catatan Kelas': 'Class Task & Note List',
+            'Semua': 'All', 'Buka & Komentar': 'Open & Comment', 'Tandai Selesai': 'Mark Completed',
+            'Hari / Jam': 'Day / Time', 'Senin': 'Monday', 'Selasa': 'Tuesday', 'Rabu': 'Wednesday', 'Kamis': 'Thursday', 'Jumat': 'Friday'
+        },
+        ja: {
+            'Jadwal': '時間割', 'List Tugas': '課題一覧', 'Kalender': 'カレンダー', 'Siswa': '生徒一覧',
+            'Nmr Guru': '先生連絡先', 'Materi': '教材', 'Latihan': '練習問題', 'Profil': 'プロフィール',
+            'Pengaturan': '設定', 'JADWAL XI RPL 1': 'XI RPL 1 時間割',
+            'Catatan': 'ノート', 'Tugas': '課題', 'PR': '宿題', 'Event': 'イベント',
+            'Tenggat': '締切間近', 'Deadline': '期限切れ', 'Selesai': '完了', 'Reset': 'リセット',
+            'Pengaturan Tampilan': '表示設定',
+            '← Kembali ke Jadwal Utama': '← 時間割に戻る',
+            'TEMA GELAP (GRADIEN)': 'ダークテーマ', 'TEMA TERANG (GRADIEN)': 'ライトテーマ',
+            'GRAFIK & ANIMASI': 'グラフィックとアニメーション', 'GAYA HURUF': 'フォントスタイル',
+            'BAHASA': '言語設定', 'Pemutar Musik Kelas': 'クラス音楽プレイヤー',
+            'Hari / Jam': '曜日 / 時限', 'Senin': '月曜', 'Selasa': '火曜', 'Rabu': '水曜', 'Kamis': '木曜', 'Jumat': '金曜'
+        },
+        ru: {
+            'Jadwal': 'Расписание', 'List Tugas': 'Задания', 'Kalender': 'Календарь', 'Siswa': 'Ученики',
+            'Nmr Guru': 'Учителя', 'Materi': 'Материалы', 'Latihan': 'Тесты', 'Profil': 'Профиль',
+            'Pengaturan': 'Настройки', 'JADWAL XI RPL 1': 'РАСПИСАНИЕ XI RPL 1',
+            'Catatan': 'Заметки', 'Tugas': 'Задания', 'PR': 'ДЗ', 'Event': 'События',
+            'Tenggat': 'Скоро срок', 'Deadline': 'Просрочено', 'Selesai': 'Готово', 'Reset': 'Сброс',
+            'Pengaturan Tampilan': 'Настройки экрана',
+            '← Kembali ke Jadwal Utama': '← Назад к расписанию',
+            'TEMA GELAP (GRADIEN)': 'ТЁМНЫЕ ТЕМЫ', 'TEMA TERANG (GRADIEN)': 'СВЕТЛЫЕ ТЕМЫ',
+            'GRAFIK & ANIMASI': 'ГРАФИКА И АНИМАЦИЯ', 'GAYA HURUF': 'СТИЛЬ ШРИФТА',
+            'BAHASA': 'ЯЗЫК', 'Pemutar Musik Kelas': 'Музыкальный плеер класса',
+            'Hari / Jam': 'День / Урок', 'Senin': 'Пн', 'Selasa': 'Вт', 'Rabu': 'Ср', 'Kamis': 'Чт', 'Jumat': 'Пт'
+        }
+    };
+
+    window.applyLanguage = function (lang) {
+        const dict = I18N[lang] || null;
+        const keys = dict ? Object.keys(dict).sort((a, b) => b.length - a.length) : [];
+        const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+        let n;
+        while ((n = walker.nextNode())) {
+            const p = n.parentElement;
+            if (!p || ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT'].includes(p.tagName)) continue;
+            if (n._orig === undefined) n._orig = n.nodeValue;
+            if (!dict) {
+                n.nodeValue = n._orig;
+                continue;
+            }
+            let val = n._orig;
+            for (const k of keys) {
+                if (val.includes(k)) val = val.split(k).join(dict[k]);
+            }
+            n.nodeValue = val;
+        }
+    };
+
+    // 3. DOM Ready Normalizer (Navbar "List Tugas", Singkatan Mapel Desktop, Bell Dismiss)
+    document.addEventListener('DOMContentLoaded', function () {
+        // A. Navbar "(X) Tugas" -> "List Tugas"
+        document.querySelectorAll('nav a').forEach(a => {
+            const t = (a.textContent || '').replace(/\s+/g, ' ').trim();
+            if (/^\(\d+\)\s*Tugas$/i.test(t) || /list-tugas/i.test(a.getAttribute('href') || '')) {
+                a.textContent = 'List Tugas';
+            }
+        });
+
+        // B. Singkatan Kotak Jadwal di Desktop (KTS, STI, BK, KDI, MBJ(J), PP, B.Ing, BI, MTK, Penjas, PL(RPL1), SI, KWH, PAI)
+        if (window.innerWidth > 640) {
+            const dict = [
+                { keys: ['ketamansiswaan', 'etamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
+                { keys: ['samsung tech institute', 'sistem teknologi informasi', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
+                { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
+                { keys: ['kreativitas & desain interaktif', 'kreativitas dan desain interaktif', 'kdi'], code: 'KDI', full: 'Kreativitas & Desain Interaktif' },
+                { keys: ['muatan bahasa jepang', 'bahasa jepang', 'mbj'], code: 'MBJ(J)', full: 'Muatan Bahasa Jepang' },
+                { keys: ['pendidikan pancasila', 'ppkn', 'pp'], code: 'PP', full: 'Pendidikan Pancasila' },
+                { keys: ['bahasa inggris', 'b.ing'], code: 'B.Ing', full: 'Bahasa Inggris' },
+                { keys: ['bahasa indonesia', 'bi'], code: 'BI', full: 'Bahasa Indonesia' },
+                { keys: ['matematika', 'mtk'], code: 'MTK', full: 'Matematika' },
+                { keys: ['pendidikan jasmani', 'pjok', 'penjas'], code: 'Penjas', full: 'Pendidikan Jasmani' },
+                { keys: ['pemrograman lanjut', 'pl(rpl1)', 'pl'], code: 'PL(RPL1)', full: 'Pemrograman Lanjut' },
+                { keys: ['sejarah indonesia', 'sejarah'], code: 'SI', full: 'Sejarah Indonesia' },
+                { keys: ['kewirausahaan', 'pkk', 'kwh'], code: 'KWH', full: 'Kewirausahaan' },
+                { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
+            ];
+
+            document.querySelectorAll('table tr').forEach(tr => {
+                const dayTxt = (tr.firstElementChild?.textContent || '').trim().toLowerCase();
+                const isSelasa = dayTxt.startsWith('sel');
+                const boxes = Array.from(tr.querySelectorAll('a[href*="/mapel/"], a[href*="/subject/"]'));
+
+                boxes.forEach((box, idx) => {
+                    const raw = (box.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+                    let hit = null;
+                    if (isSelasa && idx === boxes.length - 1) {
+                        hit = { code: 'STI', full: 'Samsung Tech Institute' };
+                    } else {
+                        hit = dict.find(d => d.keys.some(k => raw.includes(k)));
                     }
-                }
-                node.nodeValue = updated;
-            }
-        };
-
-        // =========================================================
-        // 2. SINGKATAN JADWAL DESKTOP (KTS, STI, BK, KDI, DLL.) + NAVBAR "List Tugas"
-        // =========================================================
-        function runGlobalUiNormalizer() {
-            // Ubah "(X) Tugas" di navbar menjadi "List Tugas"
-            document.querySelectorAll('nav a').forEach(a => {
-                const raw = (a.textContent || '').trim();
-                if (/^\(\d+\)\s*Tugas$/i.test(raw) || /list-tugas/i.test(a.getAttribute('href') || '')) {
-                    a.textContent = 'List Tugas';
-                }
-            });
-
-            // Singkatan kotak jadwal di Desktop/Laptop (KTS, STI, BK, KDI, dll.)
-            if (window.innerWidth > 640) {
-                const mapelAbbr = [
-                    { keys: ['ketamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
-                    { keys: ['samsung tech institute', 'sistem teknologi informasi', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
-                    { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
-                    { keys: ['kreativitas & desain interaktif', 'kreativitas dan desain interaktif', 'kdi'], code: 'KDI', full: 'Kreativitas & Desain Interaktif' },
-                    { keys: ['muatan bahasa jepang', 'bahasa jepang', 'mbj'], code: 'MBJ(J)', full: 'Muatan Bahasa Jepang' },
-                    { keys: ['pendidikan pancasila', 'ppkn', 'pp'], code: 'PP', full: 'Pendidikan Pancasila' },
-                    { keys: ['bahasa inggris', 'b.ing'], code: 'B.Ing', full: 'Bahasa Inggris' },
-                    { keys: ['bahasa indonesia', 'bi'], code: 'BI', full: 'Bahasa Indonesia' },
-                    { keys: ['matematika', 'mtk'], code: 'MTK', full: 'Matematika' },
-                    { keys: ['pendidikan jasmani', 'pjok', 'penjas'], code: 'Penjas', full: 'Pendidikan Jasmani' },
-                    { keys: ['pemrograman lanjut', 'pl(rpl1)', 'pl'], code: 'PL(RPL1)', full: 'Pemrograman Lanjut' },
-                    { keys: ['sejarah indonesia', 'sejarah'], code: 'SI', full: 'Sejarah Indonesia' },
-                    { keys: ['kewirausahaan', 'pkk', 'kwh'], code: 'KWH', full: 'Kewirausahaan' },
-                    { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
-                ];
-
-                document.querySelectorAll('table tr').forEach(tr => {
-                    const rowDay = (tr.firstElementChild?.textContent || '').trim().toLowerCase();
-                    const isSelasa = rowDay.startsWith('sel');
-                    const links = Array.from(tr.querySelectorAll('a[href*="/mapel/"], a[href*="/subject/"]'));
-
-                    links.forEach((box, idx) => {
-                        if (box.dataset.abbrApplied === '1') return;
-                        const txt = (box.textContent || '').trim().toLowerCase();
-                        let found = null;
-
-                        if (isSelasa && idx === links.length - 1) {
-                            found = { code: 'STI', full: 'Samsung Tech Institute' };
-                        } else {
-                            found = mapelAbbr.find(item => item.keys.some(k => txt === k || txt.includes(k)));
-                        }
-
-                        if (found) {
-                            box.dataset.abbrApplied = '1';
-                            const dots = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
-                            box.innerHTML = `
-                                <div class="font-extrabold text-sm leading-tight">${found.code}</div>
-                                <div class="text-[10px] opacity-75 leading-tight line-clamp-1 px-1">${found.full}</div>
-                            `;
-                            dots.forEach(d => box.appendChild(d));
-                        }
-                    });
+                    if (hit) {
+                        const dots = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
+                        box.style.position = 'relative';
+                        box.innerHTML = '<div class="font-extrabold text-sm leading-tight">' + hit.code + '</div><div class="text-[10px] opacity-75 leading-tight truncate max-w-full px-1">' + hit.full + '</div>';
+                        dots.forEach(dt => box.appendChild(dt));
+                    }
                 });
-            }
-
-            // Terapkan bahasa tersimpan setelah normalisasi
-            const savedLang = localStorage.getItem('app_lang') || 'id';
-            if (savedLang !== 'id') {
-                window.applyLanguage(savedLang);
-            }
+            });
         }
 
-        document.addEventListener('DOMContentLoaded', runGlobalUiNormalizer);
-            // =========================================================
-        // 3. LONCENG NOTIFIKASI: HILANG ANGKA SAAT DIKLIK, MUNCUL LAGI BILA ADA APPROVAL/EDIT BARU
-        // =========================================================
-        (function () {
-            function getNotifSignature() {
-                const items = [];
-                document.querySelectorAll('#notif-dropdown a, #notif-panel a, [id*="notif"] a').forEach(a => {
-                    items.push((a.textContent || '').trim());
-                });
-                return items.join('|');
+        // C. Lonceng Notifikasi: sembunyikan angka setelah diklik hingga ada approval/edit baru
+        const bellBtn = document.querySelector('nav button');
+        if (bellBtn) {
+            const badge = bellBtn.querySelector('span');
+            const notifLinks = Array.from(document.querySelectorAll('[id*="notif"] a')).map(a => a.textContent.trim()).join('|');
+            const seenSig = localStorage.getItem('notif_seen_sig') || '';
+            if (badge && notifLinks && notifLinks === seenSig) {
+                badge.classList.add('hidden');
             }
-
-            document.addEventListener('DOMContentLoaded', () => {
-                // Paksa semua menu "(X) Tugas" menjadi "List Tugas"
-                document.querySelectorAll('nav a, nav button').forEach(el => {
-                    const txt = (el.textContent || '').replace(/\s+/g, ' ').trim();
-                    if (/^\(\d+\)\s*Tugas$/i.test(txt)) {
-                        el.textContent = 'List Tugas';
-                    }
-                });
-
-                // Paksa singkatan mapel di seluruh kotak jadwal desktop
-                if (window.innerWidth > 640) {
-                    const dict = [
-                        { keys: ['ketamansiswaan', 'etamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
-                        { keys: ['samsung tech institute', 'sistem teknologi informasi', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
-                        { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
-                        { keys: ['kreativitas & desain interaktif', 'kreativitas dan desain interaktif', 'kdi'], code: 'KDI', full: 'Kreativitas & Desain Interaktif' },
-                        { keys: ['muatan bahasa jepang', 'bahasa jepang', 'mbj'], code: 'MBJ(J)', full: 'Muatan Bahasa Jepang' },
-                        { keys: ['pendidikan pancasila', 'ppkn', 'pp'], code: 'PP', full: 'Pendidikan Pancasila' },
-                        { keys: ['bahasa inggris', 'b.ing'], code: 'B.Ing', full: 'Bahasa Inggris' },
-                        { keys: ['bahasa indonesia', 'bi'], code: 'BI', full: 'Bahasa Indonesia' },
-                        { keys: ['matematika', 'mtk'], code: 'MTK', full: 'Matematika' },
-                        { keys: ['pendidikan jasmani', 'pjok', 'penjas'], code: 'Penjas', full: 'Pendidikan Jasmani' },
-                        { keys: ['pemrograman lanjut', 'pl(rpl1)', 'pl'], code: 'PL(RPL1)', full: 'Pemrograman Lanjut' },
-                        { keys: ['sejarah indonesia', 'sejarah'], code: 'SI', full: 'Sejarah Indonesia' },
-                        { keys: ['kewirausahaan', 'pkk', 'kwh'], code: 'KWH', full: 'Kewirausahaan' },
-                        { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
-                    ];
-
-                    document.querySelectorAll('table tr').forEach(tr => {
-                        const dayTxt = (tr.firstElementChild?.textContent || '').trim().toLowerCase();
-                        const isSelasa = dayTxt.startsWith('sel');
-                        const cells = Array.from(tr.querySelectorAll('a[href*="/mapel/"], a[href*="/subject/"]'));
-
-                        cells.forEach((box, idx) => {
-                            const raw = (box.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
-                            let hit = null;
-                            if (isSelasa && idx === cells.length - 1) {
-                                hit = { code: 'STI', full: 'Samsung Tech Institute' };
-                            } else {
-                                hit = dict.find(d => d.keys.some(k => raw.includes(k)));
-                            }
-                            if (hit) {
-                                const dots = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
-                                box.style.position = 'relative';
-                                box.innerHTML = `
-                                    <div class="font-extrabold text-sm leading-tight tracking-tight">${hit.code}</div>
-                                    <div class="text-[10px] opacity-75 leading-tight truncate max-w-full px-1">${hit.full}</div>
-                                `;
-                                dots.forEach(dt => box.appendChild(dt));
-                            }
-                        });
-                    });
-                }
-
-                // Logika Lonceng Notifikasi: sembunyikan badge angka setelah diklik sampai ada perubahan/approval baru
-                const bellBtn = document.querySelector('button[onclick*="notif"], #notif-bell-btn, nav button:has(svg)');
-                if (bellBtn) {
-                    const badge = bellBtn.querySelector('span');
-                    const currentSig = getNotifSignature();
-                    const seenSig = localStorage.getItem('notif_seen_signature') || '';
-
-                    if (badge && currentSig && currentSig === seenSig) {
-                        badge.classList.add('hidden');
-                    }
-
-                    bellBtn.addEventListener('click', () => {
-                        const latestSig = getNotifSignature();
-                        if (latestSig) {
-                            localStorage.setItem('notif_seen_signature', latestSig);
-                        }
-                        if (badge) {
-                            badge.classList.add('hidden');
-                        }
-                    });
-                }
+            bellBtn.addEventListener('click', function () {
+                const latest = Array.from(document.querySelectorAll('[id*="notif"] a')).map(a => a.textContent.trim()).join('|');
+                if (latest) localStorage.setItem('notif_seen_sig', latest);
+                if (badge) badge.classList.add('hidden');
             });
-        })();
-    </script>
+        }
+
+        // D. Apply saved language
+        const curLang = localStorage.getItem('app_lang') || 'id';
+        if (curLang !== 'id') window.applyLanguage(curLang);
+    });
+})();
+</script>
+<!-- GLOBAL-UI-ENGINE-END -->
 </body>
 </html>

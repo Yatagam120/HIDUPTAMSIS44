@@ -358,51 +358,118 @@
 
         document.addEventListener('DOMContentLoaded', refreshSettingsButtonsState);
     </script>
-    <script>
-        (function () {
-            const langMapByLabel = [
-                { match: 'indonesia', code: 'id' },
-                { match: 'english', code: 'en' },
-                { match: '日本語', code: 'ja' },
-                { match: 'jepang', code: 'ja' },
-                { match: 'русский', code: 'ru' },
-                { match: 'rusia', code: 'ru' }
-            ];
+    
+<script id="settings-interactive-binding">
+document.addEventListener('DOMContentLoaded', function () {
+    const themeMap = {
+        'academic trust': 'academic-trust',
+        'deep ocean': 'deep-ocean',
+        'midnight scholar': 'midnight-scholar',
+        'forest academy': 'forest-academy',
+        'mode gelap': 'mode-gelap',
+        'tech growth': 'tech-growth',
+        'creative spark': 'creative-spark',
+        'lavender dream': 'lavender-dream',
+        'soft berry': 'soft-berry',
+        'morning assembly': 'morning-assembly'
+    };
+    const graphicMap = { 'legacy': 'legacy', 'minimalist': 'minimalist', 'simple': 'simple' };
+    const fontMap = { 'modern sans': 'modern', 'klasik serif': 'serif', 'coding mono': 'mono' };
+    const langMap = { 'indonesia': 'id', 'english': 'en', '日本語': 'ja', 'jepang': 'ja', 'русский': 'ru', 'rusia': 'ru' };
 
-            function syncLanguageButtons(activeCode) {
-                document.querySelectorAll('button, a').forEach(btn => {
-                    const txt = (btn.textContent || '').trim().toLowerCase();
-                    const found = langMapByLabel.find(l => txt.includes(l.match));
-                    if (!found) return;
+    function refreshSettingsHighlight() {
+        const curTheme = localStorage.getItem('app_theme') || 'mode-gelap';
+        const curGraphic = localStorage.getItem('app_graphic') || 'simple';
+        const curFont = localStorage.getItem('app_font') || 'modern';
+        const curLang = localStorage.getItem('app_lang') || 'id';
+        const curAnim = localStorage.getItem('app_anim') || 'on';
 
-                    btn.dataset.langCode = found.code;
-                    if (found.code === activeCode) {
-                        btn.classList.add('theme-primary', 'shadow');
-                        btn.classList.remove('theme-soft');
-                    } else {
-                        btn.classList.remove('theme-primary', 'shadow');
-                        btn.classList.add('theme-soft');
-                    }
-                });
+        document.querySelectorAll('main button').forEach(btn => {
+            const t = (btn.textContent || '').trim().toLowerCase();
+
+            for (const [k, slug] of Object.entries(themeMap)) {
+                if (t.includes(k)) {
+                    btn.classList.toggle('theme-primary', slug === curTheme);
+                    btn.classList.toggle('ring-2', slug === curTheme);
+                }
             }
+            for (const [k, slug] of Object.entries(graphicMap)) {
+                if (t === k) {
+                    btn.classList.toggle('theme-primary', slug === curGraphic);
+                    btn.classList.toggle('theme-soft', slug !== curGraphic);
+                }
+            }
+            for (const [k, slug] of Object.entries(fontMap)) {
+                if (t.includes(k)) {
+                    btn.classList.toggle('theme-primary', slug === curFont);
+                    btn.classList.toggle('theme-soft', slug !== curFont);
+                }
+            }
+            for (const [k, code] of Object.entries(langMap)) {
+                if (t.includes(k)) {
+                    btn.classList.toggle('theme-primary', code === curLang);
+                    btn.classList.toggle('theme-soft', code !== curLang);
+                }
+            }
+            if (t === 'aktif' || t === 'nonaktif') {
+                const animRow = btn.closest('div')?.textContent?.toLowerCase() || '';
+                if (animRow.includes('animasi')) {
+                    btn.textContent = curAnim === 'on' ? 'Aktif' : 'Nonaktif';
+                    btn.classList.toggle('theme-primary', curAnim === 'on');
+                }
+            }
+        });
+    }
 
-            document.addEventListener('DOMContentLoaded', () => {
-                const currentLang = localStorage.getItem('app_lang') || 'id';
-                syncLanguageButtons(currentLang);
+    document.querySelectorAll('main button').forEach(btn => {
+        btn.addEventListener('click', function (e) {
+            const t = (this.textContent || '').trim().toLowerCase();
 
-                document.querySelectorAll('button, a').forEach(btn => {
-                    if (!btn.dataset.langCode) return;
-                    btn.addEventListener('click', function (e) {
-                        e.preventDefault();
-                        const chosen = this.dataset.langCode;
-                        localStorage.setItem('app_lang', chosen);
-                        syncLanguageButtons(chosen);
-                        if (typeof window.applyLanguage === 'function') {
-                            window.applyLanguage(chosen);
-                        }
-                    });
-                });
-            });
-        })();
-    </script>
+            for (const [k, slug] of Object.entries(themeMap)) {
+                if (t.includes(k)) {
+                    e.preventDefault();
+                    window.setAppTheme(slug);
+                    refreshSettingsHighlight();
+                    return;
+                }
+            }
+            for (const [k, slug] of Object.entries(graphicMap)) {
+                if (t === k) {
+                    e.preventDefault();
+                    window.setAppGraphic(slug);
+                    refreshSettingsHighlight();
+                    return;
+                }
+            }
+            for (const [k, slug] of Object.entries(fontMap)) {
+                if (t.includes(k)) {
+                    e.preventDefault();
+                    window.setAppFont(slug);
+                    refreshSettingsHighlight();
+                    return;
+                }
+            }
+            for (const [k, code] of Object.entries(langMap)) {
+                if (t.includes(k)) {
+                    e.preventDefault();
+                    localStorage.setItem('app_lang', code);
+                    window.applyLanguage(code);
+                    refreshSettingsHighlight();
+                    return;
+                }
+            }
+            if (t === 'aktif' || t === 'nonaktif') {
+                const animRow = this.closest('div')?.textContent?.toLowerCase() || '';
+                if (animRow.includes('animasi')) {
+                    e.preventDefault();
+                    window.toggleAppAnim();
+                    refreshSettingsHighlight();
+                }
+            }
+        });
+    });
+
+    refreshSettingsHighlight();
+});
+</script>
 </x-app-layout>
