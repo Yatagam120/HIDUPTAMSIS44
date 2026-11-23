@@ -3,10 +3,17 @@
         $uid = (int) auth()->id();
         $activeFilter = strtolower(trim((string) request()->query('filter', 'semua')));
 
-        // Ambil semua item approved (termasuk catatan) agar filter Catatan, PR, Tugas, Event lengkap
         $postTbl = \Illuminate\Support\Facades\Schema::hasTable('subject_posts')
             ? 'subject_posts'
             : (\Illuminate\Support\Facades\Schema::hasTable('subject_items') ? 'subject_items' : null);
+
+        $subjMap = \Illuminate\Support\Facades\Schema::hasTable('subjects')
+            ? \Illuminate\Support\Facades\DB::table('subjects')->get()->keyBy('id')
+            : collect();
+
+        $userMap = \Illuminate\Support\Facades\Schema::hasTable('users')
+            ? \Illuminate\Support\Facades\DB::table('users')->get()->keyBy('id')
+            : collect();
 
         if ($postTbl) {
             $q = \Illuminate\Support\Facades\DB::table($postTbl)->orderByDesc('id');
@@ -14,21 +21,22 @@
                 $q->where('status', 'approved');
             }
             $allRecords = $q->get();
-            $subjMap = \App\Models\Subject::all()->keyBy('id');
-            $userMap = \App\Models\User::all()->keyBy('id');
 
             $listItems = $allRecords->map(function ($row) use ($subjMap, $userMap) {
                 $row->type = strtolower(trim((string) ($row->category ?? $row->kategori ?? $row->type ?? $row->jenis ?? 'tugas')));
                 $row->title = $row->title ?? $row->judul ?? 'Tanpa Judul';
                 $row->description = $row->description ?? $row->deskripsi ?? $row->content ?? '';
                 $row->due_date = $row->due_date ?? $row->deadline ?? $row->tanggal_deadline ?? null;
-                $row->subject = $subjMap->get($row->subject_id);
+                $row->subject = isset($row->subject_id) ? $subjMap->get($row->subject_id) : null;
                 $row->author = isset($row->user_id) ? $userMap->get($row->user_id) : null;
                 return $row;
             });
         } else {
-            $listItems = ($tasks ?? $items ?? collect())->map(function ($row) {
+            $listItems = collect($tasks ?? $items ?? [])->map(function ($row) {
                 $row->type = strtolower(trim((string) ($row->type ?? $row->category ?? 'tugas')));
+                $row->title = $row->title ?? $row->judul ?? 'Tanpa Judul';
+                $row->description = $row->description ?? $row->deskripsi ?? '';
+                $row->due_date = $row->due_date ?? $row->deadline ?? null;
                 return $row;
             });
         }
@@ -49,7 +57,7 @@
             <!-- Filter Pojok Kanan Atas -->
             <div class="flex flex-wrap items-center gap-1.5 sm:justify-end">
                 @foreach(['semua' => 'Semua', 'catatan' => '📝 Catatan', 'pr' => '🏠 PR', 'tugas' => '📌 Tugas', 'event' => '🎉 Event'] as $fKey => $fLabel)
-                    <a href="{{ route('subjects.tasks', ['filter' => $fKey]) }}"
+                    <a href="{{ url()->current() }}?filter={{ $fKey }}"
                        class="px-3 py-1.5 rounded-xl border theme-border text-xs font-extrabold transition {{ $activeFilter === $fKey ? 'theme-primary shadow' : 'theme-soft hover:opacity-90' }}">
                         {{ $fLabel }}
                     </a>
@@ -70,7 +78,10 @@
                         ? $t->completed_by
                         : (json_decode((string) ($t->completed_by ?? '[]'), true) ?: []);
                     $isDone = in_array($uid, array_map('intval', $doneArr), true);
-                    $subjName = $t->subject->nama_mapel ?? $t->subject->kode_mapel ?? 'Mata Pelajaran';
+                    $subjName = $t->subject->nama_mapel ?? $t->subject->name ?? $t->subject->kode_mapel ?? 'Mata Pelajaran';
+                    $detailUrl = \Illuminate\Support\Facades\Route::has('subjects.show') && !empty($t->subject_id)
+                        ? route('subjects.show', ['subject' => $t->subject_id, 'tab' => $t->type])
+                        : url('/mapel/' . ($t->subject_id ?? 1) . '?tab=' . $t->type);
                 @endphp
                 <div class="theme-card border theme-border rounded-2xl p-5 flex flex-col justify-between gap-3 shadow">
                     <div class="space-y-2">
@@ -79,7 +90,7 @@
                                 <span class="px-2 py-0.5 rounded theme-primary text-[10px] font-extrabold uppercase">{{ $t->type }}</span>
                                 <span class="text-xs font-extrabold opacity-85">{{ $subjName }}</span>
                             </div>
-                            @if($t->due_date)
+                            @if(!empty($t->due_date))
                                 <span class="text-[11px] font-bold opacity-75">📅 {{ \Carbon\Carbon::parse($t->due_date)->format('d M Y') }}</span>
                             @endif
                         </div>
@@ -90,7 +101,7 @@
                             <div class="text-[11px] opacity-70">Dibuat oleh <strong>{{ $t->author->name }}</strong></div>
                         @endif
 
-                        @if($t->description)
+                        @if(!empty($t->description))
                             <p class="text-xs opacity-85 whitespace-pre-line">{{ $t->description }}</p>
                         @endif
 
@@ -109,12 +120,12 @@
                     </div>
 
                     <div class="pt-3 border-t theme-border flex items-center justify-between gap-2">
-                        <a href="{{ route('subjects.show', ['subject' => $t->subject_id, 'tab' => $t->type]) }}"
+                        <a href="{{ $detailUrl }}"
                            class="px-3 py-1.5 rounded-xl border theme-border theme-soft text-xs font-extrabold">
                             💬 Buka & Komentar
                         </a>
 
-                        @if(in_array($t->type, ['tugas', 'pr', 'event'], true))
+                        @if(in_array($t->type, ['tugas', 'pr', 'event'], true) && \Illuminate\Support\Facades\Route::has('items.toggle-complete'))
                             <form action="{{ route('items.toggle-complete', $t->id) }}" method="POST">
                                 @csrf
                                 <button type="submit"
