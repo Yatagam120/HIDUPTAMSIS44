@@ -50,6 +50,16 @@ class AdminUserController extends Controller
 
     public function updateRole(Request $request, User $user)
     {
+        $targetId = is_object($user) ? (int) $user->id : (int) $user;
+        $targetUser = is_object($user) ? $user : \App\Models\User::find($targetId);
+        $nextRole = strtolower(trim((string) $request->input('role', '')));
+
+        if ($targetUser && strtolower(trim((string) ($targetUser->role ?? ''))) === 'admin' && $nextRole !== 'admin') {
+            $adminCount = \App\Models\User::whereRaw("LOWER(TRIM(COALESCE(role, ''))) = 'admin'")->count();
+            if ($adminCount <= 1) {
+                return back()->withErrors(['error' => 'Role admin terakhir tidak bisa diturunkan.']);
+            }
+        }
         $this->ensureAdmin();
 
         $validated = $request->validate([
@@ -77,6 +87,19 @@ class AdminUserController extends Controller
 
     public function destroy(User $user)
     {
+        $targetId = is_object($user) ? (int) $user->id : (int) $user;
+        $targetUser = is_object($user) ? $user : \App\Models\User::find($targetId);
+
+        if ((int) auth()->id() === $targetId) {
+            return back()->withErrors(['error' => 'Akun sendiri tidak bisa dihapus.']);
+        }
+
+        if ($targetUser && strtolower(trim((string) ($targetUser->role ?? ''))) === 'admin') {
+            $adminCount = \App\Models\User::whereRaw("LOWER(TRIM(COALESCE(role, ''))) = 'admin'")->count();
+            if ($adminCount <= 1) {
+                return back()->withErrors(['error' => 'Admin terakhir tidak bisa dihapus.']);
+            }
+        }
         $this->ensureAdmin();
 
         if ((int) $user->id === (int) Auth::id()) {

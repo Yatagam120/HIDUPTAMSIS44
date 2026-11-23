@@ -548,4 +548,34 @@
         });
     })();
 </script>
+<!-- CALENDAR-POLISH-V5-START -->
+<style id="calendar-polish-v5">
+    main .grid td,
+    main table td {
+        vertical-align: top;
+    }
+
+    main [class*="calendar"] td,
+    main .calendar-grid td {
+        min-height: 76px;
+        height: 82px;
+        padding: 6px;
+    }
+
+    main .agenda-item button,
+    main .agenda-item a,
+    main [data-event-card] button,
+    main [data-event-card] a {
+        opacity: 0.85;
+        transition: opacity 0.15s ease;
+    }
+
+    main .agenda-item button:hover,
+    main .agenda-item a:hover,
+    main [data-event-card] button:hover,
+    main [data-event-card] a:hover {
+        opacity: 1;
+    }
+</style>
+<!-- CALENDAR-POLISH-V5-END -->
 </x-app-layout>

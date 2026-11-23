@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     <div class="theme-card rounded-2xl shadow-md p-6 mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
             <h1 class="text-2xl font-extrabold">Daftar Tugas, PR & Event Kelas</h1>
@@ -115,4 +115,33 @@
             </div>
         @endforelse
     </div>
+<!-- MODULE-POLISH-V6-START -->
+<style id="module-polish-v6">
+    /* Tugas & Materi: spacing card lebih lega & empty state lebih jelas */
+    main .task-card,
+    main .material-card {
+        padding: 1rem 1.15rem;
+        border-radius: 14px;
+    }
+
+    main .empty-state-box {
+        padding: 2rem 1.25rem;
+        border-radius: 16px;
+        line-height: 1.6;
+    }
+
+    /* Admin users: jarak antar kontrol lebih rapi */
+    main table th,
+    main table td {
+        padding: 0.65rem 0.75rem;
+        vertical-align: middle;
+    }
+
+    /* Live preview box untuk Pengaturan */
+    #settings-live-preview {
+        border-radius: 14px;
+        padding: 1rem 1.25rem;
+    }
+</style>
+<!-- MODULE-POLISH-V6-END -->
 </x-app-layout>

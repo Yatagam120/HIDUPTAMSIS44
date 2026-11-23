@@ -709,6 +709,192 @@
             transform: translateY(-2px) scale(1.03) !important;
         }
                     </style>
+
+<!-- DESIGN-SYSTEM-V2-START -->
+<style id="design-system-v2">
+    :root {
+        --ds-bg-main: #090d16;
+        --ds-surface-1: #111827;
+        --ds-surface-2: #1a2334;
+        --ds-surface-input: #0e1524;
+        --ds-border-subtle: rgba(148, 163, 184, 0.16);
+        --ds-text-primary: #f8fafc;
+        --ds-text-secondary: #cbd5e1;
+        --ds-accent-primary: #6366f1;
+        --ds-accent-success: #10b981;
+        --ds-accent-warning: #f59e0b;
+        --ds-accent-danger: #ef4444;
+        --ds-accent-info: #06b6d4;
+    }
+
+    /* Layer surface & typography dasar */
+    html[data-theme="mode-gelap"] body,
+    body {
+        font-size: 14px;
+        line-height: 1.5;
+        background-color: var(--ds-bg-main);
+        color: var(--ds-text-primary);
+    }
+
+    .theme-card {
+        background-color: var(--ds-surface-1);
+        border-color: var(--ds-border-subtle);
+    }
+
+    .theme-soft {
+        background-color: var(--ds-surface-2);
+        border-color: var(--ds-border-subtle);
+        color: var(--ds-text-secondary);
+    }
+
+    main input[type="text"],
+    main input[type="email"],
+    main input[type="password"],
+    main input[type="number"],
+    main input[type="date"],
+    main select,
+    main textarea {
+        background-color: var(--ds-surface-input);
+        border-color: var(--ds-border-subtle);
+        font-size: 14px;
+        line-height: 1.45;
+    }
+
+    /* Hindari teks metadata & label terlalu kecil seperti footnote */
+    main p, main li, main td, main th, main label {
+        font-size: max(12.5px, 1em);
+    }
+
+    main button,
+    main a.rounded-xl,
+    main a.rounded-lg {
+        font-size: max(13px, 0.875rem);
+    }
+
+    /* Warna semantik status */
+    .badge-success, .status-done {
+        background-color: rgba(16, 185, 129, 0.16);
+        color: #6ee7b7;
+        border-color: rgba(16, 185, 129, 0.35);
+    }
+
+    .badge-warning, .status-due {
+        background-color: rgba(245, 158, 11, 0.16);
+        color: #fcd34d;
+        border-color: rgba(245, 158, 11, 0.35);
+    }
+
+    .badge-danger, .status-late {
+        background-color: rgba(239, 68, 68, 0.16);
+        color: #fca5a5;
+        border-color: rgba(239, 68, 68, 0.35);
+    }
+
+    .badge-info {
+        background-color: rgba(6, 182, 212, 0.16);
+        color: #67e8f9;
+        border-color: rgba(6, 182, 212, 0.35);
+    }
+</style>
+<!-- DESIGN-SYSTEM-V2-END -->
+<!-- NAVBAR-POLISH-V3-START -->
+<style id="navbar-polish-v3">
+    nav a, nav button {
+        font-size: 13.5px;
+        line-height: 1.35;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    nav .flex.items-center,
+    nav .flex.gap-1,
+    nav .flex.gap-1\.5,
+    nav .flex.gap-2 {
+        gap: 0.375rem;
+    }
+
+    @media (max-width: 768px) {
+        nav a, nav button {
+            font-size: 12.5px;
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+        }
+    }
+</style>
+<!-- NAVBAR-POLISH-V3-END -->
+<!-- SCHEDULE-POLISH-V4-START -->
+<style id="schedule-polish-v4">
+    table.timetable-grid,
+    main table {
+        border-collapse: separate;
+        border-spacing: 4px;
+    }
+
+    main table thead th {
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 1.3;
+        padding: 6px 4px;
+    }
+
+    main table tbody th,
+    main table tbody td:first-child {
+        font-size: 12.5px;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+
+    main table a[href*="/mapel/"],
+    main table a[href*="/subject/"],
+    main table .subject-box {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        min-height: 48px;
+        padding: 6px 5px;
+        border-radius: 10px;
+        font-size: 12.5px;
+        line-height: 1.25;
+        overflow: hidden;
+    }
+
+    @media (max-width: 640px) {
+        main table {
+            border-spacing: 2px;
+            table-layout: fixed;
+            width: 100%;
+        }
+
+        main table thead th {
+            font-size: 9px;
+            padding: 4px 2px;
+            line-height: 1.2;
+        }
+
+        main table tbody th,
+        main table tbody td:first-child {
+            width: 44px;
+            min-width: 44px;
+            max-width: 44px;
+            font-size: 10px;
+            padding: 4px 2px;
+        }
+
+        main table a[href*="/mapel/"],
+        main table a[href*="/subject/"],
+        main table .subject-box {
+            min-height: 40px;
+            height: 40px;
+            padding: 3px 2px;
+            border-radius: 7px;
+            font-size: 9.5px;
+            line-height: 1.15;
+        }
+    }
+</style>
+<!-- SCHEDULE-POLISH-V4-END -->
 </head>
 <body class="antialiased" data-theme="mode-gelap" data-font="sans" data-graphic="simple" data-anim="off">
     @php

@@ -459,4 +459,45 @@ document.addEventListener('DOMContentLoaded', function () {
     refreshSettingsUI();
 });
 </script>
+<!-- MODULE-POLISH-V6-START -->
+<style id="module-polish-v6">
+    /* Tugas & Materi: spacing card lebih lega & empty state lebih jelas */
+    main .task-card,
+    main .material-card {
+        padding: 1rem 1.15rem;
+        border-radius: 14px;
+    }
+
+    main .empty-state-box {
+        padding: 2rem 1.25rem;
+        border-radius: 16px;
+        line-height: 1.6;
+    }
+
+    /* Admin users: jarak antar kontrol lebih rapi */
+    main table th,
+    main table td {
+        padding: 0.65rem 0.75rem;
+        vertical-align: middle;
+    }
+
+    /* Live preview box untuk Pengaturan */
+    #settings-live-preview {
+        border-radius: 14px;
+        padding: 1rem 1.25rem;
+    }
+</style>
+<!-- MODULE-POLISH-V6-END -->
+<!-- MODULE-POLISH-V6-START -->
+<div id="settings-live-preview" class="theme-card border theme-border mt-4 space-y-2 shadow">
+    <div class="text-xs font-bold uppercase tracking-wider opacity-70">Live Preview Tampilan</div>
+    <div class="text-lg font-extrabold">Contoh Heading Jadwal XI RPL 1</div>
+    <p class="text-sm opacity-85">Contoh teks deskripsi tugas, tenggat waktu, dan catatan mata pelajaran agar mudah dibaca.</p>
+    <div class="pt-1 flex flex-wrap items-center gap-2">
+        <span class="theme-primary px-3 py-1.5 rounded-lg text-xs font-bold inline-block">Contoh Tombol Utama</span>
+        <span class="badge-success px-2.5 py-1 rounded-full text-xs font-bold border inline-block">Selesai</span>
+        <span class="badge-warning px-2.5 py-1 rounded-full text-xs font-bold border inline-block">Tenggat</span>
+    </div>
+</div>
+<!-- MODULE-POLISH-V6-END -->
 </x-app-layout>
