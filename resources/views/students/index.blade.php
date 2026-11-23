@@ -655,7 +655,14 @@
          class="fixed inset-0 z-[99999] hidden items-center justify-center bg-black/90 p-4 cursor-zoom-out">
         <div class="relative max-w-md w-full flex flex-col items-center gap-3" onclick="event.stopPropagation()">
             <img id="student-pp-lightbox-img" src="" alt="Foto Profil Siswa"
-                 class="max-h-[75vh] w-auto rounded-2xl border-2 border-white/25 shadow-2xl object-contain">
+                 class="hidden max-h-[75vh] w-auto rounded-2xl border-2 border-white/25 shadow-2xl object-contain">
+            <div id="student-pp-lightbox-guest"
+                 class="hidden w-56 h-56 rounded-full bg-zinc-800 border-2 border-white/25 flex items-center justify-center shadow-2xl">
+                <svg viewBox="0 0 24 24" fill="currentColor" class="w-32 h-32 text-zinc-300">
+                    <path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/>
+                </svg>
+            </div>
+            <div id="student-pp-lightbox-name" class="text-sm font-extrabold text-white"></div>
             <button type="button" onclick="document.getElementById('student-pp-lightbox').classList.add('hidden'); document.getElementById('student-pp-lightbox').classList.remove('flex');"
                     class="px-4 py-1.5 rounded-full bg-white/15 text-white text-xs font-extrabold hover:bg-white/25">
                 ✕ Tutup Foto
@@ -664,23 +671,42 @@
     </div>
 
     <script>
+        function openStudentPpInspect(src, nameText) {
+            const lb = document.getElementById('student-pp-lightbox');
+            const lbImg = document.getElementById('student-pp-lightbox-img');
+            const lbGuest = document.getElementById('student-pp-lightbox-guest');
+            const lbName = document.getElementById('student-pp-lightbox-name');
+            if (!lb) return;
+
+            if (lbName) lbName.textContent = nameText || '';
+
+            if (src && !src.endsWith('/')) {
+                lbGuest.classList.add('hidden');
+                lbImg.src = src;
+                lbImg.classList.remove('hidden');
+            } else {
+                lbImg.classList.add('hidden');
+                lbGuest.classList.remove('hidden');
+            }
+
+            lb.classList.remove('hidden');
+            lb.classList.add('flex');
+        }
+
         document.addEventListener('DOMContentLoaded', () => {
-            // Pastikan saat biodata siswa dibuka, foto PP di dalam modal biodata yang bisa diklik untuk inspect
-            document.querySelectorAll('[id*="modal"] img, [id*="biodata"] img').forEach(ppImg => {
-                if (ppImg.id === 'student-pp-lightbox-img') return;
-                ppImg.style.cursor = 'zoom-in';
-                ppImg.title = 'Klik foto profil untuk memperbesar (Inspect PP)';
-                ppImg.addEventListener('click', function (e) {
+            // Pasang event klik Inspect PP pada avatar/foto di dalam modal Biodata siswa
+            document.querySelectorAll('.fixed .rounded-full').forEach(avatarEl => {
+                if (avatarEl.closest('#student-pp-lightbox') || avatarEl.tagName === 'BUTTON') return;
+                avatarEl.style.cursor = 'zoom-in';
+                avatarEl.title = 'Klik PP untuk memperbesar';
+                avatarEl.addEventListener('click', function (e) {
                     e.stopPropagation();
-                    const src = this.getAttribute('src');
-                    if (!src) return;
-                    const lb = document.getElementById('student-pp-lightbox');
-                    const lbImg = document.getElementById('student-pp-lightbox-img');
-                    if (lb && lbImg) {
-                        lbImg.src = src;
-                        lb.classList.remove('hidden');
-                        lb.classList.add('flex');
-                    }
+                    const modalBox = this.closest('.fixed');
+                    const nameEl = modalBox ? modalBox.querySelector('h2, h3, .text-xl, .text-2xl') : null;
+                    const studentName = nameEl ? nameEl.textContent.trim() : '';
+                    const imgInside = this.tagName === 'IMG' ? this : this.querySelector('img');
+                    const imgSrc = imgInside ? imgInside.getAttribute('src') : '';
+                    openStudentPpInspect(imgSrc, studentName);
                 });
             });
         });

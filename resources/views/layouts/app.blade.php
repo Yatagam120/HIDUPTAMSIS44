@@ -1751,6 +1751,13 @@
             });
         }
         document.addEventListener('DOMContentLoaded', applyPrTugasCountsAndEventBadges);
+            document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('nav a').forEach(a => {
+                if (/^\(\d+\)\s*Tugas$/i.test(a.textContent.trim())) {
+                    a.textContent = 'List Tugas';
+                }
+            });
+        });
     </script>
 </body>
 </html>
