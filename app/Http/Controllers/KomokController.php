@@ -27,13 +27,23 @@ class KomokController extends Controller
 
         $posts = collect();
         if (Schema::hasTable('komok_posts')) {
+            $hasMediaData = Schema::hasColumn('komok_posts', 'media_data');
             $rawPosts = DB::table('komok_posts')->orderByDesc('id')->get();
-            $users = User::whereIn('id', $rawPosts->pluck('user_id')->unique())->get()->keyBy('id');
-            $posts = $rawPosts->map(function ($p) use ($users) {
-                $p->author = $users->get($p->user_id);
-                $p->resolved_src = !empty($p->media_data)
-                    ? $p->media_data
-                    : ((!empty($p->media_path) && file_exists(public_path($p->media_path))) ? asset($p->media_path) : null);
+            $userIds = $rawPosts->pluck('user_id')->filter()->unique()->values()->all();
+            $users = !empty($userIds) ? User::whereIn('id', $userIds)->get()->keyBy('id') : collect();
+
+            $posts = $rawPosts->map(function ($p) use ($users, $hasMediaData) {
+                $p->author = isset($p->user_id) ? $users->get($p->user_id) : null;
+                $mData = $hasMediaData ? ($p->media_data ?? null) : null;
+                $mPath = $p->media_path ?? null;
+
+                if (!empty($mData)) {
+                    $p->resolved_src = $mData;
+                } elseif (!empty($mPath) && file_exists(public_path($mPath))) {
+                    $p->resolved_src = asset($mPath);
+                } else {
+                    $p->resolved_src = null;
+                }
                 return $p;
             });
         }
@@ -50,6 +60,10 @@ class KomokController extends Controller
             'caption' => 'nullable|string|max:1000',
             'media'   => 'required|file|mimes:jpg,jpeg,png,webp,gif,mp4,webm,mov|max:40960',
         ]);
+
+        if (!Schema::hasTable('komok_posts')) {
+            return back()->withErrors(['media' => 'Tabel komok_posts belum tersedia. Jalankan php artisan migrate --force.']);
+        }
 
         $file = $request->file('media');
         $ext = strtolower($file->getClientOriginalExtension());
@@ -91,7 +105,9 @@ class KomokController extends Controller
     public function destroy($id)
     {
         $this->ensureAllowed();
-        DB::table('komok_posts')->where('id', $id)->delete();
+        if (Schema::hasTable('komok_posts')) {
+            DB::table('komok_posts')->where('id', $id)->delete();
+        }
         return back()->with('success', 'Postingan Komok dihapus!');
     }
 }

@@ -1891,6 +1891,195 @@
 
         document.addEventListener('DOMContentLoaded', formatDesktopSubjectLabels);
         window.addEventListener('resize', formatDesktopSubjectLabels);
+            // =========================================================
+        // 1. GLOBAL 4-LANGUAGE TRANSLATOR (ID, EN, JA, RU)
+        // =========================================================
+        const GLOBAL_I18N = {
+            en: {
+                'Jadwal': 'Schedule', 'List Tugas': 'Task List', 'Kalender': 'Calendar', 'Siswa': 'Students',
+                'Nmr Guru': 'Teachers', 'Materi': 'Materials', 'Latihan': 'Practice', 'Profil': 'Profile',
+                'Pengaturan': 'Settings', 'Komok': 'Komok',
+                'JADWAL XI RPL 1': 'XI RPL 1 SCHEDULE',
+                'Catatan': 'Notes', 'Tugas': 'Tasks', 'PR': 'Homework', 'Event': 'Event',
+                'Tenggat': 'Due Soon', 'Deadline': 'Overdue', 'Selesai': 'Completed', 'Reset': 'Reset',
+                'Pengaturan Tampilan': 'Display Settings',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Customize gradient color themes, graphic styles, animations, sound effects, class music, and app language.',
+                '← Kembali ke Jadwal Utama': '← Back to Main Schedule',
+                'TEMA GELAP (GRADIEN)': 'DARK THEMES (GRADIENT)',
+                'TEMA TERANG (GRADIEN)': 'LIGHT THEMES (GRADIENT)',
+                'GRAFIK & ANIMASI': 'GRAPHICS & ANIMATION',
+                'Animasi Transisi UI': 'UI Transition Animation',
+                'GAYA HURUF': 'FONT STYLE',
+                'EFEK SUARA (SFX)': 'SOUND EFFECTS (SFX)',
+                'BAHASA': 'LANGUAGE',
+                'Pemutar Musik Kelas': 'Class Music Player',
+                'Dengarkan musik santai saat belajar. Pengaturan playlist dikelola oleh Admin.': 'Listen to relaxing music while studying. Playlist settings are managed by Admin.',
+                'Tambah Lagu Langsung (Admin)': 'Add Song Directly (Admin)',
+                'Upload & Tayangkan Lagu': 'Upload & Publish Song',
+                'Kasih Saran & Laporan Bug': 'Send Feedback & Bug Report',
+                'List Tugas & Catatan Kelas': 'Class Task & Note List',
+                'Filter berdasarkan Catatan, PR, Tugas, atau Event.': 'Filter by Notes, Homework, Tasks, or Events.',
+                'Semua': 'All', 'Buka & Komentar': 'Open & Comment', 'Tandai Selesai': 'Mark Completed',
+                'Nomor WhatsApp Guru XI RPL 1': 'Teacher WhatsApp Contacts XI RPL 1',
+                'Bank Materi Ujian (AAS, ATS, Ulangan)': 'Exam Study Materials (AAS, ATS, Quizzes)',
+                'Pusat Latihan Soal XI RPL 1': 'Practice Quiz Center XI RPL 1',
+                'Hari / Jam': 'Day / Time', 'Senin': 'Monday', 'Selasa': 'Tuesday', 'Rabu': 'Wednesday', 'Kamis': 'Thursday', 'Jumat': 'Friday'
+            },
+            ja: {
+                'Jadwal': '時間割', 'List Tugas': '課題一覧', 'Kalender': 'カレンダー', 'Siswa': '生徒一覧',
+                'Nmr Guru': '先生連絡先', 'Materi': '教材', 'Latihan': '練習問題', 'Profil': 'プロフィール',
+                'Pengaturan': '設定', 'Komok': 'コモック',
+                'JADWAL XI RPL 1': 'XI RPL 1 時間割',
+                'Catatan': 'ノート', 'Tugas': '課題', 'PR': '宿題', 'Event': 'イベント',
+                'Tenggat': '締切間近', 'Deadline': '期限切れ', 'Selesai': '完了', 'Reset': 'リセット',
+                'Pengaturan Tampilan': '表示設定',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'グラデーションテーマ、グラフィックスタイル、アニメーション、効果音、音楽、言語を設定します。',
+                '← Kembali ke Jadwal Utama': '← 時間割に戻る',
+                'TEMA GELAP (GRADIEN)': 'ダークテーマ（グラデーション）',
+                'TEMA TERANG (GRADIEN)': 'ライトテーマ（グラデーション）',
+                'GRAFIK & ANIMASI': 'グラフィックとアニメーション',
+                'Animasi Transisi UI': 'UIトランジションアニメーション',
+                'GAYA HURUF': 'フォントスタイル',
+                'EFEK SUARA (SFX)': '効果音 (SFX)',
+                'BAHASA': '言語設定',
+                'Pemutar Musik Kelas': 'クラス音楽プレイヤー',
+                'Dengarkan musik santai saat belajar. Pengaturan playlist dikelola oleh Admin.': '勉強中にリラックスできる音楽を聴きましょう。プレイリストは管理者が管理します。',
+                'Tambah Lagu Langsung (Admin)': '曲を追加（管理者）',
+                'Upload & Tayangkan Lagu': '曲をアップロードして公開',
+                'Kasih Saran & Laporan Bug': 'ご意見・バグ報告',
+                'List Tugas & Catatan Kelas': 'クラスの課題・ノート一覧',
+                'Filter berdasarkan Catatan, PR, Tugas, atau Event.': 'ノート・宿題・課題・イベントで絞り込みます。',
+                'Semua': 'すべて', 'Buka & Komentar': '開く・コメント', 'Tandai Selesai': '完了にする',
+                'Nomor WhatsApp Guru XI RPL 1': 'XI RPL 1 先生の連絡先',
+                'Bank Materi Ujian (AAS, ATS, Ulangan)': '試験対策教材バンク',
+                'Pusat Latihan Soal XI RPL 1': 'XI RPL 1 練習問題センター',
+                'Hari / Jam': '曜日 / 時限', 'Senin': '月曜', 'Selasa': '火曜', 'Rabu': '水曜', 'Kamis': '木曜', 'Jumat': '金曜'
+            },
+            ru: {
+                'Jadwal': 'Расписание', 'List Tugas': 'Задания', 'Kalender': 'Календарь', 'Siswa': 'Ученики',
+                'Nmr Guru': 'Учителя', 'Materi': 'Материалы', 'Latihan': 'Тесты', 'Profil': 'Профиль',
+                'Pengaturan': 'Настройки', 'Komok': 'Комок',
+                'JADWAL XI RPL 1': 'РАСПИСАНИЕ XI RPL 1',
+                'Catatan': 'Заметки', 'Tugas': 'Задания', 'PR': 'ДЗ', 'Event': 'События',
+                'Tenggat': 'Скоро срок', 'Deadline': 'Просрочено', 'Selesai': 'Готово', 'Reset': 'Сброс',
+                'Pengaturan Tampilan': 'Настройки экрана',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Настройте градиентные темы, графику, анимацию, звуки, музыку класса и язык.',
+                '← Kembali ke Jadwal Utama': '← Назад к расписанию',
+                'TEMA GELAP (GRADIEN)': 'ТЁМНЫЕ ТЕМЫ (ГРАДИЕНТ)',
+                'TEMA TERANG (GRADIEN)': 'СВЕТЛЫЕ ТЕМЫ (ГРАДИЕНТ)',
+                'GRAFIK & ANIMASI': 'ГРАФИКА И АНИМАЦИЯ',
+                'Animasi Transisi UI': 'Анимация переходов UI',
+                'GAYA HURUF': 'СТИЛЬ ШРИФТА',
+                'EFEK SUARA (SFX)': 'ЗВУКОВЫЕ ЭФФЕКТЫ (SFX)',
+                'BAHASA': 'ЯЗЫК',
+                'Pemutar Musik Kelas': 'Музыкальный плеер класса',
+                'Dengarkan musik santai saat belajar. Pengaturan playlist dikelola oleh Admin.': 'Слушайте спокойную музыку во время учёбы. Плейлист настраивает администратор.',
+                'Tambah Lagu Langsung (Admin)': 'Добавить трек (Админ)',
+                'Upload & Tayangkan Lagu': 'Загрузить и опубликовать',
+                'Kasih Saran & Laporan Bug': 'Отзыв и отчёт об ошибке',
+                'List Tugas & Catatan Kelas': 'Список заданий и заметок',
+                'Filter berdasarkan Catatan, PR, Tugas, atau Event.': 'Фильтр по заметкам, ДЗ, заданиям и событиям.',
+                'Semua': 'Все', 'Buka & Komentar': 'Открыть', 'Tandai Selesai': 'Выполнено',
+                'Nomor WhatsApp Guru XI RPL 1': 'Контакты WhatsApp учителей XI RPL 1',
+                'Bank Materi Ujian (AAS, ATS, Ulangan)': 'Учебные материалы к экзаменам',
+                'Pusat Latihan Soal XI RPL 1': 'Тренировочные тесты XI RPL 1',
+                'Hari / Jam': 'День / Урок', 'Senin': 'Пн', 'Selasa': 'Вт', 'Rabu': 'Ср', 'Kamis': 'Чт', 'Jumat': 'Пт'
+            }
+        };
+
+        window.applyLanguage = function (lang) {
+            const dict = GLOBAL_I18N[lang] || null;
+            const sortedKeys = dict ? Object.keys(dict).sort((a, b) => b.length - a.length) : [];
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+            let node;
+            while ((node = walker.nextNode())) {
+                const parent = node.parentElement;
+                if (!parent || ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT'].includes(parent.tagName)) continue;
+                if (node._origText === undefined) {
+                    node._origText = node.nodeValue;
+                }
+                if (!dict) {
+                    node.nodeValue = node._origText;
+                    continue;
+                }
+                let updated = node._origText;
+                for (const k of sortedKeys) {
+                    if (updated.includes(k)) {
+                        updated = updated.split(k).join(dict[k]);
+                    }
+                }
+                node.nodeValue = updated;
+            }
+        };
+
+        // =========================================================
+        // 2. SINGKATAN JADWAL DESKTOP (KTS, STI, BK, KDI, DLL.) + NAVBAR "List Tugas"
+        // =========================================================
+        function runGlobalUiNormalizer() {
+            // Ubah "(X) Tugas" di navbar menjadi "List Tugas"
+            document.querySelectorAll('nav a').forEach(a => {
+                const raw = (a.textContent || '').trim();
+                if (/^\(\d+\)\s*Tugas$/i.test(raw) || /list-tugas/i.test(a.getAttribute('href') || '')) {
+                    a.textContent = 'List Tugas';
+                }
+            });
+
+            // Singkatan kotak jadwal di Desktop/Laptop (KTS, STI, BK, KDI, dll.)
+            if (window.innerWidth > 640) {
+                const mapelAbbr = [
+                    { keys: ['ketamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
+                    { keys: ['samsung tech institute', 'sistem teknologi informasi', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
+                    { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
+                    { keys: ['kreativitas & desain interaktif', 'kreativitas dan desain interaktif', 'kdi'], code: 'KDI', full: 'Kreativitas & Desain Interaktif' },
+                    { keys: ['muatan bahasa jepang', 'bahasa jepang', 'mbj'], code: 'MBJ(J)', full: 'Muatan Bahasa Jepang' },
+                    { keys: ['pendidikan pancasila', 'ppkn', 'pp'], code: 'PP', full: 'Pendidikan Pancasila' },
+                    { keys: ['bahasa inggris', 'b.ing'], code: 'B.Ing', full: 'Bahasa Inggris' },
+                    { keys: ['bahasa indonesia', 'bi'], code: 'BI', full: 'Bahasa Indonesia' },
+                    { keys: ['matematika', 'mtk'], code: 'MTK', full: 'Matematika' },
+                    { keys: ['pendidikan jasmani', 'pjok', 'penjas'], code: 'Penjas', full: 'Pendidikan Jasmani' },
+                    { keys: ['pemrograman lanjut', 'pl(rpl1)', 'pl'], code: 'PL(RPL1)', full: 'Pemrograman Lanjut' },
+                    { keys: ['sejarah indonesia', 'sejarah'], code: 'SI', full: 'Sejarah Indonesia' },
+                    { keys: ['kewirausahaan', 'pkk', 'kwh'], code: 'KWH', full: 'Kewirausahaan' },
+                    { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
+                ];
+
+                document.querySelectorAll('table tr').forEach(tr => {
+                    const rowDay = (tr.firstElementChild?.textContent || '').trim().toLowerCase();
+                    const isSelasa = rowDay.startsWith('sel');
+                    const links = Array.from(tr.querySelectorAll('a[href*="/mapel/"], a[href*="/subject/"]'));
+
+                    links.forEach((box, idx) => {
+                        if (box.dataset.abbrApplied === '1') return;
+                        const txt = (box.textContent || '').trim().toLowerCase();
+                        let found = null;
+
+                        if (isSelasa && idx === links.length - 1) {
+                            found = { code: 'STI', full: 'Samsung Tech Institute' };
+                        } else {
+                            found = mapelAbbr.find(item => item.keys.some(k => txt === k || txt.includes(k)));
+                        }
+
+                        if (found) {
+                            box.dataset.abbrApplied = '1';
+                            const dots = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
+                            box.innerHTML = `
+                                <div class="font-extrabold text-sm leading-tight">${found.code}</div>
+                                <div class="text-[10px] opacity-75 leading-tight line-clamp-1 px-1">${found.full}</div>
+                            `;
+                            dots.forEach(d => box.appendChild(d));
+                        }
+                    });
+                });
+            }
+
+            // Terapkan bahasa tersimpan setelah normalisasi
+            const savedLang = localStorage.getItem('app_lang') || 'id';
+            if (savedLang !== 'id') {
+                window.applyLanguage(savedLang);
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', runGlobalUiNormalizer);
     </script>
 </body>
 </html>
