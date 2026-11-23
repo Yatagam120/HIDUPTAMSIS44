@@ -88,10 +88,14 @@
             <div class="p-3 rounded-xl theme-soft border theme-border space-y-2">
                 <div class="flex flex-wrap items-center justify-between gap-2">
                     <label class="text-xs font-extrabold">📎 Lampiran Foto / Video (Opsional):</label>
-                    <input type="file" name="media" id="subject-media-input"
+                    <label class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl theme-primary text-xs font-extrabold cursor-pointer shadow hover:opacity-90">
+                        <span class="text-base leading-none font-black">+</span>
+                        <span id="subject-media-btn-text">Unggah Foto / Video</span>
+                        <input type="file" name="media" id="subject-media-input"
                            accept="image/*,video/mp4,video/webm,video/quicktime"
                            onchange="handleMediaSelectForCrop(this)"
-                           class="text-xs">
+                           class="hidden">
+                    </label>
                 </div>
 
                 <!-- Preview Hasil Crop / Video sebelum Confirm Post -->

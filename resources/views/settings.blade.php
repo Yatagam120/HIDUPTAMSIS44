@@ -1,4 +1,4 @@
-﻿<x-app-layout>
+<x-app-layout>
     @php
         $user = auth()->user();
         $rawRole = strtolower(trim((string) ($user->role ?? $user->jabatan ?? 'siswa')));
@@ -204,7 +204,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
                         <input type="text" name="title" required placeholder="Judul Lagu..." class="rounded-xl border theme-border px-3 py-2 text-xs">
                         <input type="text" name="artist" placeholder="Penyanyi / Artis..." class="rounded-xl border theme-border px-3 py-2 text-xs">
-                        <input type="file" name="audio" {{ $isAdminRole ? 'required' : '' }} accept="audio/mp3,audio/wav,audio/ogg,audio/m4a" class="rounded-xl border theme-border px-2.5 py-1.5 text-xs">
+                        <label class="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl border theme-border theme-soft text-xs font-extrabold cursor-pointer hover:opacity-90">
+                            <span class="text-sm font-black">+</span>
+                            <span id="music-file-label">Pilih File Audio</span>
+                            <input type="file" name="audio" {{ $isAdminRole ? 'required' : '' }} accept="audio/mp3,audio/wav,audio/ogg,audio/m4a" class="hidden" onchange="document.getElementById('music-file-label').textContent = this.files[0]?.name || 'Pilih File Audio'">
+                        </label>
                     </div>
                     <button type="submit" class="theme-primary px-4 py-2 rounded-xl text-xs font-extrabold shadow">
                         {{ $isAdminRole ? 'Upload & Tayangkan Lagu' : 'Kirim Request Lagu' }}
@@ -268,7 +272,8 @@
             const curFont    = localStorage.getItem('app_font') || 'sans';
             const curGraphic = localStorage.getItem('app_graphic') || 'simple';
             const curLang    = localStorage.getItem('app_lang') || 'id';
-            const curAnim    = curGraphic === 'simple' ? 'off' : (localStorage.getItem('app_anim') || 'off');
+            const isSimple   = curGraphic === 'simple';
+            const curAnim    = isSimple ? 'off' : (localStorage.getItem('app_anim') || 'off');
             const curSfx     = localStorage.getItem('app_sfx') || 'active';
 
             document.querySelectorAll('[data-theme-btn]').forEach(btn => {
@@ -285,7 +290,16 @@
             });
 
             const animBtn = document.getElementById('toggle-anim-btn');
-            if (animBtn) animBtn.textContent = curAnim === 'on' ? '✨ Aktif' : 'Mati';
+            if (animBtn) {
+                animBtn.disabled = isSimple;
+                if (isSimple) {
+                    animBtn.textContent = 'Nonaktif (Simple)';
+                    animBtn.className = 'px-3 py-1.5 rounded-xl border border-zinc-600/40 bg-zinc-700/40 text-zinc-400 text-xs font-extrabold cursor-not-allowed opacity-60';
+                } else {
+                    animBtn.textContent = curAnim === 'on' ? '✨ Aktif' : 'Mati';
+                    animBtn.className = 'px-3 py-1.5 rounded-xl border theme-border text-xs font-extrabold ' + (curAnim === 'on' ? 'theme-primary' : 'theme-soft');
+                }
+            }
 
             const sfxBtn = document.getElementById('toggle-sfx-btn');
             if (sfxBtn) sfxBtn.textContent = curSfx === 'muted' ? '🔇 Nonaktif' : '🔊 Aktif';
@@ -307,12 +321,12 @@
         }
 
         function toggleAppAnim() {
+            if ((localStorage.getItem('app_graphic') || 'simple') === 'simple') {
+                return; // Terkunci abu-abu saat mode Simple
+            }
             const cur = localStorage.getItem('app_anim') || 'off';
             const next = cur === 'on' ? 'off' : 'on';
             localStorage.setItem('app_anim', next);
-            if (next === 'on' && (localStorage.getItem('app_graphic') || 'simple') === 'simple') {
-                localStorage.setItem('app_graphic', 'legacy');
-            }
             if (typeof applySavedAppearance === 'function') applySavedAppearance();
             refreshSettingsButtonsState();
             playSfx('click');

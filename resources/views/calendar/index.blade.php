@@ -154,7 +154,15 @@
                 <h2 class="text-lg font-bold mb-1">Tandai Tanggal Kalender</h2>
                 <p class="text-xs opacity-75 mb-4">Tandai tugas, ulangan/ATS, acara, atau peringatan hari.</p>
 
-                <form action="{{ route('calendar.store') }}" method="POST" class="space-y-3.5">
+                <div class="space-y-3">
+    <button type="button" id="btn-open-create-date"
+            onclick="document.getElementById('calendar-create-form-box').classList.toggle('hidden'); this.classList.toggle('hidden');"
+            class="theme-primary px-4 py-2.5 rounded-xl text-xs font-extrabold shadow inline-flex items-center gap-2">
+        <span class="text-base leading-none font-black">+</span>
+        <span>Create Tanggal</span>
+    </button>
+    <div id="calendar-create-form-box" class="hidden">
+        <form action="{{ route('calendar.store') }}" method="POST" class="space-y-3.5">
                     @csrf
 
                     <div>
@@ -179,7 +187,7 @@
 
                     <div>
                         <label class="block text-xs font-bold mb-1">Judul Agenda</label>
-                        <input type="text" name="judul" required placeholder="Contoh: ATS Pemrograman Lanjut"
+                        <input type="text" name="judul" required placeholder="Masukkan judul agenda..."
                                class="w-full rounded-xl border p-2.5 text-sm">
                     </div>
 
@@ -408,6 +416,8 @@
                 <button type="submit" class="px-5 py-2 rounded-xl theme-primary text-xs font-extrabold shadow-md">Simpan Penanda</button>
             </div>
         </form>
+    </div>
+</div>
     </div>
 </div>
 

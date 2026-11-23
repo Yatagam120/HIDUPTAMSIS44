@@ -44,8 +44,12 @@
             <textarea name="description" rows="2" placeholder="Catatan ringkas atau poin kisi-kisi..."
                       class="w-full rounded-xl border theme-border px-3 py-2 text-xs"></textarea>
             <div class="flex flex-wrap items-center justify-between gap-3">
-                <input type="file" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.webp,.mp4,.webm"
-                       class="text-xs">
+                <label class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl border theme-border theme-soft text-xs font-extrabold cursor-pointer hover:opacity-90">
+                    <span class="text-base leading-none font-black">+</span>
+                    <span id="material-file-label">Unggah File / Foto / Video</span>
+                    <input type="file" name="file" accept=".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.webp,.mp4,.webm"
+                       class="hidden" onchange="document.getElementById('material-file-label').textContent = this.files[0]?.name || 'Unggah File / Foto / Video'">
+                </label>
                 <button type="submit" class="theme-primary px-4 py-2 rounded-xl text-xs font-extrabold shadow">
                     Upload Materi
                 </button>

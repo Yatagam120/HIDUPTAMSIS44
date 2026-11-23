@@ -663,6 +663,34 @@
                 z-index: 5 !important;
             }
         }
+            /* Navbar Desktop & Laptop: Anti-meluber untuk teks panjang (Bahasa Rusia) */
+        @media (min-width: 641px) {
+            nav.main-tamsis-nav .nav-links-wrap {
+                display: flex !important;
+                flex-wrap: wrap !important;
+                align-items: center !important;
+                gap: 4px !important;
+            }
+            nav.main-tamsis-nav .nav-btn-anim {
+                padding: 5px 9px !important;
+                font-size: 11.5px !important;
+                white-space: nowrap !important;
+                letter-spacing: 0 !important;
+            }
+        }
+        @media (max-width: 640px) {
+            .timetable-grid {
+                min-width: 680px !important;
+                border-spacing: 4px !important;
+            }
+            .timetable-grid a,
+            .timetable-grid .subject-box {
+                min-height: 52px !important;
+                height: 52px !important;
+                padding: 6px 5px !important;
+                font-size: 10.5px !important;
+            }
+        }
     </style>
 </head>
 <body class="antialiased" data-theme="mode-gelap" data-font="sans" data-graphic="simple" data-anim="off">
@@ -1058,16 +1086,9 @@
 
         function detectMobileTypeTag(rawHtml, href) {
             const matchId = (href || '').match(/\/(?:mapel|subject)\/(\d+)/i);
-            if (matchId && SERVER_SUBJECT_NOTIFS[matchId[1]]) {
+            if (matchId && typeof SERVER_SUBJECT_NOTIFS !== 'undefined' && SERVER_SUBJECT_NOTIFS[matchId[1]]) {
                 return SERVER_SUBJECT_NOTIFS[matchId[1]].tag;
             }
-            const combined = `${rawHtml || ''} ${href || ''}`.toLowerCase();
-            if (combined.includes('tab=pr') || combined.includes('notif=pr')) return 'PR';
-            if (combined.includes('tab=tugas') || combined.includes('notif=tugas')) return 'TGS';
-            if (combined.includes('tab=event') || combined.includes('notif=event')) return 'EVT';
-            if (combined.includes('tab=catatan') || combined.includes('notif=catatan')) return 'CTT';
-            if (combined.includes('bg-red-')) return 'DL';
-            if (combined.includes('bg-yellow-') || combined.includes('bg-amber-')) return 'TGS';
             return '';
         }
 
@@ -1178,68 +1199,26 @@
         }
 
         function syncScheduleMarkersAndSourceTab() {
-            const links = document.querySelectorAll('table.timetable-grid a, .subject-box a, a.subject-box');
-            links.forEach(el => {
-                const href = el.getAttribute('href');
-                if (!href || href === '#') return;
+            const hasServerMap = typeof SERVER_SUBJECT_NOTIFS !== 'undefined';
+            document.querySelectorAll('.timetable-grid a, .timetable-grid .subject-box').forEach(box => {
+                const href = box.getAttribute('href') || '';
+                const m = href.match(/\/(?:mapel|subject)\/(\d+)/i);
+                const info = (m && hasServerMap) ? SERVER_SUBJECT_NOTIFS[m[1]] : null;
 
-                if (!el.dataset.rawHtml) {
-                    el.dataset.rawHtml = el.innerHTML || '';
-                }
-
-                const htmlLower = el.dataset.rawHtml.toLowerCase();
-                let sourceTab = '';
-                let badgeColor = '';
-
-                if (htmlLower.includes('pr')) {
-                    sourceTab = 'pr';
-                } else if (htmlLower.includes('tugas')) {
-                    sourceTab = 'tugas';
-                } else if (htmlLower.includes('event')) {
-                    sourceTab = 'event';
-                } else if (htmlLower.includes('catatan')) {
-                    sourceTab = 'catatan';
-                }
-
-                if (htmlLower.includes('bg-red-') || htmlLower.includes('deadline')) {
-                    badgeColor = 'red';
-                    if (!sourceTab) sourceTab = 'tugas';
-                } else if (htmlLower.includes('bg-yellow-') || htmlLower.includes('bg-amber-') || htmlLower.includes('tenggat') || el.querySelector('span')) {
-                    badgeColor = 'yellow';
-                    if (!sourceTab) sourceTab = 'tugas';
-                }
-
-                if (sourceTab && !href.includes('tab=')) {
-                    const sep = href.includes('?') ? '&' : '?';
-                    el.setAttribute('href', `${href}${sep}tab=${sourceTab}${badgeColor ? '&notif=' + badgeColor : ''}`);
-                }
-            });
-
-            shortenSubjectsForMobile();
-
-            const params = new URLSearchParams(window.location.search);
-            const activeTab = params.get('tab');
-            const notifColor = params.get('notif') || 'yellow';
-
-            if (activeTab) {
-                const tabCandidates = Array.from(document.querySelectorAll('main button, main a'));
-                const tabBtn = tabCandidates.find(btn => {
-                    const txt = btn.textContent.trim().toLowerCase();
-                    return txt === activeTab.toLowerCase() || btn.getAttribute('data-tab') === activeTab;
+                // Hapus dot bawaan yang salah tempel jika mapel tidak punya notif aktif
+                box.querySelectorAll('span.rounded-full').forEach(dot => {
+                    if (!info) dot.remove();
+                    else dot.style.backgroundColor = info.dot;
                 });
 
-                if (tabBtn) {
-                    if (!tabBtn.querySelector('.tab-source-badge')) {
-                        const dot = document.createElement('span');
-                        dot.className = `tab-source-badge badge-${notifColor}`;
-                        dot.title = 'Sumber notifikasi dari jadwal';
-                        tabBtn.prepend(dot);
-                    }
-                    if (typeof tabBtn.click === 'function') {
-                        setTimeout(() => tabBtn.click(), 50);
-                    }
+                if (info && !box.querySelector('span.rounded-full')) {
+                    const dot = document.createElement('span');
+                    dot.className = 'rounded-full mobile-notif-dot';
+                    dot.style.cssText = 'position:absolute;top:5px;right:5px;width:7px;height:7px;border-radius:9999px;background:' + info.dot;
+                    box.style.position = 'relative';
+                    box.appendChild(dot);
                 }
-            }
+            });
         }
 
         function hideTamsisSplash() {
@@ -1437,20 +1416,112 @@
             }
         }
 
+                const I18N_DICT = {
+            en: {
+                'Jadwal': 'Schedule', 'Tugas': 'Tasks', 'Kalender': 'Calendar', 'Siswa': 'Students',
+                'Nmr Guru': 'Teachers', 'Materi': 'Materials', 'Latihan': 'Practice', 'Profil': 'Profile',
+                'Pengaturan': 'Settings', 'Komok': 'Komok',
+                'Jadwal Pelajaran XI RPL 1': 'Class Schedule XI RPL 1',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': 'Click any subject box to view Notes, Tasks, Homework, or Events.',
+                'Catatan': 'Notes', 'PR': 'Homework', 'Event': 'Event', 'Tenggat': 'Due Soon',
+                'Deadline': 'Overdue', 'Selesai': 'Completed', 'Reset': 'Reset',
+                'Pengaturan Tampilan': 'Display Settings',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Customize gradient themes, graphic style, animations, sound effects, class music, and app language.',
+                '← Kembali ke Jadwal Utama': '← Back to Main Schedule',
+                'TEMA GELAP (GRADIEN)': 'DARK THEMES (GRADIENT)',
+                'TEMA TERANG (GRADIEN)': 'LIGHT THEMES (GRADIENT)',
+                'GRAFIK & ANIMASI': 'GRAPHICS & ANIMATION',
+                'Animasi Transisi UI': 'UI Transition Animation',
+                'GAYA HURUF': 'FONT STYLE',
+                'EFEK SUARA (SFX)': 'SOUND EFFECTS (SFX)',
+                'BAHASA': 'LANGUAGE',
+                'Pemutar Musik Kelas': 'Class Music Player',
+                'Kasih Saran & Laporan Bug': 'Send Feedback & Bug Report',
+                'Daftar Semua Tugas, PR & Event': 'All Tasks, Homework & Events',
+                'Tandai Selesai': 'Mark Done', 'Buka & Komentar': 'Open & Comment',
+                'Nomor WhatsApp Guru XI RPL 1': 'Teacher WhatsApp Contacts XI RPL 1',
+                'Bank Materi Ujian (AAS, ATS, Ulangan)': 'Exam Study Materials (AAS, ATS, Quizzes)',
+                'Pusat Latihan Soal XI RPL 1': 'Practice Quiz Center XI RPL 1',
+                'Hari / Jam': 'Day / Time', 'Senin': 'Monday', 'Selasa': 'Tuesday', 'Rabu': 'Wednesday', 'Kamis': 'Thursday', 'Jumat': 'Friday'
+            },
+            ja: {
+                'Jadwal': '時間割', 'Tugas': '課題', 'Kalender': 'カレンダー', 'Siswa': '生徒一覧',
+                'Nmr Guru': '先生連絡先', 'Materi': '教材', 'Latihan': '練習問題', 'Profil': 'プロフィール',
+                'Pengaturan': '設定', 'Komok': 'コモック',
+                'Jadwal Pelajaran XI RPL 1': 'XI RPL 1 授業時間割',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': '教科ボックスをクリックしてノート・課題・宿題・イベントを確認します。',
+                'Catatan': 'ノート', 'PR': '宿題', 'Event': 'イベント', 'Tenggat': '締切間近',
+                'Deadline': '期限切れ', 'Selesai': '完了', 'Reset': 'リセット',
+                'Pengaturan Tampilan': '表示設定',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'グラデーションテーマ、グラフィックスタイル、アニメーション、効果音、音楽、言語を設定します。',
+                '← Kembali ke Jadwal Utama': '← 時間割に戻る',
+                'TEMA GELAP (GRADIEN)': 'ダークテーマ（グラデーション）',
+                'TEMA TERANG (GRADIEN)': 'ライトテーマ（グラデーション）',
+                'GRAFIK & ANIMASI': 'グラフィックとアニメーション',
+                'Animasi Transisi UI': 'UIトランジションアニメーション',
+                'GAYA HURUF': 'フォントスタイル',
+                'EFEK SUARA (SFX)': '効果音 (SFX)',
+                'BAHASA': '言語設定',
+                'Pemutar Musik Kelas': 'クラス音楽プレイヤー',
+                'Kasih Saran & Laporan Bug': 'ご意見・バグ報告',
+                'Daftar Semua Tugas, PR & Event': 'すべての課題・宿題・イベント一覧',
+                'Tandai Selesai': '完了にする', 'Buka & Komentar': '開く・コメント',
+                'Nomor WhatsApp Guru XI RPL 1': 'XI RPL 1 先生の連絡先',
+                'Bank Materi Ujian (AAS, ATS, Ulangan)': '試験対策教材バンク',
+                'Pusat Latihan Soal XI RPL 1': 'XI RPL 1 練習問題センター',
+                'Hari / Jam': '曜日 / 時限', 'Senin': '月曜', 'Selasa': '火曜', 'Rabu': '水曜', 'Kamis': '木曜', 'Jumat': '金曜'
+            },
+            ru: {
+                'Jadwal': 'Расписание', 'Tugas': 'Задания', 'Kalender': 'Календарь', 'Siswa': 'Ученики',
+                'Nmr Guru': 'Учителя', 'Materi': 'Материалы', 'Latihan': 'Тесты', 'Profil': 'Профиль',
+                'Pengaturan': 'Настройки', 'Komok': 'Комок',
+                'Jadwal Pelajaran XI RPL 1': 'Расписание уроков XI RPL 1',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': 'Нажмите на предмет, чтобы открыть заметки, задания, ДЗ или события.',
+                'Catatan': 'Заметки', 'PR': 'ДЗ', 'Event': 'События', 'Tenggat': 'Скоро срок',
+                'Deadline': 'Просрочено', 'Selesai': 'Готово', 'Reset': 'Сброс',
+                'Pengaturan Tampilan': 'Настройки экрана',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Настройте градиентные темы, графику, анимацию, звуки, музыку класса и язык.',
+                '← Kembali ke Jadwal Utama': '← Назад к расписанию',
+                'TEMA GELAP (GRADIEN)': 'ТЁМНЫЕ ТЕМЫ (ГРАДИЕНТ)',
+                'TEMA TERANG (GRADIEN)': 'СВЕТЛЫЕ ТЕМЫ (ГРАДИЕНТ)',
+                'GRAFIK & ANIMASI': 'ГРАФИКА И АНИМАЦИЯ',
+                'Animasi Transisi UI': 'Анимация переходов UI',
+                'GAYA HURUF': 'СТИЛЬ ШРИФТА',
+                'EFEK SUARA (SFX)': 'ЗВУКОВЫЕ ЭФФЕКТЫ (SFX)',
+                'BAHASA': 'ЯЗЫК',
+                'Pemutar Musik Kelas': 'Музыкальный плеер класса',
+                'Kasih Saran & Laporan Bug': 'Отзыв и отчёт об ошибке',
+                'Daftar Semua Tugas, PR & Event': 'Все задания, ДЗ и события',
+                'Tandai Selesai': 'Выполнено', 'Buka & Komentar': 'Открыть',
+                'Nomor WhatsApp Guru XI RPL 1': 'Контакты WhatsApp учителей XI RPL 1',
+                'Bank Materi Ujian (AAS, ATS, Ulangan)': 'Учебные материалы к экзаменам',
+                'Pusat Latihan Soal XI RPL 1': 'Тренировочные тесты XI RPL 1',
+                'Hari / Jam': 'День / Урок', 'Senin': 'Пн', 'Selasa': 'Вт', 'Rabu': 'Ср', 'Kamis': 'Чт', 'Jumat': 'Пт'
+            }
+        };
+
         function applyLanguage(lang) {
-            if (!translations[lang]) lang = 'id';
-            localStorage.setItem('app_lang', lang);
-            document.documentElement.setAttribute('lang', lang);
+            const dict = I18N_DICT[lang] || null;
+            const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null);
+            let node;
+            while ((node = walker.nextNode())) {
+                const parent = node.parentElement;
+                if (!parent || ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT'].includes(parent.tagName)) continue;
+                if (!node._origText) node._origText = node.nodeValue;
 
-            document.querySelectorAll('[data-i18n]').forEach(el => {
-                const key = el.getAttribute('data-i18n');
-                if (translations[lang][key]) {
-                    el.textContent = translations[lang][key];
+                if (!dict) {
+                    node.nodeValue = node._origText;
+                    continue;
                 }
-            });
 
-            applyPhraseTranslation(lang);
-            shortenSubjectsForMobile();
+                let text = node._origText;
+                Object.keys(dict).sort((a, b) => b.length - a.length).forEach(key => {
+                    if (text.includes(key)) {
+                        text = text.split(key).join(dict[key]);
+                    }
+                });
+                node.nodeValue = text;
+            }
         }
 
                 document.addEventListener('DOMContentLoaded', () => {
