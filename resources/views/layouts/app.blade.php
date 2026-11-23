@@ -1758,6 +1758,62 @@
                 }
             });
         });
+            function formatDesktopSubjectLabels() {
+            if (window.innerWidth <= 640) return;
+
+            const subjectDict = [
+                { keys: ['ketamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
+                { keys: ['samsung tech institute', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
+                { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
+                { keys: ['kreativitas & desain interaktif', 'kreativitas dan desain interaktif', 'kdi'], code: 'KDI', full: 'Kreativitas & Desain Interaktif' },
+                { keys: ['muatan bahasa jepang', 'bahasa jepang', 'mbj'], code: 'MBJ(J)', full: 'Muatan Bahasa Jepang' },
+                { keys: ['pendidikan pancasila', 'ppkn', 'pp'], code: 'PP', full: 'Pendidikan Pancasila' },
+                { keys: ['bahasa inggris', 'b.ing'], code: 'B.Ing', full: 'Bahasa Inggris' },
+                { keys: ['bahasa indonesia', 'bi'], code: 'BI', full: 'Bahasa Indonesia' },
+                { keys: ['matematika', 'mtk'], code: 'MTK', full: 'Matematika' },
+                { keys: ['pendidikan jasmani', 'pjok', 'penjas'], code: 'Penjas', full: 'Pendidikan Jasmani' },
+                { keys: ['pemrograman lanjut', 'pl(rpl1)', 'pl'], code: 'PL(RPL1)', full: 'Pemrograman Lanjut' },
+                { keys: ['sejarah indonesia', 'sejarah', 'si'], code: 'SI', full: 'Sejarah Indonesia' },
+                { keys: ['kewirausahaan', 'pkk', 'kwh'], code: 'KWH', full: 'Kewirausahaan' },
+                { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
+            ];
+
+            document.querySelectorAll('.timetable-grid a, .timetable-grid .subject-box').forEach(box => {
+                if (box.dataset.desktopFormatted === '1') return;
+
+                const rawText = (box.textContent || '').trim();
+                const lower = rawText.toLowerCase();
+                if (!lower) return;
+
+                const matched = subjectDict.find(item =>
+                    item.keys.some(k => lower === k || lower.includes(k))
+                );
+
+                if (matched) {
+                    box.dataset.desktopFormatted = '1';
+                    box.title = `${matched.code} - ${matched.full}`;
+
+                    // Pertahankan elemen indikator / dot / badge jika ada
+                    const preserved = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .mobile-notif-dot'));
+                    box.innerHTML = '';
+
+                    const codeEl = document.createElement('div');
+                    codeEl.className = 'font-extrabold text-xs sm:text-sm leading-tight tracking-tight';
+                    codeEl.textContent = matched.code;
+
+                    const subEl = document.createElement('div');
+                    subEl.className = 'text-[9.5px] opacity-75 leading-tight line-clamp-1 max-w-full px-1';
+                    subEl.textContent = matched.full;
+
+                    box.appendChild(codeEl);
+                    box.appendChild(subEl);
+                    preserved.forEach(el => box.appendChild(el));
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', formatDesktopSubjectLabels);
+        window.addEventListener('resize', formatDesktopSubjectLabels);
     </script>
 </body>
 </html>
