@@ -2201,29 +2201,8 @@
 })();
 </script>
 <!-- SCHEDULE-NAV-CLEAN-END -->
+
 <!-- FINAL-CLEAN-SCHEDULE-BELL-START -->
-<style id="final-clean-schedule-bell-css">
-    #notif-bell-btn svg,
-    button[aria-label*="Notif"] svg,
-    nav button svg {
-        display: inline-block !important;
-        width: 18px !important;
-        height: 18px !important;
-        opacity: 1 !important;
-        visibility: visible !important;
-        color: currentColor !important;
-        stroke: currentColor !important;
-    }
-
-    @media (min-width: 641px) {
-        main table a[href*="/mapel/"],
-        main table a[href*="/subject/"] {
-            overflow: hidden !important;
-            text-align: center !important;
-        }
-    }
-</style>
-
 <script id="final-clean-schedule-bell-js">
 (function () {
     const mapelList = [
@@ -2243,23 +2222,11 @@
         { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
     ];
 
-    function renderCleanSchedule() {
+    function initScheduleAndBell() {
         document.querySelectorAll('nav a').forEach(a => {
             const t = (a.textContent || '').replace(/\s+/g, ' ').trim();
             if (/^\(\d+\)\s*Tugas$/i.test(t) || /list-tugas/i.test(a.getAttribute('href') || '')) {
                 a.textContent = 'List Tugas';
-            }
-        });
-
-        // Pastikan tombol lonceng punya ikon lonceng SVG yang jelas
-        const bellSvgHtml = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>';
-        document.querySelectorAll('nav button').forEach(btn => {
-            const hasBadge = !!btn.querySelector('span');
-            if (hasBadge && !btn.querySelector('svg')) {
-                const badgeEl = btn.querySelector('span');
-                const badgeClone = badgeEl ? badgeEl.cloneNode(true) : null;
-                btn.innerHTML = bellSvgHtml;
-                if (badgeClone) btn.appendChild(badgeClone);
             }
         });
 
@@ -2271,7 +2238,11 @@
             const boxes = Array.from(tr.querySelectorAll('a[href*="/mapel/"], a[href*="/subject/"]'));
 
             boxes.forEach((box, idx) => {
-                // Ambil teks murni pertama sebelum label tambahan agar tidak numpuk berlapis-lapis
+                // Simpan badge/dot/ikon asli kotak jadwal agar tidak hilang
+                if (!box.dataset.origBadgesHtml) {
+                    const badgeNodes = Array.from(box.querySelectorAll('span.rounded-full, div.rounded-full, .event-grayred-badge, .notif-corner-dot, [data-badge]'));
+                    box.dataset.origBadgesHtml = badgeNodes.map(el => el.outerHTML).join('');
+                }
                 const rawFull = box.dataset.rawScheduleText || (box.innerText || box.textContent || '').replace(/\s+/g, ' ').trim();
                 box.dataset.rawScheduleText = rawFull;
                 const lower = rawFull.toLowerCase();
@@ -2284,21 +2255,53 @@
                 }
 
                 if (match) {
-                    const dots = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
                     box.style.position = 'relative';
                     if (isMobile) {
-                        box.innerHTML = '<span class="font-extrabold leading-none" style="font-size:8px;">' + match.code + '</span>';
+                        box.innerHTML = '<span class="font-extrabold leading-none" style="font-size:8px;">' + match.code + '</span>' + (box.dataset.origBadgesHtml || '');
                     } else {
-                        box.innerHTML = '<div class="font-extrabold text-sm leading-tight">' + match.code + '</div><div class="text-[10px] opacity-75 leading-tight truncate max-w-full px-1">' + match.full + '</div>';
+                        box.innerHTML = '<div class="font-extrabold text-sm leading-tight">' + match.code + '</div><div class="text-[10px] opacity-75 leading-tight truncate max-w-full px-1">' + match.full + '</div>' + (box.dataset.origBadgesHtml || '');
                     }
-                    dots.forEach(d => box.appendChild(d));
                 }
             });
         });
+
+        // Tombol lonceng notifikasi: pastikan bisa dibuka/ditutup & badge angka hilang saat diklik
+        const bellBtn = document.getElementById('notif-bell-btn') || Array.from(document.querySelectorAll('nav button')).find(b => b.querySelector('svg') && b.querySelector('span'));
+        if (bellBtn) {
+            const parentWrap = bellBtn.parentElement;
+            const dropdown = document.getElementById('notif-dropdown') || document.getElementById('notif-menu') || (parentWrap ? parentWrap.querySelector('div[class*="absolute"], ul[class*="absolute"]') : null);
+            const badge = bellBtn.querySelector('span');
+
+            const getSig = () => dropdown ? Array.from(dropdown.querySelectorAll('a, li')).map(x => (x.textContent || '').trim()).join('|') : '';
+            const seenSig = localStorage.getItem('notif_seen_sig') || '';
+            if (badge && getSig() && getSig() === seenSig) {
+                badge.classList.add('hidden');
+            }
+
+            bellBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                if (dropdown) {
+                    const willShow = dropdown.classList.contains('hidden') || getComputedStyle(dropdown).display === 'none';
+                    dropdown.classList.toggle('hidden', !willShow);
+                    dropdown.style.display = willShow ? 'block' : 'none';
+                    dropdown.style.zIndex = '999';
+                }
+                const latest = getSig();
+                if (latest) localStorage.setItem('notif_seen_sig', latest);
+                if (badge) badge.classList.add('hidden');
+            });
+
+            document.addEventListener('click', function (e) {
+                if (dropdown && !dropdown.contains(e.target) && !bellBtn.contains(e.target)) {
+                    dropdown.classList.add('hidden');
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
     }
 
-    document.addEventListener('DOMContentLoaded', renderCleanSchedule);
-    window.addEventListener('resize', renderCleanSchedule);
+    document.addEventListener('DOMContentLoaded', initScheduleAndBell);
+    window.addEventListener('resize', initScheduleAndBell);
 })();
 </script>
 <!-- FINAL-CLEAN-SCHEDULE-BELL-END -->
