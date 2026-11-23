@@ -1786,7 +1786,14 @@
                 if (!lower) return;
 
                 const matched = subjectDict.find(item =>
-                    item.keys.some(k => lower === k || lower.includes(k))
+                    item.keys.some(k => {
+                        if (lower === k) return true;
+                        if (k.length <= 3) {
+                            const escaped = k.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+                            return new RegExp('(?:^|[^a-z0-9])' + escaped + '(?:$|[^a-z0-9])', 'i').test(lower);
+                        }
+                        return lower.includes(k);
+                    })
                 );
 
                 if (matched) {
