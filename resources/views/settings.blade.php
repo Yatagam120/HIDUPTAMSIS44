@@ -26,10 +26,10 @@
     @endphp
 
     <!-- [REMOVED] LIVE PREVIEW TAMPILAN -->
-    <div class="text-lg font-extrabold">Contoh Heading Jadwal XI RPL 1</div>
-    <p class="text-sm opacity-85">Contoh teks deskripsi tugas, tenggat waktu, dan catatan mata pelajaran agar mudah dibaca.</p>
+    <div class="text-lg font-extrabold"></div>
+    <p class="text-sm opacity-85"></p>
     <div class="pt-1 flex flex-wrap items-center gap-2">
-        <span class="theme-primary px-3 py-1.5 rounded-lg text-xs font-bold inline-block">Contoh Tombol Utama</span>
+        <span class="theme-primary px-3 py-1.5 rounded-lg text-xs font-bold inline-block"></span>
         <span class="badge-success px-2.5 py-1 rounded-full text-xs font-bold border inline-block">Selesai</span>
         <span class="badge-warning px-2.5 py-1 rounded-full text-xs font-bold border inline-block">Tenggat</span>
     </div>
@@ -38,4 +38,17 @@
 
 
 
+<!-- SETTINGS-UNHIDE-ALL-START -->
+<style id="settings-unhide-all">
+    main, main > div, main .max-w-5xl, main .max-w-6xl, main .max-w-4xl, main section, main .theme-card {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+        max-height: none !important;
+        overflow: visible !important;
+    }
+    main .grid { display: grid !important; }
+    main .flex { display: flex !important; }
+</style>
+<!-- SETTINGS-UNHIDE-ALL-END -->
 </x-app-layout>

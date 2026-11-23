@@ -864,7 +864,7 @@
                             aria-label="Notifikasi"
                             class="relative px-2.5 py-1.5 rounded-lg border theme-border text-xs font-extrabold"
                             style="background-color: var(--primary-soft);">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        ðŸ””
                         @if($navNotifs->count() > 0)
                             <span class="absolute -top-1 -right-1 px-1 min-w-[15px] h-[15px] rounded-full bg-red-500 text-white text-[9px] font-extrabold flex items-center justify-center">
                                 {{ $navNotifs->count() }}
@@ -938,7 +938,7 @@
                             aria-label="Notifikasi"
                             class="relative nav-btn-anim px-2.5 py-1.5 rounded-lg border theme-border text-xs font-extrabold"
                             style="background-color: var(--primary-soft);">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                        ðŸ””
                         @if($navNotifs->count() > 0)
                             <span class="absolute -top-1 -right-1 px-1 min-w-[16px] h-[16px] rounded-full bg-red-500 text-white text-[9px] font-extrabold flex items-center justify-center">
                                 {{ $navNotifs->count() }}
@@ -953,7 +953,7 @@
         <div id="nav-notif-dropdown"
              class="hidden fixed right-2 sm:right-6 left-2 sm:left-auto top-14 sm:w-80 theme-card border theme-border rounded-2xl shadow-2xl p-3 z-[9995] space-y-2 max-h-[75vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b theme-border pb-2">
-                <span class="text-xs font-extrabold"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Notifikasi ({{ $navNotifs->count() }})</span>
+                <span class="text-xs font-extrabold">ðŸ”” Notifikasi ({{ $navNotifs->count() }})</span>
                 <button type="button" onclick="toggleNavNotifBox()" class="px-2 py-0.5 rounded text-xs font-bold border theme-border">âœ•</button>
             </div>
             @forelse($navNotifs as $notifItem)
@@ -2131,11 +2131,10 @@
 </script>
 {{-- [PATCH END] --}}
 
-
-<!-- CLEAN-SCHEDULE-NOTIF-START -->
-<script id="clean-schedule-notif-js">
+<!-- SCHEDULE-NAV-CLEAN-START -->
+<script id="schedule-nav-clean-js">
 (function () {
-    const mapelDict = [
+    const subjectMap = [
         { keys: ['ketamansiswaan', 'etamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
         { keys: ['samsung tech institute', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
         { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
@@ -2152,10 +2151,10 @@
         { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
     ];
 
-    function applyScheduleLabels() {
+    function normalizeScheduleAndNav() {
         document.querySelectorAll('nav a').forEach(a => {
-            const t = (a.textContent || '').replace(/\s+/g, ' ').trim();
-            if (/^\(\d+\)\s*Tugas$/i.test(t) || /list-tugas/i.test(a.getAttribute('href') || '')) {
+            const txt = (a.textContent || '').replace(/\s+/g, ' ').trim();
+            if (/^\(\d+\)\s*Tugas$/i.test(txt) || /list-tugas/i.test(a.getAttribute('href') || '')) {
                 a.textContent = 'List Tugas';
             }
         });
@@ -2168,48 +2167,141 @@
             const boxes = Array.from(tr.querySelectorAll('a[href*="/mapel/"], a[href*="/subject/"]'));
 
             boxes.forEach((box, idx) => {
-                // Pertahankan indikator/dot/badge yang sudah ada di dalam kotak jadwal
-                const indicators = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot, [data-badge]'));
-                const textOnly = Array.from(box.childNodes)
-                    .filter(n => n.nodeType === 3 || (n.nodeType === 1 && !indicators.includes(n)))
-                    .map(n => n.textContent || '')
-                    .join(' ')
-                    .replace(/\s+/g, ' ')
-                    .trim();
-
-                const orig = box.dataset.schedOrig || textOnly;
-                box.dataset.schedOrig = orig;
+                const orig = box.dataset.cleanOrig || (box.textContent || '').replace(/\s+/g, ' ').trim();
+                box.dataset.cleanOrig = orig;
                 const lower = orig.toLowerCase();
 
-                let found = null;
+                let match = null;
                 if (isSelasa && idx === boxes.length - 1) {
-                    found = { code: 'STI', full: 'Samsung Tech Institute' };
+                    match = { code: 'STI', full: 'Samsung Tech Institute' };
                 } else {
-                    found = mapelDict.find(m => m.keys.some(k => lower.includes(k)));
+                    match = subjectMap.find(item => item.keys.some(k => lower.includes(k)));
                 }
 
-                if (found) {
-                    box.style.position = 'relative';
-                    box.querySelectorAll('.sched-label-wrap').forEach(el => el.remove());
+                const badges = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
+                box.style.position = 'relative';
 
-                    const wrap = document.createElement('div');
-                    wrap.className = 'sched-label-wrap flex flex-col items-center justify-center leading-tight';
+                if (match) {
                     if (isMobile) {
-                        wrap.innerHTML = '<span class="font-extrabold text-[8px]">' + found.code + '</span>';
+                        box.innerHTML = '<span class="font-extrabold leading-none">' + match.code + '</span>';
                     } else {
-                        wrap.innerHTML = '<span class="font-extrabold text-sm">' + found.code + '</span><span class="text-[10px] opacity-75 truncate max-w-full px-1">' + found.full + '</span>';
+                        box.innerHTML = '<div class="font-extrabold text-sm leading-tight">' + match.code + '</div><div class="text-[10px] opacity-75 leading-tight truncate max-w-full px-1">' + match.full + '</div>';
                     }
-                    box.insertBefore(wrap, box.firstChild);
+                    badges.forEach(b => box.appendChild(b));
+                } else if (isMobile && orig) {
+                    box.innerHTML = '<span class="font-extrabold leading-none">' + orig + '</span>';
+                    badges.forEach(b => box.appendChild(b));
                 }
             });
         });
     }
 
-    document.addEventListener('DOMContentLoaded', applyScheduleLabels);
-    window.addEventListener('resize', applyScheduleLabels);
+    document.addEventListener('DOMContentLoaded', normalizeScheduleAndNav);
+    window.addEventListener('resize', normalizeScheduleAndNav);
 })();
 </script>
-<!-- CLEAN-SCHEDULE-NOTIF-END -->
+<!-- SCHEDULE-NAV-CLEAN-END -->
+<!-- FINAL-CLEAN-SCHEDULE-BELL-START -->
+<style id="final-clean-schedule-bell-css">
+    #notif-bell-btn svg,
+    button[aria-label*="Notif"] svg,
+    nav button svg {
+        display: inline-block !important;
+        width: 18px !important;
+        height: 18px !important;
+        opacity: 1 !important;
+        visibility: visible !important;
+        color: currentColor !important;
+        stroke: currentColor !important;
+    }
+
+    @media (min-width: 641px) {
+        main table a[href*="/mapel/"],
+        main table a[href*="/subject/"] {
+            overflow: hidden !important;
+            text-align: center !important;
+        }
+    }
+</style>
+
+<script id="final-clean-schedule-bell-js">
+(function () {
+    const mapelList = [
+        { keys: ['ketamansiswaan', 'etamansiswaan', 'ketamansiswaa', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
+        { keys: ['samsung tech institute', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
+        { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
+        { keys: ['kreativitas & desain interaktif', 'kreativitas dan desain interaktif', 'kdi'], code: 'KDI', full: 'Kreativitas & Desain Interaktif' },
+        { keys: ['muatan bahasa jepang', 'bahasa jepang', 'mbj'], code: 'MBJ(J)', full: 'Muatan Bahasa Jepang' },
+        { keys: ['pendidikan pancasila', 'ppkn', 'pp'], code: 'PP', full: 'Pendidikan Pancasila' },
+        { keys: ['bahasa inggris', 'b.ing'], code: 'B.Ing', full: 'Bahasa Inggris' },
+        { keys: ['bahasa indonesia', 'bi'], code: 'BI', full: 'Bahasa Indonesia' },
+        { keys: ['matematika', 'mtk'], code: 'MTK', full: 'Matematika' },
+        { keys: ['pendidikan jasmani', 'pjok', 'penjas'], code: 'Penjas', full: 'Pendidikan Jasmani' },
+        { keys: ['pemrograman lanjut', 'pl(rpl1)', 'pl'], code: 'PL(RPL1)', full: 'Pemrograman Lanjut' },
+        { keys: ['sejarah indonesia', 'sejarah'], code: 'SI', full: 'Sejarah Indonesia' },
+        { keys: ['kewirausahaan', 'pkk', 'kwh'], code: 'KWH', full: 'Kewirausahaan' },
+        { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
+    ];
+
+    function renderCleanSchedule() {
+        document.querySelectorAll('nav a').forEach(a => {
+            const t = (a.textContent || '').replace(/\s+/g, ' ').trim();
+            if (/^\(\d+\)\s*Tugas$/i.test(t) || /list-tugas/i.test(a.getAttribute('href') || '')) {
+                a.textContent = 'List Tugas';
+            }
+        });
+
+        // Pastikan tombol lonceng punya ikon lonceng SVG yang jelas
+        const bellSvgHtml = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>';
+        document.querySelectorAll('nav button').forEach(btn => {
+            const hasBadge = !!btn.querySelector('span');
+            if (hasBadge && !btn.querySelector('svg')) {
+                const badgeEl = btn.querySelector('span');
+                const badgeClone = badgeEl ? badgeEl.cloneNode(true) : null;
+                btn.innerHTML = bellSvgHtml;
+                if (badgeClone) btn.appendChild(badgeClone);
+            }
+        });
+
+        const isMobile = window.innerWidth <= 640;
+
+        document.querySelectorAll('main table tr').forEach(tr => {
+            const dayTxt = (tr.firstElementChild?.textContent || '').trim().toLowerCase();
+            const isSelasa = dayTxt.startsWith('sel');
+            const boxes = Array.from(tr.querySelectorAll('a[href*="/mapel/"], a[href*="/subject/"]'));
+
+            boxes.forEach((box, idx) => {
+                // Ambil teks murni pertama sebelum label tambahan agar tidak numpuk berlapis-lapis
+                const rawFull = box.dataset.rawScheduleText || (box.innerText || box.textContent || '').replace(/\s+/g, ' ').trim();
+                box.dataset.rawScheduleText = rawFull;
+                const lower = rawFull.toLowerCase();
+
+                let match = null;
+                if (isSelasa && idx === boxes.length - 1) {
+                    match = { code: 'STI', full: 'Samsung Tech Institute' };
+                } else {
+                    match = mapelList.find(m => m.keys.some(k => lower.includes(k)));
+                }
+
+                if (match) {
+                    const dots = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
+                    box.style.position = 'relative';
+                    if (isMobile) {
+                        box.innerHTML = '<span class="font-extrabold leading-none" style="font-size:8px;">' + match.code + '</span>';
+                    } else {
+                        box.innerHTML = '<div class="font-extrabold text-sm leading-tight">' + match.code + '</div><div class="text-[10px] opacity-75 leading-tight truncate max-w-full px-1">' + match.full + '</div>';
+                    }
+                    dots.forEach(d => box.appendChild(d));
+                }
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', renderCleanSchedule);
+    window.addEventListener('resize', renderCleanSchedule);
+})();
+</script>
+<!-- FINAL-CLEAN-SCHEDULE-BELL-END -->
 </body>
 </html>
 
