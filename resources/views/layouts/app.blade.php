@@ -749,7 +749,7 @@
                         if ($isHighAuth && $tStatus === 'pending') {
                             $navNotifs->push([
                                 'title' => 'Menunggu Verifikasi: ' . ($ti->title ?? $ti->judul ?? 'Postingan'),
-                                'sub'   => $subjName . ' • ' . strtoupper($tType),
+                                'sub'   => $subjName . ' â€¢ ' . strtoupper($tType),
                                 'url'   => route('subjects.show', ['subject' => $ti->subject_id, 'tab' => $tType]),
                                 'dot'   => '#38bdf8',
                             ]);
@@ -768,13 +768,13 @@
                             }
                             $dueVal = $ti->due_date ?? $ti->deadline ?? $ti->tanggal_deadline ?? null;
                             $dotColor = $tType === 'catatan' ? '#38bdf8' : '#10b981';
-                            $subLabel = $subjName . ' • ' . strtoupper($tType);
+                            $subLabel = $subjName . ' â€¢ ' . strtoupper($tType);
                             $titlePrefix = strtoupper($tType) . ' Baru: ';
 
                             if ($dueVal) {
                                 try {
                                     $diff = now()->startOfDay()->diffInDays(\Carbon\Carbon::parse($dueVal)->startOfDay(), false);
-                                    $subLabel .= ' • ' . \Carbon\Carbon::parse($dueVal)->format('d M Y');
+                                    $subLabel .= ' â€¢ ' . \Carbon\Carbon::parse($dueVal)->format('d M Y');
                                     if ($diff < 0) {
                                         $dotColor = '#ef4444';
                                         $titlePrefix = 'LEWAT TENGGAT: ';
@@ -789,7 +789,7 @@
                             $creatorName = $creatorUser ? $creatorUser->name : 'Siswa';
                             $navNotifs->push([
                                 'title' => $titlePrefix . ($ti->title ?? $ti->judul ?? 'Tugas'),
-                                'sub'   => $subLabel . ' • Oleh ' . $creatorName,
+                                'sub'   => $subLabel . ' â€¢ Oleh ' . $creatorName,
                                 'url'   => route('subjects.show', ['subject' => $ti->subject_id, 'tab' => $tType]),
                                 'dot'   => $dotColor,
                             ]);
@@ -864,7 +864,7 @@
                             aria-label="Notifikasi"
                             class="relative px-2.5 py-1.5 rounded-lg border theme-border text-xs font-extrabold"
                             style="background-color: var(--primary-soft);">
-                        🔔
+                        ðŸ””
                         @if($navNotifs->count() > 0)
                             <span class="absolute -top-1 -right-1 px-1 min-w-[15px] h-[15px] rounded-full bg-red-500 text-white text-[9px] font-extrabold flex items-center justify-center">
                                 {{ $navNotifs->count() }}
@@ -938,7 +938,7 @@
                             aria-label="Notifikasi"
                             class="relative nav-btn-anim px-2.5 py-1.5 rounded-lg border theme-border text-xs font-extrabold"
                             style="background-color: var(--primary-soft);">
-                        🔔
+                        ðŸ””
                         @if($navNotifs->count() > 0)
                             <span class="absolute -top-1 -right-1 px-1 min-w-[16px] h-[16px] rounded-full bg-red-500 text-white text-[9px] font-extrabold flex items-center justify-center">
                                 {{ $navNotifs->count() }}
@@ -953,8 +953,8 @@
         <div id="nav-notif-dropdown"
              class="hidden fixed right-2 sm:right-6 left-2 sm:left-auto top-14 sm:w-80 theme-card border theme-border rounded-2xl shadow-2xl p-3 z-[9995] space-y-2 max-h-[75vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b theme-border pb-2">
-                <span class="text-xs font-extrabold">🔔 Notifikasi ({{ $navNotifs->count() }})</span>
-                <button type="button" onclick="toggleNavNotifBox()" class="px-2 py-0.5 rounded text-xs font-bold border theme-border">✕</button>
+                <span class="text-xs font-extrabold">ðŸ”” Notifikasi ({{ $navNotifs->count() }})</span>
+                <button type="button" onclick="toggleNavNotifBox()" class="px-2 py-0.5 rounded text-xs font-bold border theme-border">âœ•</button>
             </div>
             @forelse($navNotifs as $notifItem)
                 <a href="{{ $notifItem['url'] }}" class="block p-2.5 rounded-xl theme-soft border theme-border hover:opacity-90">
@@ -982,7 +982,7 @@
         <button type="button"
                 onclick="closePhotoPreview()"
                 class="fixed top-4 right-4 px-3 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold border border-white/30">
-            ✕ Tutup
+            âœ• Tutup
         </button>
         <img id="global-photo-preview-img"
              src=""
@@ -1091,7 +1091,7 @@
                     if ($mIsDone && in_array($mType, ['tugas', 'pr'], true)) continue;
 
                     $sid = (string) $mi->subject_id;
-                    $tagMap = ['pr' => '🏠 PR', 'tugas' => '📌 TGS', 'event' => '🎉 EVT', 'catatan' => '📝 CTT'];
+                    $tagMap = ['pr' => 'ðŸ  PR', 'tugas' => 'ðŸ“Œ TGS', 'event' => 'ðŸŽ‰ EVT', 'catatan' => 'ðŸ“ CTT'];
                     $prioMap = ['PR' => 4, 'TGS' => 3, 'EVT' => 2, 'CTT' => 1];
                     $candTag = $tagMap[$mType] ?? '';
                     if ($candTag) {
@@ -1321,30 +1321,30 @@
                 nav_pengaturan: 'Settings',
             },
             ja: {
-                splash_sub: 'XI RPL 1の時間割とクラスルームを読み込んでいます...',
-                nav_ap: '管理',
-                nav_jadwal: '時間割',
-                nav_kalender: 'カレンダー',
-                nav_siswa: '生徒',
-                nav_nmr_guru: '先生連絡先',
-                nav_materi: '教材',
-                nav_komok: 'コモック',
-                nav_latihan: '練習',
-                nav_profile: 'プロフィール',
-                nav_pengaturan: '設定',
+                splash_sub: 'XI RPL 1ã®æ™‚é–“å‰²ã¨ã‚¯ãƒ©ã‚¹ãƒ«ãƒ¼ãƒ ã‚’èª­ã¿è¾¼ã‚“ã§ã„ã¾ã™...',
+                nav_ap: 'ç®¡ç†',
+                nav_jadwal: 'æ™‚é–“å‰²',
+                nav_kalender: 'ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼',
+                nav_siswa: 'ç”Ÿå¾’',
+                nav_nmr_guru: 'å…ˆç”Ÿé€£çµ¡å…ˆ',
+                nav_materi: 'æ•™æ',
+                nav_komok: 'ã‚³ãƒ¢ãƒƒã‚¯',
+                nav_latihan: 'ç·´ç¿’',
+                nav_profile: 'ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«',
+                nav_pengaturan: 'è¨­å®š',
             },
             ru: {
-                splash_sub: 'Загрузка расписания и класса XI RPL 1...',
-                nav_ap: 'АП',
-                nav_jadwal: 'Расписание',
-                nav_kalender: 'Календарь',
-                nav_siswa: 'Ученики',
-                nav_nmr_guru: 'Номера учителей',
-                nav_materi: 'Материалы',
-                nav_komok: 'Комок',
-                nav_latihan: 'Практика',
-                nav_profile: 'Профиль',
-                nav_pengaturan: 'Настройки',
+                splash_sub: 'Ð—Ð°Ð³Ñ€ÑƒÐ·ÐºÐ° Ñ€Ð°ÑÐ¿Ð¸ÑÐ°Ð½Ð¸Ñ Ð¸ ÐºÐ»Ð°ÑÑÐ° XI RPL 1...',
+                nav_ap: 'ÐÐŸ',
+                nav_jadwal: 'Ð Ð°ÑÐ¿Ð¸ÑÐ°Ð½Ð¸Ðµ',
+                nav_kalender: 'ÐšÐ°Ð»ÐµÐ½Ð´Ð°Ñ€ÑŒ',
+                nav_siswa: 'Ð£Ñ‡ÐµÐ½Ð¸ÐºÐ¸',
+                nav_nmr_guru: 'ÐÐ¾Ð¼ÐµÑ€Ð° ÑƒÑ‡Ð¸Ñ‚ÐµÐ»ÐµÐ¹',
+                nav_materi: 'ÐœÐ°Ñ‚ÐµÑ€Ð¸Ð°Ð»Ñ‹',
+                nav_komok: 'ÐšÐ¾Ð¼Ð¾Ðº',
+                nav_latihan: 'ÐŸÑ€Ð°ÐºÑ‚Ð¸ÐºÐ°',
+                nav_profile: 'ÐŸÑ€Ð¾Ñ„Ð¸Ð»ÑŒ',
+                nav_pengaturan: 'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸',
             }
         };
 
@@ -1373,52 +1373,52 @@
                 'Kembali ke Jadwal Utama': 'Back to Main Schedule',
             },
             ja: {
-                'Jadwal Pelajaran XI RPL 1': 'XI RPL 1 授業時間割',
-                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': '科目ボックスをクリックしてメモ・課題・宿題・予定を確認します。',
-                'Hari / Jam': '曜日 / 時限',
-                'Senin': '月曜日',
-                'Selasa': '火曜日',
-                'Rabu': '水曜日',
-                'Kamis': '木曜日',
-                'Jumat': '金曜日',
-                'Tenggat': '期限間近',
-                'Deadline': '締切',
-                'Selesai': '完了',
-                'Reset': 'リセット',
-                'Pengaturan Tampilan': '表示設定',
-                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, dan bahasa aplikasi.': 'カラーテーマ、グラフィックスタイル、アニメーション、効果音、言語をカスタマイズします。',
-                'TEMA GELAP (GRADIEN)': 'ダークテーマ (グラデーション)',
-                'TEMA TERANG (GRADIEN)': 'ライトテーマ (グラデーション)',
-                'GRAFIK': 'グラフィック',
-                'GAYA HURUF': 'フォントスタイル',
-                'BAHASA': '言語',
-                'EFEK SUARA (SFX)': '効果音 (SFX)',
-                'Kasih Saran & Laporan Bug': 'ご意見・バグ報告',
-                'Kembali ke Jadwal Utama': 'メイン時間割に戻る',
+                'Jadwal Pelajaran XI RPL 1': 'XI RPL 1 æŽˆæ¥­æ™‚é–“å‰²',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': 'ç§‘ç›®ãƒœãƒƒã‚¯ã‚¹ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ãƒ¡ãƒ¢ãƒ»èª²é¡Œãƒ»å®¿é¡Œãƒ»äºˆå®šã‚’ç¢ºèªã—ã¾ã™ã€‚',
+                'Hari / Jam': 'æ›œæ—¥ / æ™‚é™',
+                'Senin': 'æœˆæ›œæ—¥',
+                'Selasa': 'ç«æ›œæ—¥',
+                'Rabu': 'æ°´æ›œæ—¥',
+                'Kamis': 'æœ¨æ›œæ—¥',
+                'Jumat': 'é‡‘æ›œæ—¥',
+                'Tenggat': 'æœŸé™é–“è¿‘',
+                'Deadline': 'ç· åˆ‡',
+                'Selesai': 'å®Œäº†',
+                'Reset': 'ãƒªã‚»ãƒƒãƒˆ',
+                'Pengaturan Tampilan': 'è¡¨ç¤ºè¨­å®š',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, dan bahasa aplikasi.': 'ã‚«ãƒ©ãƒ¼ãƒ†ãƒ¼ãƒžã€ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ã‚¿ã‚¤ãƒ«ã€ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã€åŠ¹æžœéŸ³ã€è¨€èªžã‚’ã‚«ã‚¹ã‚¿ãƒžã‚¤ã‚ºã—ã¾ã™ã€‚',
+                'TEMA GELAP (GRADIEN)': 'ãƒ€ãƒ¼ã‚¯ãƒ†ãƒ¼ãƒž (ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³)',
+                'TEMA TERANG (GRADIEN)': 'ãƒ©ã‚¤ãƒˆãƒ†ãƒ¼ãƒž (ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³)',
+                'GRAFIK': 'ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯',
+                'GAYA HURUF': 'ãƒ•ã‚©ãƒ³ãƒˆã‚¹ã‚¿ã‚¤ãƒ«',
+                'BAHASA': 'è¨€èªž',
+                'EFEK SUARA (SFX)': 'åŠ¹æžœéŸ³ (SFX)',
+                'Kasih Saran & Laporan Bug': 'ã”æ„è¦‹ãƒ»ãƒã‚°å ±å‘Š',
+                'Kembali ke Jadwal Utama': 'ãƒ¡ã‚¤ãƒ³æ™‚é–“å‰²ã«æˆ»ã‚‹',
             },
             ru: {
-                'Jadwal Pelajaran XI RPL 1': 'Расписание уроков XI RPL 1',
-                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': 'Нажмите на предмет, чтобы посмотреть заметки, задания, ДЗ или события.',
-                'Hari / Jam': 'День / Урок',
-                'Senin': 'Понедельник',
-                'Selasa': 'Вторник',
-                'Rabu': 'Среда',
-                'Kamis': 'Четверг',
-                'Jumat': 'Пятница',
-                'Tenggat': 'Срок',
-                'Deadline': 'Дедлайн',
-                'Selesai': 'Готово',
-                'Reset': 'Сброс',
-                'Pengaturan Tampilan': 'Настройки отображения',
-                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, dan bahasa aplikasi.': 'Настройте цветовые темы, стиль графики, анимацию, звуковые эффекты и язык приложения.',
-                'TEMA GELAP (GRADIEN)': 'ТЁМНЫЕ ТЕМЫ (ГРАДИЕНТ)',
-                'TEMA TERANG (GRADIEN)': 'СВЕТЛЫЕ ТЕМЫ (ГРАДИЕНТ)',
-                'GRAFIK': 'ГРАФИКА',
-                'GAYA HURUF': 'СТИЛЬ ШРИФТА',
-                'BAHASA': 'ЯЗЫК',
-                'EFEK SUARA (SFX)': 'ЗВУКОВЫЕ ЭФФЕКТЫ (SFX)',
-                'Kasih Saran & Laporan Bug': 'Отзывы и сообщения об ошибках',
-                'Kembali ke Jadwal Utama': 'Назад к расписанию',
+                'Jadwal Pelajaran XI RPL 1': 'Ð Ð°ÑÐ¿Ð¸ÑÐ°Ð½Ð¸Ðµ ÑƒÑ€Ð¾ÐºÐ¾Ð² XI RPL 1',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': 'ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð½Ð° Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð¿Ð¾ÑÐ¼Ð¾Ñ‚Ñ€ÐµÑ‚ÑŒ Ð·Ð°Ð¼ÐµÑ‚ÐºÐ¸, Ð·Ð°Ð´Ð°Ð½Ð¸Ñ, Ð”Ð— Ð¸Ð»Ð¸ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ.',
+                'Hari / Jam': 'Ð”ÐµÐ½ÑŒ / Ð£Ñ€Ð¾Ðº',
+                'Senin': 'ÐŸÐ¾Ð½ÐµÐ´ÐµÐ»ÑŒÐ½Ð¸Ðº',
+                'Selasa': 'Ð’Ñ‚Ð¾Ñ€Ð½Ð¸Ðº',
+                'Rabu': 'Ð¡Ñ€ÐµÐ´Ð°',
+                'Kamis': 'Ð§ÐµÑ‚Ð²ÐµÑ€Ð³',
+                'Jumat': 'ÐŸÑÑ‚Ð½Ð¸Ñ†Ð°',
+                'Tenggat': 'Ð¡Ñ€Ð¾Ðº',
+                'Deadline': 'Ð”ÐµÐ´Ð»Ð°Ð¹Ð½',
+                'Selesai': 'Ð“Ð¾Ñ‚Ð¾Ð²Ð¾',
+                'Reset': 'Ð¡Ð±Ñ€Ð¾Ñ',
+                'Pengaturan Tampilan': 'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ Ð¾Ñ‚Ð¾Ð±Ñ€Ð°Ð¶ÐµÐ½Ð¸Ñ',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, dan bahasa aplikasi.': 'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹Ñ‚Ðµ Ñ†Ð²ÐµÑ‚Ð¾Ð²Ñ‹Ðµ Ñ‚ÐµÐ¼Ñ‹, ÑÑ‚Ð¸Ð»ÑŒ Ð³Ñ€Ð°Ñ„Ð¸ÐºÐ¸, Ð°Ð½Ð¸Ð¼Ð°Ñ†Ð¸ÑŽ, Ð·Ð²ÑƒÐºÐ¾Ð²Ñ‹Ðµ ÑÑ„Ñ„ÐµÐºÑ‚Ñ‹ Ð¸ ÑÐ·Ñ‹Ðº Ð¿Ñ€Ð¸Ð»Ð¾Ð¶ÐµÐ½Ð¸Ñ.',
+                'TEMA GELAP (GRADIEN)': 'Ð¢ÐÐœÐÐ«Ð• Ð¢Ð•ÐœÐ« (Ð“Ð ÐÐ”Ð˜Ð•ÐÐ¢)',
+                'TEMA TERANG (GRADIEN)': 'Ð¡Ð’Ð•Ð¢Ð›Ð«Ð• Ð¢Ð•ÐœÐ« (Ð“Ð ÐÐ”Ð˜Ð•ÐÐ¢)',
+                'GRAFIK': 'Ð“Ð ÐÐ¤Ð˜ÐšÐ',
+                'GAYA HURUF': 'Ð¡Ð¢Ð˜Ð›Ð¬ Ð¨Ð Ð˜Ð¤Ð¢Ð',
+                'BAHASA': 'Ð¯Ð—Ð«Ðš',
+                'EFEK SUARA (SFX)': 'Ð—Ð’Ð£ÐšÐžÐ’Ð«Ð• Ð­Ð¤Ð¤Ð•ÐšÐ¢Ð« (SFX)',
+                'Kasih Saran & Laporan Bug': 'ÐžÑ‚Ð·Ñ‹Ð²Ñ‹ Ð¸ ÑÐ¾Ð¾Ð±Ñ‰ÐµÐ½Ð¸Ñ Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐ°Ñ…',
+                'Kembali ke Jadwal Utama': 'ÐÐ°Ð·Ð°Ð´ Ðº Ñ€Ð°ÑÐ¿Ð¸ÑÐ°Ð½Ð¸ÑŽ',
             }
         };
 
@@ -1462,7 +1462,7 @@
                 'Deadline': 'Overdue', 'Selesai': 'Completed', 'Reset': 'Reset',
                 'Pengaturan Tampilan': 'Display Settings',
                 'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Customize gradient themes, graphic style, animations, sound effects, class music, and app language.',
-                '← Kembali ke Jadwal Utama': '← Back to Main Schedule',
+                'â† Kembali ke Jadwal Utama': 'â† Back to Main Schedule',
                 'TEMA GELAP (GRADIEN)': 'DARK THEMES (GRADIENT)',
                 'TEMA TERANG (GRADIEN)': 'LIGHT THEMES (GRADIENT)',
                 'GRAFIK & ANIMASI': 'GRAPHICS & ANIMATION',
@@ -1480,58 +1480,58 @@
                 'Hari / Jam': 'Day / Time', 'Senin': 'Monday', 'Selasa': 'Tuesday', 'Rabu': 'Wednesday', 'Kamis': 'Thursday', 'Jumat': 'Friday'
             },
             ja: {
-                'Jadwal': '時間割', 'Tugas': '課題', 'Kalender': 'カレンダー', 'Siswa': '生徒一覧',
-                'Nmr Guru': '先生連絡先', 'Materi': '教材', 'Latihan': '練習問題', 'Profil': 'プロフィール',
-                'Pengaturan': '設定', 'Komok': 'コモック',
-                'Jadwal Pelajaran XI RPL 1': 'XI RPL 1 授業時間割',
-                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': '教科ボックスをクリックしてノート・課題・宿題・イベントを確認します。',
-                'Catatan': 'ノート', 'PR': '宿題', 'Event': 'イベント', 'Tenggat': '締切間近',
-                'Deadline': '期限切れ', 'Selesai': '完了', 'Reset': 'リセット',
-                'Pengaturan Tampilan': '表示設定',
-                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'グラデーションテーマ、グラフィックスタイル、アニメーション、効果音、音楽、言語を設定します。',
-                '← Kembali ke Jadwal Utama': '← 時間割に戻る',
-                'TEMA GELAP (GRADIEN)': 'ダークテーマ（グラデーション）',
-                'TEMA TERANG (GRADIEN)': 'ライトテーマ（グラデーション）',
-                'GRAFIK & ANIMASI': 'グラフィックとアニメーション',
-                'Animasi Transisi UI': 'UIトランジションアニメーション',
-                'GAYA HURUF': 'フォントスタイル',
-                'EFEK SUARA (SFX)': '効果音 (SFX)',
-                'BAHASA': '言語設定',
-                'Pemutar Musik Kelas': 'クラス音楽プレイヤー',
-                'Kasih Saran & Laporan Bug': 'ご意見・バグ報告',
-                'Daftar Semua Tugas, PR & Event': 'すべての課題・宿題・イベント一覧',
-                'Tandai Selesai': '完了にする', 'Buka & Komentar': '開く・コメント',
-                'Nomor WhatsApp Guru XI RPL 1': 'XI RPL 1 先生の連絡先',
-                'Bank Materi Ujian (AAS, ATS, Ulangan)': '試験対策教材バンク',
-                'Pusat Latihan Soal XI RPL 1': 'XI RPL 1 練習問題センター',
-                'Hari / Jam': '曜日 / 時限', 'Senin': '月曜', 'Selasa': '火曜', 'Rabu': '水曜', 'Kamis': '木曜', 'Jumat': '金曜'
+                'Jadwal': 'æ™‚é–“å‰²', 'Tugas': 'èª²é¡Œ', 'Kalender': 'ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼', 'Siswa': 'ç”Ÿå¾’ä¸€è¦§',
+                'Nmr Guru': 'å…ˆç”Ÿé€£çµ¡å…ˆ', 'Materi': 'æ•™æ', 'Latihan': 'ç·´ç¿’å•é¡Œ', 'Profil': 'ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«',
+                'Pengaturan': 'è¨­å®š', 'Komok': 'ã‚³ãƒ¢ãƒƒã‚¯',
+                'Jadwal Pelajaran XI RPL 1': 'XI RPL 1 æŽˆæ¥­æ™‚é–“å‰²',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': 'æ•™ç§‘ãƒœãƒƒã‚¯ã‚¹ã‚’ã‚¯ãƒªãƒƒã‚¯ã—ã¦ãƒŽãƒ¼ãƒˆãƒ»èª²é¡Œãƒ»å®¿é¡Œãƒ»ã‚¤ãƒ™ãƒ³ãƒˆã‚’ç¢ºèªã—ã¾ã™ã€‚',
+                'Catatan': 'ãƒŽãƒ¼ãƒˆ', 'PR': 'å®¿é¡Œ', 'Event': 'ã‚¤ãƒ™ãƒ³ãƒˆ', 'Tenggat': 'ç· åˆ‡é–“è¿‘',
+                'Deadline': 'æœŸé™åˆ‡ã‚Œ', 'Selesai': 'å®Œäº†', 'Reset': 'ãƒªã‚»ãƒƒãƒˆ',
+                'Pengaturan Tampilan': 'è¡¨ç¤ºè¨­å®š',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'ã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ãƒ†ãƒ¼ãƒžã€ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚¹ã‚¿ã‚¤ãƒ«ã€ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³ã€åŠ¹æžœéŸ³ã€éŸ³æ¥½ã€è¨€èªžã‚’è¨­å®šã—ã¾ã™ã€‚',
+                'â† Kembali ke Jadwal Utama': 'â† æ™‚é–“å‰²ã«æˆ»ã‚‹',
+                'TEMA GELAP (GRADIEN)': 'ãƒ€ãƒ¼ã‚¯ãƒ†ãƒ¼ãƒžï¼ˆã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ï¼‰',
+                'TEMA TERANG (GRADIEN)': 'ãƒ©ã‚¤ãƒˆãƒ†ãƒ¼ãƒžï¼ˆã‚°ãƒ©ãƒ‡ãƒ¼ã‚·ãƒ§ãƒ³ï¼‰',
+                'GRAFIK & ANIMASI': 'ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³',
+                'Animasi Transisi UI': 'UIãƒˆãƒ©ãƒ³ã‚¸ã‚·ãƒ§ãƒ³ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³',
+                'GAYA HURUF': 'ãƒ•ã‚©ãƒ³ãƒˆã‚¹ã‚¿ã‚¤ãƒ«',
+                'EFEK SUARA (SFX)': 'åŠ¹æžœéŸ³ (SFX)',
+                'BAHASA': 'è¨€èªžè¨­å®š',
+                'Pemutar Musik Kelas': 'ã‚¯ãƒ©ã‚¹éŸ³æ¥½ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼',
+                'Kasih Saran & Laporan Bug': 'ã”æ„è¦‹ãƒ»ãƒã‚°å ±å‘Š',
+                'Daftar Semua Tugas, PR & Event': 'ã™ã¹ã¦ã®èª²é¡Œãƒ»å®¿é¡Œãƒ»ã‚¤ãƒ™ãƒ³ãƒˆä¸€è¦§',
+                'Tandai Selesai': 'å®Œäº†ã«ã™ã‚‹', 'Buka & Komentar': 'é–‹ããƒ»ã‚³ãƒ¡ãƒ³ãƒˆ',
+                'Nomor WhatsApp Guru XI RPL 1': 'XI RPL 1 å…ˆç”Ÿã®é€£çµ¡å…ˆ',
+                'Bank Materi Ujian (AAS, ATS, Ulangan)': 'è©¦é¨“å¯¾ç­–æ•™æãƒãƒ³ã‚¯',
+                'Pusat Latihan Soal XI RPL 1': 'XI RPL 1 ç·´ç¿’å•é¡Œã‚»ãƒ³ã‚¿ãƒ¼',
+                'Hari / Jam': 'æ›œæ—¥ / æ™‚é™', 'Senin': 'æœˆæ›œ', 'Selasa': 'ç«æ›œ', 'Rabu': 'æ°´æ›œ', 'Kamis': 'æœ¨æ›œ', 'Jumat': 'é‡‘æ›œ'
             },
             ru: {
-                'Jadwal': 'Расписание', 'Tugas': 'Задания', 'Kalender': 'Календарь', 'Siswa': 'Ученики',
-                'Nmr Guru': 'Учителя', 'Materi': 'Материалы', 'Latihan': 'Тесты', 'Profil': 'Профиль',
-                'Pengaturan': 'Настройки', 'Komok': 'Комок',
-                'Jadwal Pelajaran XI RPL 1': 'Расписание уроков XI RPL 1',
-                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': 'Нажмите на предмет, чтобы открыть заметки, задания, ДЗ или события.',
-                'Catatan': 'Заметки', 'PR': 'ДЗ', 'Event': 'События', 'Tenggat': 'Скоро срок',
-                'Deadline': 'Просрочено', 'Selesai': 'Готово', 'Reset': 'Сброс',
-                'Pengaturan Tampilan': 'Настройки экрана',
-                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Настройте градиентные темы, графику, анимацию, звуки, музыку класса и язык.',
-                '← Kembali ke Jadwal Utama': '← Назад к расписанию',
-                'TEMA GELAP (GRADIEN)': 'ТЁМНЫЕ ТЕМЫ (ГРАДИЕНТ)',
-                'TEMA TERANG (GRADIEN)': 'СВЕТЛЫЕ ТЕМЫ (ГРАДИЕНТ)',
-                'GRAFIK & ANIMASI': 'ГРАФИКА И АНИМАЦИЯ',
-                'Animasi Transisi UI': 'Анимация переходов UI',
-                'GAYA HURUF': 'СТИЛЬ ШРИФТА',
-                'EFEK SUARA (SFX)': 'ЗВУКОВЫЕ ЭФФЕКТЫ (SFX)',
-                'BAHASA': 'ЯЗЫК',
-                'Pemutar Musik Kelas': 'Музыкальный плеер класса',
-                'Kasih Saran & Laporan Bug': 'Отзыв и отчёт об ошибке',
-                'Daftar Semua Tugas, PR & Event': 'Все задания, ДЗ и события',
-                'Tandai Selesai': 'Выполнено', 'Buka & Komentar': 'Открыть',
-                'Nomor WhatsApp Guru XI RPL 1': 'Контакты WhatsApp учителей XI RPL 1',
-                'Bank Materi Ujian (AAS, ATS, Ulangan)': 'Учебные материалы к экзаменам',
-                'Pusat Latihan Soal XI RPL 1': 'Тренировочные тесты XI RPL 1',
-                'Hari / Jam': 'День / Урок', 'Senin': 'Пн', 'Selasa': 'Вт', 'Rabu': 'Ср', 'Kamis': 'Чт', 'Jumat': 'Пт'
+                'Jadwal': 'Ð Ð°ÑÐ¿Ð¸ÑÐ°Ð½Ð¸Ðµ', 'Tugas': 'Ð—Ð°Ð´Ð°Ð½Ð¸Ñ', 'Kalender': 'ÐšÐ°Ð»ÐµÐ½Ð´Ð°Ñ€ÑŒ', 'Siswa': 'Ð£Ñ‡ÐµÐ½Ð¸ÐºÐ¸',
+                'Nmr Guru': 'Ð£Ñ‡Ð¸Ñ‚ÐµÐ»Ñ', 'Materi': 'ÐœÐ°Ñ‚ÐµÑ€Ð¸Ð°Ð»Ñ‹', 'Latihan': 'Ð¢ÐµÑÑ‚Ñ‹', 'Profil': 'ÐŸÑ€Ð¾Ñ„Ð¸Ð»ÑŒ',
+                'Pengaturan': 'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸', 'Komok': 'ÐšÐ¾Ð¼Ð¾Ðº',
+                'Jadwal Pelajaran XI RPL 1': 'Ð Ð°ÑÐ¿Ð¸ÑÐ°Ð½Ð¸Ðµ ÑƒÑ€Ð¾ÐºÐ¾Ð² XI RPL 1',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': 'ÐÐ°Ð¶Ð¼Ð¸Ñ‚Ðµ Ð½Ð° Ð¿Ñ€ÐµÐ´Ð¼ÐµÑ‚, Ñ‡Ñ‚Ð¾Ð±Ñ‹ Ð¾Ñ‚ÐºÑ€Ñ‹Ñ‚ÑŒ Ð·Ð°Ð¼ÐµÑ‚ÐºÐ¸, Ð·Ð°Ð´Ð°Ð½Ð¸Ñ, Ð”Ð— Ð¸Ð»Ð¸ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ.',
+                'Catatan': 'Ð—Ð°Ð¼ÐµÑ‚ÐºÐ¸', 'PR': 'Ð”Ð—', 'Event': 'Ð¡Ð¾Ð±Ñ‹Ñ‚Ð¸Ñ', 'Tenggat': 'Ð¡ÐºÐ¾Ñ€Ð¾ ÑÑ€Ð¾Ðº',
+                'Deadline': 'ÐŸÑ€Ð¾ÑÑ€Ð¾Ñ‡ÐµÐ½Ð¾', 'Selesai': 'Ð“Ð¾Ñ‚Ð¾Ð²Ð¾', 'Reset': 'Ð¡Ð±Ñ€Ð¾Ñ',
+                'Pengaturan Tampilan': 'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ ÑÐºÑ€Ð°Ð½Ð°',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹Ñ‚Ðµ Ð³Ñ€Ð°Ð´Ð¸ÐµÐ½Ñ‚Ð½Ñ‹Ðµ Ñ‚ÐµÐ¼Ñ‹, Ð³Ñ€Ð°Ñ„Ð¸ÐºÑƒ, Ð°Ð½Ð¸Ð¼Ð°Ñ†Ð¸ÑŽ, Ð·Ð²ÑƒÐºÐ¸, Ð¼ÑƒÐ·Ñ‹ÐºÑƒ ÐºÐ»Ð°ÑÑÐ° Ð¸ ÑÐ·Ñ‹Ðº.',
+                'â† Kembali ke Jadwal Utama': 'â† ÐÐ°Ð·Ð°Ð´ Ðº Ñ€Ð°ÑÐ¿Ð¸ÑÐ°Ð½Ð¸ÑŽ',
+                'TEMA GELAP (GRADIEN)': 'Ð¢ÐÐœÐÐ«Ð• Ð¢Ð•ÐœÐ« (Ð“Ð ÐÐ”Ð˜Ð•ÐÐ¢)',
+                'TEMA TERANG (GRADIEN)': 'Ð¡Ð’Ð•Ð¢Ð›Ð«Ð• Ð¢Ð•ÐœÐ« (Ð“Ð ÐÐ”Ð˜Ð•ÐÐ¢)',
+                'GRAFIK & ANIMASI': 'Ð“Ð ÐÐ¤Ð˜ÐšÐ Ð˜ ÐÐÐ˜ÐœÐÐ¦Ð˜Ð¯',
+                'Animasi Transisi UI': 'ÐÐ½Ð¸Ð¼Ð°Ñ†Ð¸Ñ Ð¿ÐµÑ€ÐµÑ…Ð¾Ð´Ð¾Ð² UI',
+                'GAYA HURUF': 'Ð¡Ð¢Ð˜Ð›Ð¬ Ð¨Ð Ð˜Ð¤Ð¢Ð',
+                'EFEK SUARA (SFX)': 'Ð—Ð’Ð£ÐšÐžÐ’Ð«Ð• Ð­Ð¤Ð¤Ð•ÐšÐ¢Ð« (SFX)',
+                'BAHASA': 'Ð¯Ð—Ð«Ðš',
+                'Pemutar Musik Kelas': 'ÐœÑƒÐ·Ñ‹ÐºÐ°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¿Ð»ÐµÐµÑ€ ÐºÐ»Ð°ÑÑÐ°',
+                'Kasih Saran & Laporan Bug': 'ÐžÑ‚Ð·Ñ‹Ð² Ð¸ Ð¾Ñ‚Ñ‡Ñ‘Ñ‚ Ð¾Ð± Ð¾ÑˆÐ¸Ð±ÐºÐµ',
+                'Daftar Semua Tugas, PR & Event': 'Ð’ÑÐµ Ð·Ð°Ð´Ð°Ð½Ð¸Ñ, Ð”Ð— Ð¸ ÑÐ¾Ð±Ñ‹Ñ‚Ð¸Ñ',
+                'Tandai Selesai': 'Ð’Ñ‹Ð¿Ð¾Ð»Ð½ÐµÐ½Ð¾', 'Buka & Komentar': 'ÐžÑ‚ÐºÑ€Ñ‹Ñ‚ÑŒ',
+                'Nomor WhatsApp Guru XI RPL 1': 'ÐšÐ¾Ð½Ñ‚Ð°ÐºÑ‚Ñ‹ WhatsApp ÑƒÑ‡Ð¸Ñ‚ÐµÐ»ÐµÐ¹ XI RPL 1',
+                'Bank Materi Ujian (AAS, ATS, Ulangan)': 'Ð£Ñ‡ÐµÐ±Ð½Ñ‹Ðµ Ð¼Ð°Ñ‚ÐµÑ€Ð¸Ð°Ð»Ñ‹ Ðº ÑÐºÐ·Ð°Ð¼ÐµÐ½Ð°Ð¼',
+                'Pusat Latihan Soal XI RPL 1': 'Ð¢Ñ€ÐµÐ½Ð¸Ñ€Ð¾Ð²Ð¾Ñ‡Ð½Ñ‹Ðµ Ñ‚ÐµÑÑ‚Ñ‹ XI RPL 1',
+                'Hari / Jam': 'Ð”ÐµÐ½ÑŒ / Ð£Ñ€Ð¾Ðº', 'Senin': 'ÐŸÐ½', 'Selasa': 'Ð’Ñ‚', 'Rabu': 'Ð¡Ñ€', 'Kamis': 'Ð§Ñ‚', 'Jumat': 'ÐŸÑ‚'
             }
         };
 
@@ -1605,13 +1605,13 @@
             document.querySelectorAll('.filter-bar-mobile-grid button, .filter-bar-mobile-grid a, button, a').forEach(el => {
                 if (el.closest('nav')) return;
                 const txt = (el.textContent || '').trim();
-                if (/^📌?\s*Tugas$/i.test(txt) && UNCOMPLETED_TUGAS_COUNT > 0 && !el.querySelector('.cnt-pill')) {
+                if (/^ðŸ“Œ?\s*Tugas$/i.test(txt) && UNCOMPLETED_TUGAS_COUNT > 0 && !el.querySelector('.cnt-pill')) {
                     const pill = document.createElement('span');
                     pill.className = 'cnt-pill ml-1.5 px-1.5 py-0.2 rounded-full bg-amber-400 text-zinc-950 text-[10px] font-black';
                     pill.textContent = UNCOMPLETED_TUGAS_COUNT;
                     el.appendChild(pill);
                 }
-                if (/^🏠?\s*PR$/i.test(txt) && UNCOMPLETED_PR_COUNT > 0 && !el.querySelector('.cnt-pill')) {
+                if (/^ðŸ ?\s*PR$/i.test(txt) && UNCOMPLETED_PR_COUNT > 0 && !el.querySelector('.cnt-pill')) {
                     const pill = document.createElement('span');
                     pill.className = 'cnt-pill ml-1.5 px-1.5 py-0.2 rounded-full bg-orange-400 text-zinc-950 text-[10px] font-black';
                     pill.textContent = UNCOMPLETED_PR_COUNT;
@@ -1899,7 +1899,7 @@
             'Tenggat': 'Due Soon', 'Deadline': 'Overdue', 'Selesai': 'Completed', 'Reset': 'Reset',
             'Pengaturan Tampilan': 'Display Settings',
             'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Customize gradient themes, graphic styles, animations, sound effects, class music, and app language.',
-            '← Kembali ke Jadwal Utama': '← Back to Main Schedule',
+            'â† Kembali ke Jadwal Utama': 'â† Back to Main Schedule',
             'TEMA GELAP (GRADIEN)': 'DARK THEMES (GRADIENT)', 'TEMA TERANG (GRADIEN)': 'LIGHT THEMES (GRADIENT)',
             'GRAFIK & ANIMASI': 'GRAPHICS & ANIMATION', 'Animasi Transisi UI': 'UI Transition Animation',
             'GAYA HURUF': 'FONT STYLE', 'EFEK SUARA (SFX)': 'SOUND EFFECTS (SFX)', 'BAHASA': 'LANGUAGE',
@@ -1908,30 +1908,30 @@
             'Hari / Jam': 'Day / Time', 'Senin': 'Monday', 'Selasa': 'Tuesday', 'Rabu': 'Wednesday', 'Kamis': 'Thursday', 'Jumat': 'Friday'
         },
         ja: {
-            'Jadwal': '時間割', 'List Tugas': '課題一覧', 'Kalender': 'カレンダー', 'Siswa': '生徒一覧',
-            'Nmr Guru': '先生連絡先', 'Materi': '教材', 'Latihan': '練習問題', 'Profil': 'プロフィール',
-            'Pengaturan': '設定', 'Komok': 'コモック',
-            'JADWAL XI RPL 1': 'XI RPL 1 時間割',
-            'Catatan': 'ノート', 'Tugas': '課題', 'PR': '宿題', 'Event': 'イベント',
-            'Tenggat': '締切間近', 'Deadline': '期限切れ', 'Selesai': '完了', 'Reset': 'リセット',
-            'Pengaturan Tampilan': '表示設定', '← Kembali ke Jadwal Utama': '← 時間割に戻る',
-            'TEMA GELAP (GRADIEN)': 'ダークテーマ', 'TEMA TERANG (GRADIEN)': 'ライトテーマ',
-            'GRAFIK & ANIMASI': 'グラフィックとアニメーション', 'GAYA HURUF': 'フォントスタイル',
-            'BAHASA': '言語設定', 'Pemutar Musik Kelas': 'クラス音楽プレイヤー',
-            'Hari / Jam': '曜日 / 時限', 'Senin': '月曜', 'Selasa': '火曜', 'Rabu': '水曜', 'Kamis': '木曜', 'Jumat': '金曜'
+            'Jadwal': 'æ™‚é–“å‰²', 'List Tugas': 'èª²é¡Œä¸€è¦§', 'Kalender': 'ã‚«ãƒ¬ãƒ³ãƒ€ãƒ¼', 'Siswa': 'ç”Ÿå¾’ä¸€è¦§',
+            'Nmr Guru': 'å…ˆç”Ÿé€£çµ¡å…ˆ', 'Materi': 'æ•™æ', 'Latihan': 'ç·´ç¿’å•é¡Œ', 'Profil': 'ãƒ—ãƒ­ãƒ•ã‚£ãƒ¼ãƒ«',
+            'Pengaturan': 'è¨­å®š', 'Komok': 'ã‚³ãƒ¢ãƒƒã‚¯',
+            'JADWAL XI RPL 1': 'XI RPL 1 æ™‚é–“å‰²',
+            'Catatan': 'ãƒŽãƒ¼ãƒˆ', 'Tugas': 'èª²é¡Œ', 'PR': 'å®¿é¡Œ', 'Event': 'ã‚¤ãƒ™ãƒ³ãƒˆ',
+            'Tenggat': 'ç· åˆ‡é–“è¿‘', 'Deadline': 'æœŸé™åˆ‡ã‚Œ', 'Selesai': 'å®Œäº†', 'Reset': 'ãƒªã‚»ãƒƒãƒˆ',
+            'Pengaturan Tampilan': 'è¡¨ç¤ºè¨­å®š', 'â† Kembali ke Jadwal Utama': 'â† æ™‚é–“å‰²ã«æˆ»ã‚‹',
+            'TEMA GELAP (GRADIEN)': 'ãƒ€ãƒ¼ã‚¯ãƒ†ãƒ¼ãƒž', 'TEMA TERANG (GRADIEN)': 'ãƒ©ã‚¤ãƒˆãƒ†ãƒ¼ãƒž',
+            'GRAFIK & ANIMASI': 'ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã¨ã‚¢ãƒ‹ãƒ¡ãƒ¼ã‚·ãƒ§ãƒ³', 'GAYA HURUF': 'ãƒ•ã‚©ãƒ³ãƒˆã‚¹ã‚¿ã‚¤ãƒ«',
+            'BAHASA': 'è¨€èªžè¨­å®š', 'Pemutar Musik Kelas': 'ã‚¯ãƒ©ã‚¹éŸ³æ¥½ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼',
+            'Hari / Jam': 'æ›œæ—¥ / æ™‚é™', 'Senin': 'æœˆæ›œ', 'Selasa': 'ç«æ›œ', 'Rabu': 'æ°´æ›œ', 'Kamis': 'æœ¨æ›œ', 'Jumat': 'é‡‘æ›œ'
         },
         ru: {
-            'Jadwal': 'Расписание', 'List Tugas': 'Задания', 'Kalender': 'Календарь', 'Siswa': 'Ученики',
-            'Nmr Guru': 'Учителя', 'Materi': 'Материалы', 'Latihan': 'Тесты', 'Profil': 'Профиль',
-            'Pengaturan': 'Настройки', 'Komok': 'Комок',
-            'JADWAL XI RPL 1': 'РАСПИСАНИЕ XI RPL 1',
-            'Catatan': 'Заметки', 'Tugas': 'Задания', 'PR': 'ДЗ', 'Event': 'События',
-            'Tenggat': 'Скоро срок', 'Deadline': 'Просрочено', 'Selesai': 'Готово', 'Reset': 'Сброс',
-            'Pengaturan Tampilan': 'Настройки экрана', '← Kembali ke Jadwal Utama': '← Назад к расписанию',
-            'TEMA GELAP (GRADIEN)': 'ТЁМНЫЕ ТЕМЫ', 'TEMA TERANG (GRADIEN)': 'СВЕТЛЫЕ ТЕМЫ',
-            'GRAFIK & ANIMASI': 'ГРАФИКА И АНИМАЦИЯ', 'GAYA HURUF': 'СТИЛЬ ШРИФТА',
-            'BAHASA': 'ЯЗЫК', 'Pemutar Musik Kelas': 'Музыкальный плеер класса',
-            'Hari / Jam': 'День / Урок', 'Senin': 'Пн', 'Selasa': 'Вт', 'Rabu': 'Ср', 'Kamis': 'Чт', 'Jumat': 'Пт'
+            'Jadwal': 'Ð Ð°ÑÐ¿Ð¸ÑÐ°Ð½Ð¸Ðµ', 'List Tugas': 'Ð—Ð°Ð´Ð°Ð½Ð¸Ñ', 'Kalender': 'ÐšÐ°Ð»ÐµÐ½Ð´Ð°Ñ€ÑŒ', 'Siswa': 'Ð£Ñ‡ÐµÐ½Ð¸ÐºÐ¸',
+            'Nmr Guru': 'Ð£Ñ‡Ð¸Ñ‚ÐµÐ»Ñ', 'Materi': 'ÐœÐ°Ñ‚ÐµÑ€Ð¸Ð°Ð»Ñ‹', 'Latihan': 'Ð¢ÐµÑÑ‚Ñ‹', 'Profil': 'ÐŸÑ€Ð¾Ñ„Ð¸Ð»ÑŒ',
+            'Pengaturan': 'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸', 'Komok': 'ÐšÐ¾Ð¼Ð¾Ðº',
+            'JADWAL XI RPL 1': 'Ð ÐÐ¡ÐŸÐ˜Ð¡ÐÐÐ˜Ð• XI RPL 1',
+            'Catatan': 'Ð—Ð°Ð¼ÐµÑ‚ÐºÐ¸', 'Tugas': 'Ð—Ð°Ð´Ð°Ð½Ð¸Ñ', 'PR': 'Ð”Ð—', 'Event': 'Ð¡Ð¾Ð±Ñ‹Ñ‚Ð¸Ñ',
+            'Tenggat': 'Ð¡ÐºÐ¾Ñ€Ð¾ ÑÑ€Ð¾Ðº', 'Deadline': 'ÐŸÑ€Ð¾ÑÑ€Ð¾Ñ‡ÐµÐ½Ð¾', 'Selesai': 'Ð“Ð¾Ñ‚Ð¾Ð²Ð¾', 'Reset': 'Ð¡Ð±Ñ€Ð¾Ñ',
+            'Pengaturan Tampilan': 'ÐÐ°ÑÑ‚Ñ€Ð¾Ð¹ÐºÐ¸ ÑÐºÑ€Ð°Ð½Ð°', 'â† Kembali ke Jadwal Utama': 'â† ÐÐ°Ð·Ð°Ð´ Ðº Ñ€Ð°ÑÐ¿Ð¸ÑÐ°Ð½Ð¸ÑŽ',
+            'TEMA GELAP (GRADIEN)': 'Ð¢ÐÐœÐÐ«Ð• Ð¢Ð•ÐœÐ«', 'TEMA TERANG (GRADIEN)': 'Ð¡Ð’Ð•Ð¢Ð›Ð«Ð• Ð¢Ð•ÐœÐ«',
+            'GRAFIK & ANIMASI': 'Ð“Ð ÐÐ¤Ð˜ÐšÐ Ð˜ ÐÐÐ˜ÐœÐÐ¦Ð˜Ð¯', 'GAYA HURUF': 'Ð¡Ð¢Ð˜Ð›Ð¬ Ð¨Ð Ð˜Ð¤Ð¢Ð',
+            'BAHASA': 'Ð¯Ð—Ð«Ðš', 'Pemutar Musik Kelas': 'ÐœÑƒÐ·Ñ‹ÐºÐ°Ð»ÑŒÐ½Ñ‹Ð¹ Ð¿Ð»ÐµÐµÑ€ ÐºÐ»Ð°ÑÑÐ°',
+            'Hari / Jam': 'Ð”ÐµÐ½ÑŒ / Ð£Ñ€Ð¾Ðº', 'Senin': 'ÐŸÐ½', 'Selasa': 'Ð’Ñ‚', 'Rabu': 'Ð¡Ñ€', 'Kamis': 'Ð§Ñ‚', 'Jumat': 'ÐŸÑ‚'
         }
     };
 
@@ -1960,7 +1960,7 @@
         const isMobile = window.innerWidth <= 640;
         const mapelList = [
             { keys: ['ketamansiswaan', 'etamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
-            { keys: ['samsung tech institute', 'sistem teknologi informasi', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
+            { keys: ['samsung tech institute', 'Samsung Tech Institute', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
             { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
             { keys: ['kreativitas & desain interaktif', 'kreativitas dan desain interaktif', 'kdi'], code: 'KDI', full: 'Kreativitas & Desain Interaktif' },
             { keys: ['muatan bahasa jepang', 'bahasa jepang', 'mbj'], code: 'MBJ(J)', full: 'Muatan Bahasa Jepang' },
@@ -2028,5 +2028,179 @@
 })();
 </script>
 <!-- GLOBAL-UI-ENGINE-END -->
+{{-- [PATCH START] Fix Bell Notification & Appearance Sync --}}
+<style>
+  [data-notif-bell], .notif-bell, .notification-bell, #notifBell, a[href*="notifikasi"], button[data-target*="notif"] {
+    position: relative !important;
+    z-index: 9999 !important;
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+  body.theme-deep-ocean { --bg-main: #07131f; --bg-card: #0e2236; --accent-main: #0ea5e9; }
+  body.theme-midnight-scholar { --bg-main: #0b0f19; --bg-card: #151c2c; --accent-main: #6366f1; }
+  body.theme-forest-academy { --bg-main: #071712; --bg-card: #0f2920; --accent-main: #10b981; }
+  body.theme-mode-gelap { --bg-main: #09090b; --bg-card: #18181b; --accent-main: #3b82f6; }
+  body.theme-teal-growth { --bg-main: #f0fdfa; --bg-card: #ffffff; --accent-main: #0d9488; }
+  body.font-coding-mono, body.font-coding-mono * { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace !important; }
+  body.font-klasik-serif, body.font-klasik-serif * { font-family: Georgia, Cambria, "Times New Roman", Times, serif !important; }
+  body.font-modern-sans, body.font-modern-sans * { font-family: Inter, system-ui, -apple-system, sans-serif !important; }
+</style>
+<script>
+(function () {
+  const slugify = (str) => (str || "").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+  // 1. Terapkan state tersimpan dari localStorage saat halaman dimuat
+  const savedTheme = localStorage.getItem("ui_theme_slug");
+  const savedFont  = localStorage.getItem("ui_font_slug");
+  const savedLang  = localStorage.getItem("ui_lang_code");
+
+  if (savedTheme) document.body.classList.add("theme-" + savedTheme);
+  if (savedFont)  document.body.classList.add("font-" + savedFont);
+  if (savedLang)  document.documentElement.setAttribute("lang", savedLang);
+
+  // 2. Tangkap klik tombol tema / font / bahasa di halaman pengaturan
+  document.addEventListener("click", function (e) {
+    const btn = e.target.closest("button, [role='button'], .option-btn, .theme-btn, .font-btn, .lang-btn");
+    if (!btn) return;
+
+    const text = (btn.innerText || "").trim();
+    const lower = text.toLowerCase();
+
+    // Deteksi bahasa
+    const langMap = {
+      "indonesia": "id",
+      "english": "en",
+      "日本語": "ja",
+      "jepang": "ja",
+      "русский": "ru"
+    };
+    for (const [k, code] of Object.entries(langMap)) {
+      if (lower.includes(k.toLowerCase())) {
+        localStorage.setItem("ui_lang_code", code);
+        document.documentElement.setAttribute("lang", code);
+        const url = new URL(window.location.href);
+        if (url.searchParams.get("lang") !== code) {
+          url.searchParams.set("lang", code);
+          window.location.href = url.toString();
+        }
+        return;
+      }
+    }
+
+    // Deteksi font
+    if (["modern sans", "klasik serif", "coding mono"].some(f => lower.includes(f))) {
+      const fSlug = slugify(text.split("\n")[0]);
+      localStorage.setItem("ui_font_slug", fSlug);
+      [...document.body.classList].filter(c => c.startsWith("font-")).forEach(c => document.body.classList.remove(c));
+      document.body.classList.add("font-" + fSlug);
+      return;
+    }
+
+    // Deteksi tema
+    if (["deep ocean", "midnight scholar", "forest academy", "mode gelap", "teal growth", "creative spark", "lavender dream", "soft berry", "morning assembly"].some(t => lower.includes(t))) {
+      const tSlug = slugify(text.split("\n")[0]);
+      localStorage.setItem("ui_theme_slug", tSlug);
+      [...document.body.classList].filter(c => c.startsWith("theme-")).forEach(c => document.body.classList.remove(c));
+      document.body.classList.add("theme-" + tSlug);
+    }
+  }, true);
+
+  // 3. Perbaiki tombol lonceng notifikasi yang tidak merespons klik
+  document.addEventListener("click", function (e) {
+    const bell = e.target.closest("[data-notif-bell], .notif-bell, .notification-bell, #notifBell, a[href*='notifikasi'], a[href*='notif']");
+    if (!bell) return;
+
+    // Cari dropdown/panel notifikasi terdekat bila ada
+    const panel = document.querySelector("#notifDropdown, .notif-dropdown, .notification-dropdown, [data-notif-panel]");
+    if (panel) {
+      e.preventDefault();
+      e.stopPropagation();
+      panel.classList.toggle("hidden");
+      panel.classList.toggle("d-none");
+      panel.classList.toggle("show");
+      panel.style.display = (getComputedStyle(panel).display === "none") ? "block" : "none";
+      return;
+    }
+
+    // Fallback ke route /notifikasi jika elemen berupa button tanpa href
+    if (bell.tagName === "BUTTON" && !bell.getAttribute("href")) {
+      window.location.href = "/notifikasi";
+    }
+  }, true);
+})();
+</script>
+{{-- [PATCH END] --}}
+
+<!-- SCHEDULE-NAV-CLEAN-START -->
+<script id="schedule-nav-clean-js">
+(function () {
+    const subjectMap = [
+        { keys: ['ketamansiswaan', 'etamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
+        { keys: ['samsung tech institute', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
+        { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
+        { keys: ['kreativitas & desain interaktif', 'kreativitas dan desain interaktif', 'kdi'], code: 'KDI', full: 'Kreativitas & Desain Interaktif' },
+        { keys: ['muatan bahasa jepang', 'bahasa jepang', 'mbj'], code: 'MBJ(J)', full: 'Muatan Bahasa Jepang' },
+        { keys: ['pendidikan pancasila', 'ppkn', 'pp'], code: 'PP', full: 'Pendidikan Pancasila' },
+        { keys: ['bahasa inggris', 'b.ing'], code: 'B.Ing', full: 'Bahasa Inggris' },
+        { keys: ['bahasa indonesia', 'bi'], code: 'BI', full: 'Bahasa Indonesia' },
+        { keys: ['matematika', 'mtk'], code: 'MTK', full: 'Matematika' },
+        { keys: ['pendidikan jasmani', 'pjok', 'penjas'], code: 'Penjas', full: 'Pendidikan Jasmani' },
+        { keys: ['pemrograman lanjut', 'pl(rpl1)', 'pl'], code: 'PL(RPL1)', full: 'Pemrograman Lanjut' },
+        { keys: ['sejarah indonesia', 'sejarah'], code: 'SI', full: 'Sejarah Indonesia' },
+        { keys: ['kewirausahaan', 'pkk', 'kwh'], code: 'KWH', full: 'Kewirausahaan' },
+        { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
+    ];
+
+    function normalizeScheduleAndNav() {
+        document.querySelectorAll('nav a').forEach(a => {
+            const txt = (a.textContent || '').replace(/\s+/g, ' ').trim();
+            if (/^\(\d+\)\s*Tugas$/i.test(txt) || /list-tugas/i.test(a.getAttribute('href') || '')) {
+                a.textContent = 'List Tugas';
+            }
+        });
+
+        const isMobile = window.innerWidth <= 640;
+
+        document.querySelectorAll('main table tr').forEach(tr => {
+            const dayTxt = (tr.firstElementChild?.textContent || '').trim().toLowerCase();
+            const isSelasa = dayTxt.startsWith('sel');
+            const boxes = Array.from(tr.querySelectorAll('a[href*="/mapel/"], a[href*="/subject/"]'));
+
+            boxes.forEach((box, idx) => {
+                const orig = box.dataset.cleanOrig || (box.textContent || '').replace(/\s+/g, ' ').trim();
+                box.dataset.cleanOrig = orig;
+                const lower = orig.toLowerCase();
+
+                let match = null;
+                if (isSelasa && idx === boxes.length - 1) {
+                    match = { code: 'STI', full: 'Samsung Tech Institute' };
+                } else {
+                    match = subjectMap.find(item => item.keys.some(k => lower.includes(k)));
+                }
+
+                const badges = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
+                box.style.position = 'relative';
+
+                if (match) {
+                    if (isMobile) {
+                        box.innerHTML = '<span class="font-extrabold leading-none">' + match.code + '</span>';
+                    } else {
+                        box.innerHTML = '<div class="font-extrabold text-sm leading-tight">' + match.code + '</div><div class="text-[10px] opacity-75 leading-tight truncate max-w-full px-1">' + match.full + '</div>';
+                    }
+                    badges.forEach(b => box.appendChild(b));
+                } else if (isMobile && orig) {
+                    box.innerHTML = '<span class="font-extrabold leading-none">' + orig + '</span>';
+                    badges.forEach(b => box.appendChild(b));
+                }
+            });
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', normalizeScheduleAndNav);
+    window.addEventListener('resize', normalizeScheduleAndNav);
+})();
+</script>
+<!-- SCHEDULE-NAV-CLEAN-END -->
 </body>
 </html>
+

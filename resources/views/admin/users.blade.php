@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <div class="max-w-6xl mx-auto space-y-6">
         @if(session('success'))
             <div class="p-3.5 rounded-xl bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs sm:text-sm font-semibold">
@@ -20,7 +20,7 @@
         <!-- Persetujuan Ganti Bingkai Siswa -->
         <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-6 border theme-border space-y-4">
             <div>
-                <h2 class="text-base sm:text-lg font-extrabold">🖼️ Persetujuan Ganti Bingkai Siswa</h2>
+                <h2 class="text-base sm:text-lg font-extrabold">ðŸ–¼ï¸ Persetujuan Ganti Bingkai Siswa</h2>
                 <p class="text-xs opacity-75">Setujui permintaan agar gambar bingkai murid diproses dan diterapkan.</p>
             </div>
 
@@ -31,7 +31,7 @@
                              class="w-16 h-16 rounded-xl object-cover border theme-border">
                         <div class="text-xs">
                             <div class="font-extrabold text-sm">{{ $req->user->name ?? $req->student_name }}</div>
-                            <div class="opacity-75">Target: {{ $req->student_name ?? 'Siswa Kelas' }} • {{ $req->created_at->diffForHumans() }}</div>
+                            <div class="opacity-75">Target: {{ $req->student_name ?? 'Siswa Kelas' }} â€¢ {{ $req->created_at->diffForHumans() }}</div>
                         </div>
                     </div>
 
@@ -39,13 +39,13 @@
                         <form action="{{ route('admin.frame.approve', $req->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="px-3.5 py-1.5 rounded-xl text-xs font-extrabold bg-emerald-600 hover:bg-emerald-500 text-white shadow">
-                                ✓ Setujui & Proses
+                                âœ“ Setujui & Proses
                             </button>
                         </form>
                         <form action="{{ route('admin.frame.reject', $req->id) }}" method="POST">
                             @csrf
                             <button type="submit" class="px-3.5 py-1.5 rounded-xl text-xs font-extrabold bg-red-600 hover:bg-red-500 text-white shadow">
-                                ✕ Tolak
+                                âœ• Tolak
                             </button>
                         </form>
                     </div>
@@ -57,7 +57,7 @@
 
         <!-- Manajemen Akun Pengguna -->
         <div class="theme-card rounded-2xl shadow-lg p-4 sm:p-6 border theme-border space-y-4">
-            <h2 class="text-base sm:text-lg font-extrabold">👥 Manajemen Akun Pengguna</h2>
+            <h2 class="text-base sm:text-lg font-extrabold">ðŸ‘¥ Manajemen Akun Pengguna</h2>
 
             <div class="overflow-x-auto">
                 <table class="w-full text-left border-collapse text-xs sm:text-sm">
@@ -138,7 +138,7 @@
                     <p class="text-xs opacity-75" data-i18n="critic_sub">Ulasan bintang, masukan, dan laporan bug dari pengguna web kelas.</p>
                 </div>
                 <div class="px-3.5 py-1.5 rounded-xl border theme-border theme-soft text-xs font-extrabold">
-                    <span data-i18n="avg_rating_label">Rata-rata Rating Web</span>: ⭐ {{ $avgRating }} / 5.0
+                    <span data-i18n="avg_rating_label">Rata-rata Rating Web</span>: â­ {{ $avgRating }} / 5.0
                 </div>
             </div>
 
@@ -148,7 +148,7 @@
                         <div class="flex flex-wrap items-center justify-between gap-2">
                             <div class="text-xs sm:text-sm font-extrabold">
                                 {{ $fb->user->name ?? 'Pengguna Kelas' }}
-                                <span class="ml-2 text-amber-400">★ {{ number_format((float) $fb->rating, 1) }}</span>
+                                <span class="ml-2 text-amber-400">â˜… {{ number_format((float) $fb->rating, 1) }}</span>
                             </div>
                             <div class="flex items-center gap-2">
                                 <span class="text-[11px] opacity-70">{{ $fb->created_at?->diffForHumans() }}</span>
@@ -212,7 +212,7 @@
         <div class="theme-card border theme-border rounded-2xl p-5 space-y-4 shadow-lg mt-6">
             <div class="flex flex-wrap items-center justify-between gap-2">
                 <div>
-                    <h2 class="text-base font-extrabold">🟢 Status Member Online & Akun Pengguna</h2>
+                    <h2 class="text-base font-extrabold">ðŸŸ¢ Status Member Online & Akun Pengguna</h2>
                     <p class="text-xs opacity-75">Member yang sedang aktif memiliki outline glow hijau. Klik ikon mata untuk melihat/menyembunyikan password baru.</p>
                 </div>
                 <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-extrabold">
@@ -248,7 +248,7 @@
                                     onclick="const inp = document.getElementById('ap-pass-{{ $apU->id }}'); inp.type = inp.type === 'password' ? 'text' : 'password';"
                                     title="Tampilkan / Sembunyikan Password"
                                     class="px-2.5 py-1 rounded-lg border theme-border theme-card text-xs font-bold">
-                                👁️
+                                ðŸ‘ï¸
                             </button>
                         </div>
                     </div>
@@ -277,11 +277,6 @@
         vertical-align: middle;
     }
 
-    /* Live preview box untuk Pengaturan */
-    #settings-live-preview {
-        border-radius: 14px;
-        padding: 1rem 1.25rem;
-    }
-</style>
+    </style>
 <!-- MODULE-POLISH-V6-END -->
 </x-app-layout>

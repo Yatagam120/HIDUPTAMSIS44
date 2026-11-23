@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <div class="theme-card rounded-2xl shadow-md p-6 mb-6 flex flex-wrap items-center justify-between gap-4">
         <div>
             <h1 class="text-2xl font-extrabold">Daftar Tugas, PR & Event Kelas</h1>
@@ -6,7 +6,7 @@
         </div>
 
         <div class="flex flex-wrap gap-2">
-            @foreach(['semua' => 'Semua', 'tugas' => '📌 Tugas', 'pr' => '🏠 PR', 'event' => '🎉 Event'] as $key => $label)
+            @foreach(['semua' => 'Semua', 'tugas' => 'ðŸ“Œ Tugas', 'pr' => 'ðŸ  PR', 'event' => 'ðŸŽ‰ Event'] as $key => $label)
                 <a href="{{ route('tasks.index', ['filter' => $key]) }}"
                    class="px-4 py-2 rounded-xl text-xs font-bold transition {{ $filter === $key ? 'theme-primary shadow-sm' : 'theme-soft border theme-border hover:opacity-80' }}">
                     {{ $label }}
@@ -18,7 +18,7 @@
     <div class="space-y-4">
         @forelse($tasks as $post)
             @php
-                $isDone = $post->reactions->where('emoji', '✅')->where('user_id', Auth::id())->isNotEmpty();
+                $isDone = $post->reactions->where('emoji', 'âœ…')->where('user_id', Auth::id())->isNotEmpty();
                 $statusBadge = null;
                 if ($post->tanggal_deadline && !$isDone) {
                     $today = \Carbon\Carbon::today();
@@ -27,12 +27,12 @@
 
                     if ($diffDays <= 0) {
                         $statusBadge = [
-                            'label' => $diffDays === 0 ? '🚨 HARI INI DEADLINE' : '🚨 LEWAT DEADLINE',
+                            'label' => $diffDays === 0 ? 'ðŸš¨ HARI INI DEADLINE' : 'ðŸš¨ LEWAT DEADLINE',
                             'style' => 'background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444;',
                         ];
                     } elseif ($diffDays <= 2) {
                         $statusBadge = [
-                            'label' => '⚠️ WAKTU MEPET (' . $diffDays . ' HARI LAGI)',
+                            'label' => 'âš ï¸ WAKTU MEPET (' . $diffDays . ' HARI LAGI)',
                             'style' => 'background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid #f59e0b;',
                         ];
                     }
@@ -51,7 +51,7 @@
                             </span>
                             @if($isDone)
                                 <span class="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500">
-                                    ✅ Sudah Dikerjakan
+                                    âœ… Sudah Dikerjakan
                                 </span>
                             @elseif($statusBadge)
                                 <span style="{{ $statusBadge['style'] }}" class="text-[11px] font-extrabold px-2.5 py-0.5 rounded-full">
@@ -62,9 +62,9 @@
 
                         <h2 class="text-lg font-bold">{{ $post->judul }}</h2>
                         <p class="text-xs opacity-75 mt-0.5">
-                            {{ $post->subject->nama_mapel ?? '' }} • Oleh <strong>{{ $post->user->name ?? 'User' }}</strong>
+                            {{ $post->subject->nama_mapel ?? '' }} â€¢ Oleh <strong>{{ $post->user->name ?? 'User' }}</strong>
                             @if($post->tanggal_deadline)
-                                • Tenggat: <strong>{{ \Carbon\Carbon::parse($post->tanggal_deadline)->format('d M Y') }}</strong>
+                                â€¢ Tenggat: <strong>{{ \Carbon\Carbon::parse($post->tanggal_deadline)->format('d M Y') }}</strong>
                             @endif
                         </p>
                     </div>
@@ -72,16 +72,16 @@
                     <div class="flex items-center gap-3">
                         <form action="{{ route('posts.react', $post->id) }}" method="POST">
                             @csrf
-                            <input type="hidden" name="emoji" value="✅">
+                            <input type="hidden" name="emoji" value="âœ…">
                             <button type="submit"
                                     class="px-3 py-1.5 rounded-xl text-xs font-bold border transition {{ $isDone ? 'theme-primary border-transparent' : 'theme-soft theme-border hover:opacity-85' }}">
-                                {{ $isDone ? '✅ Selesai' : '☑️ Tandai Selesai' }}
+                                {{ $isDone ? 'âœ… Selesai' : 'â˜‘ï¸ Tandai Selesai' }}
                             </button>
                         </form>
 
                         <a href="{{ route('subject.show', ['subject' => $post->subject_id, 'tab' => $post->kategori]) }}"
                            class="px-3 py-1.5 rounded-xl text-xs font-bold theme-soft border theme-border hover:opacity-85">
-                            Buka Mapel →
+                            Buka Mapel â†’
                         </a>
                     </div>
                 </div>
@@ -137,11 +137,6 @@
         vertical-align: middle;
     }
 
-    /* Live preview box untuk Pengaturan */
-    #settings-live-preview {
-        border-radius: 14px;
-        padding: 1rem 1.25rem;
-    }
-</style>
+    </style>
 <!-- MODULE-POLISH-V6-END -->
 </x-app-layout>

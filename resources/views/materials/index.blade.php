@@ -1,11 +1,11 @@
-<x-app-layout>
+﻿<x-app-layout>
     <div class="max-w-5xl mx-auto space-y-5">
         <div class="theme-card border theme-border rounded-2xl p-5 flex flex-wrap items-center justify-between gap-3 shadow-lg">
             <div>
-                <h1 class="text-xl sm:text-2xl font-extrabold">📚 Bank Materi Ujian (AAS, ATS, Ulangan)</h1>
+                <h1 class="text-xl sm:text-2xl font-extrabold">ðŸ“š Bank Materi Ujian (AAS, ATS, Ulangan)</h1>
                 <p class="text-xs opacity-75 mt-1">Kumpulan kisi-kisi, rangkuman, foto catatan, video pembahasan, dan dokumen ujian XI RPL 1.</p>
             </div>
-            <a href="{{ route('dashboard') }}" class="px-3 py-1.5 rounded-xl border theme-border theme-soft text-xs font-extrabold">← Kembali ke Jadwal Utama</a>
+            <a href="{{ route('dashboard') }}" class="px-3 py-1.5 rounded-xl border theme-border theme-soft text-xs font-extrabold">â† Kembali ke Jadwal Utama</a>
         </div>
 
         @if(session('success'))
@@ -28,7 +28,7 @@
         <form action="{{ route('materials.store') }}" method="POST" enctype="multipart/form-data"
               class="theme-card border theme-border rounded-2xl p-5 space-y-3 shadow">
             @csrf
-            <div class="text-sm font-extrabold">➕ Tambah Materi / Kisi-Kisi Baru</div>
+            <div class="text-sm font-extrabold">âž• Tambah Materi / Kisi-Kisi Baru</div>
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                 <input type="text" name="title" required placeholder="Judul Materi (mis. Kisi-kisi AAS Pemrograman)"
                        class="rounded-xl border theme-border px-3 py-2 text-xs font-semibold">
@@ -81,7 +81,7 @@
                             @else
                                 <a href="{{ asset($m->file_path) }}" target="_blank"
                                    class="inline-flex items-center gap-2 px-3 py-2 rounded-xl theme-soft border theme-border text-xs font-extrabold">
-                                    📄 Buka / Download Dokumen Materi
+                                    ðŸ“„ Buka / Download Dokumen Materi
                                 </a>
                             @endif
                         @endif
@@ -128,11 +128,6 @@
         vertical-align: middle;
     }
 
-    /* Live preview box untuk Pengaturan */
-    #settings-live-preview {
-        border-radius: 14px;
-        padding: 1rem 1.25rem;
-    }
-</style>
+    </style>
 <!-- MODULE-POLISH-V6-END -->
 </x-app-layout>

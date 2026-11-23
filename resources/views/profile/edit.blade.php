@@ -1,4 +1,4 @@
-<x-app-layout>
+﻿<x-app-layout>
     <div class="max-w-2xl mx-auto space-y-6 px-2">
         @if (session('status') === 'profile-updated' || session('status') === 'password-updated')
             <div class="p-3.5 rounded-xl bg-green-100 text-green-800 text-sm font-semibold text-center shadow-sm" data-i18n="profile_updated">
@@ -96,11 +96,6 @@
         vertical-align: middle;
     }
 
-    /* Live preview box untuk Pengaturan */
-    #settings-live-preview {
-        border-radius: 14px;
-        padding: 1rem 1.25rem;
-    }
-</style>
+    </style>
 <!-- MODULE-POLISH-V6-END -->
 </x-app-layout>
