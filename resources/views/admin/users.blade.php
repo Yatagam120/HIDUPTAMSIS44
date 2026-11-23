@@ -240,7 +240,7 @@
                         <!-- Field Password dengan Toggle Visibility (Mata) -->
                         <div class="mt-2.5 flex items-center gap-1.5">
                             <input type="password"
-                                   id="ap-pass-{{ $apU-> <button type="button" onclick="const p=this.previousElementSibling; p.type=p.type==='password'?'text':'password';" class="px-2 py-1 rounded border theme-border text-xs" title="Lihat/Sembunyikan Password">👁️</button>id }}"
+                                   id="ap-pass-{{ $apU->id }}"
                                    value="{{ $apU->plain_password ?? '********' }}"
                                    readonly
                                    class="flex-1 rounded-lg border theme-border px-2.5 py-1 text-[11px] font-mono">

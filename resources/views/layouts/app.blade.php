@@ -751,14 +751,21 @@
                             ]);
                         }
 
-                        if ($tStatus === 'approved' && in_array($tType, ['tugas', 'pr', 'event'], true) && !$isDone) {
-                            if (in_array($tType, ['tugas', 'pr'], true)) {
+                        $isRecentPost = false;
+                        if (!empty($ti->created_at)) {
+                            try {
+                                $isRecentPost = \Carbon\Carbon::parse($ti->created_at)->greaterThanOrEqualTo(now()->subDays(7));
+                            } catch (\Throwable $e) {}
+                        }
+
+                        if ($tStatus === 'approved' && in_array($tType, ['catatan', 'tugas', 'pr', 'event'], true) && (!$isDone || ($tType === 'catatan' && $isRecentPost))) {
+                            if (in_array($tType, ['tugas', 'pr'], true) && !$isDone) {
                                 $pendingTaskCount++;
                             }
                             $dueVal = $ti->due_date ?? $ti->deadline ?? $ti->tanggal_deadline ?? null;
-                            $dotColor = '#10b981';
+                            $dotColor = $tType === 'catatan' ? '#38bdf8' : '#10b981';
                             $subLabel = $subjName . ' • ' . strtoupper($tType);
-                            $titlePrefix = strtoupper($tType) . ': ';
+                            $titlePrefix = strtoupper($tType) . ' Baru: ';
 
                             if ($dueVal) {
                                 try {
