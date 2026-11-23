@@ -2210,5 +2210,84 @@
 })();
 </script>
 <!-- GLOBAL-UI-ENGINE-END -->
+<!-- UNIFIED-SYSTEM-PERFECTION-START -->
+<style id="unified-system-perfection-css">
+    :root {
+        --up-bg-base: #090d16;
+        --up-surface-card: #111827;
+        --up-surface-soft: #1a2334;
+        --up-surface-input: #0e1524;
+        --up-border: rgba(148, 163, 184, 0.18);
+        --up-text-main: #f8fafc;
+        --up-text-muted: #cbd5e1;
+    }
+
+    body {
+        font-size: 14px;
+        line-height: 1.55;
+        color: var(--up-text-main);
+    }
+
+    html[data-theme="mode-gelap"] body {
+        background-color: var(--up-bg-base);
+    }
+
+    html[data-theme="mode-gelap"] .theme-card {
+        background-color: var(--up-surface-card);
+        border-color: var(--up-border);
+    }
+
+    html[data-theme="mode-gelap"] .theme-soft {
+        background-color: var(--up-surface-soft);
+        border-color: var(--up-border);
+        color: var(--up-text-muted);
+    }
+
+    main input[type="text"],
+    main input[type="email"],
+    main input[type="password"],
+    main input[type="number"],
+    main input[type="date"],
+    main select,
+    main textarea {
+        font-size: 14px;
+        line-height: 1.45;
+    }
+
+    nav a, nav button {
+        font-size: 13.5px;
+        line-height: 1.35;
+        white-space: nowrap;
+    }
+</style>
+
+<script id="unified-system-perfection-js">
+(function () {
+    const savedTheme = localStorage.getItem('app_theme') || 'mode-gelap';
+    const savedGraphic = localStorage.getItem('app_graphic') || 'simple';
+    const savedFont = localStorage.getItem('app_font') || 'modern';
+    const savedAnim = localStorage.getItem('app_anim') || 'on';
+
+    document.documentElement.setAttribute('data-theme', savedTheme);
+    document.documentElement.setAttribute('data-graphic', savedGraphic);
+    document.documentElement.setAttribute('data-font', savedFont);
+    document.documentElement.setAttribute('data-anim', savedAnim);
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('nav a').forEach(a => {
+            const t = (a.textContent || '').replace(/\s+/g, ' ').trim();
+            if (/^\(\d+\)\s*Tugas$/i.test(t) || /list-tugas/i.test(a.getAttribute('href') || '')) {
+                a.textContent = 'List Tugas';
+            }
+        });
+
+        const curLang = localStorage.getItem('app_lang') || 'id';
+        if (curLang !== 'id' && typeof window.applyLanguage === 'function') {
+            window.applyLanguage(curLang);
+        }
+    });
+})();
+</script>
+<!-- UNIFIED-SYSTEM-PERFECTION-END -->
 </body>
 </html>

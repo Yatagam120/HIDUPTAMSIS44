@@ -500,4 +500,127 @@ document.addEventListener('DOMContentLoaded', function () {
     </div>
 </div>
 <!-- MODULE-POLISH-V6-END -->
+<!-- SETTINGS-PERFECTION-START -->
+<script id="settings-perfection-js">
+document.addEventListener('DOMContentLoaded', function () {
+    const themeMap = {
+        'academic trust': 'academic-trust',
+        'deep ocean': 'deep-ocean',
+        'midnight scholar': 'midnight-scholar',
+        'forest academy': 'forest-academy',
+        'mode gelap': 'mode-gelap',
+        'tech growth': 'tech-growth',
+        'creative spark': 'creative-spark',
+        'lavender dream': 'lavender-dream',
+        'soft berry': 'soft-berry',
+        'morning assembly': 'morning-assembly'
+    };
+    const graphicMap = { 'legacy': 'legacy', 'minimalist': 'minimalist', 'simple': 'simple' };
+    const fontMap = { 'modern sans': 'modern', 'klasik serif': 'serif', 'coding mono': 'mono' };
+    const langMap = { 'indonesia': 'id', 'english': 'en', '日本語': 'ja', 'jepang': 'ja', 'русский': 'ru', 'rusia': 'ru' };
+
+    function syncStates() {
+        const curTheme = localStorage.getItem('app_theme') || 'mode-gelap';
+        const curGraphic = localStorage.getItem('app_graphic') || 'simple';
+        const curFont = localStorage.getItem('app_font') || 'modern';
+        const curLang = localStorage.getItem('app_lang') || 'id';
+        const curAnim = localStorage.getItem('app_anim') || 'on';
+
+        document.documentElement.setAttribute('data-theme', curTheme);
+        document.documentElement.setAttribute('data-graphic', curGraphic);
+        document.documentElement.setAttribute('data-font', curFont);
+        document.documentElement.setAttribute('data-anim', curAnim);
+
+        document.querySelectorAll('main button').forEach(btn => {
+            const t = (btn.textContent || '').trim().toLowerCase();
+
+            for (const [k, slug] of Object.entries(themeMap)) {
+                if (t.includes(k)) {
+                    btn.classList.toggle('ring-2', slug === curTheme);
+                }
+            }
+            for (const [k, slug] of Object.entries(graphicMap)) {
+                if (t === k) {
+                    btn.classList.toggle('theme-primary', slug === curGraphic);
+                    btn.classList.toggle('theme-soft', slug !== curGraphic);
+                }
+            }
+            for (const [k, slug] of Object.entries(fontMap)) {
+                if (t.includes(k)) {
+                    btn.classList.toggle('theme-primary', slug === curFont);
+                    btn.classList.toggle('theme-soft', slug !== curFont);
+                }
+            }
+            for (const [k, code] of Object.entries(langMap)) {
+                if (t.includes(k)) {
+                    btn.classList.toggle('theme-primary', code === curLang);
+                    btn.classList.toggle('theme-soft', code !== curLang);
+                }
+            }
+            if ((t === 'aktif' || t === 'nonaktif') && (btn.closest('div')?.textContent || '').toLowerCase().includes('animasi')) {
+                btn.textContent = curAnim === 'on' ? 'Aktif' : 'Nonaktif';
+                btn.classList.toggle('theme-primary', curAnim === 'on');
+            }
+        });
+    }
+
+    document.querySelectorAll('main button').forEach(btn => {
+        const t = (btn.textContent || '').trim().toLowerCase();
+        const isManaged = Object.keys(themeMap).some(k => t.includes(k))
+            || Object.keys(graphicMap).includes(t)
+            || Object.keys(fontMap).some(k => t.includes(k))
+            || Object.keys(langMap).some(k => t.includes(k))
+            || ((t === 'aktif' || t === 'nonaktif') && (btn.closest('div')?.textContent || '').toLowerCase().includes('animasi'));
+
+        if (!isManaged) return;
+
+        btn.removeAttribute('onclick');
+        btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            const label = (this.textContent || '').trim().toLowerCase();
+
+            for (const [k, slug] of Object.entries(themeMap)) {
+                if (label.includes(k)) {
+                    localStorage.setItem('app_theme', slug);
+                    syncStates();
+                    return;
+                }
+            }
+            for (const [k, slug] of Object.entries(graphicMap)) {
+                if (label === k) {
+                    localStorage.setItem('app_graphic', slug);
+                    syncStates();
+                    return;
+                }
+            }
+            for (const [k, slug] of Object.entries(fontMap)) {
+                if (label.includes(k)) {
+                    localStorage.setItem('app_font', slug);
+                    syncStates();
+                    return;
+                }
+            }
+            for (const [k, code] of Object.entries(langMap)) {
+                if (label.includes(k)) {
+                    localStorage.setItem('app_lang', code);
+                    if (typeof window.applyLanguage === 'function') {
+                        window.applyLanguage(code);
+                    }
+                    syncStates();
+                    return;
+                }
+            }
+            if (label === 'aktif' || label === 'nonaktif') {
+                const nextAnim = (localStorage.getItem('app_anim') || 'on') === 'on' ? 'off' : 'on';
+                localStorage.setItem('app_anim', nextAnim);
+                syncStates();
+            }
+        }, true);
+    });
+
+    syncStates();
+});
+</script>
+<!-- SETTINGS-PERFECTION-END -->
 </x-app-layout>
