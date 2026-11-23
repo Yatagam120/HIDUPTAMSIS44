@@ -1,4 +1,39 @@
 <x-app-layout>
+    <style>
+        @keyframes birthdayRainbowSpin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        @keyframes birthdayGlowPulse {
+            0%, 100% { box-shadow: 0 0 14px rgba(236, 72, 153, 0.7), 0 0 26px rgba(59, 130, 246, 0.55); }
+            50% { box-shadow: 0 0 22px rgba(250, 204, 21, 0.9), 0 0 34px rgba(168, 85, 247, 0.75); }
+        }
+        .birthday-avatar-ring {
+            position: relative !important;
+            padding: 3px !important;
+            border-radius: 9999px !important;
+            background: conic-gradient(#ff0055, #ff9900, #ffee00, #00dd77, #0099ff, #aa00ff, #ff0055) !important;
+            animation: birthdayGlowPulse 2.2s ease-in-out infinite !important;
+        }
+        .birthday-avatar-ring::before {
+            content: '';
+            position: absolute;
+            inset: -3px;
+            border-radius: 9999px;
+            background: conic-gradient(#ff0055, #ff9900, #ffee00, #00dd77, #0099ff, #aa00ff, #ff0055);
+            z-index: -1;
+            animation: birthdayRainbowSpin 3.5s linear infinite;
+            filter: blur(4px);
+            opacity: 0.85;
+        }
+        .birthday-name-rainbow {
+            background: linear-gradient(90deg, #f43f5e, #f59e0b, #10b981, #3b82f6, #a855f7);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 900 !important;
+        }
+    </style>
+    <canvas id="birthday-confetti-canvas" class="fixed inset-0 pointer-events-none z-[99999] hidden"></canvas>
     @php
         $students = $students ?? \App\Models\Student::orderBy('id')->get();
         $isAdmin = auth()->check() && auth()->user()->role === 'admin';
@@ -456,5 +491,164 @@
         function toggleStudentEditForm() {
             document.getElementById('smodal-edit-box').classList.toggle('hidden');
         }
+    </script>
+    <script>
+        (function () {
+            const today = new Date();
+            const todayMonth = today.getMonth() + 1;
+            const todayDay = today.getDate();
+
+            const monthMap = {
+                januari: 1, january: 1, jan: 1,
+                februari: 2, february: 2, feb: 2,
+                maret: 3, march: 3, mar: 3,
+                april: 4, apr: 4,
+                mei: 5, may: 5,
+                juni: 6, june: 6, jun: 6,
+                juli: 7, july: 7, jul: 7,
+                agustus: 8, august: 8, agu: 8, aug: 8,
+                september: 9, sep: 9, sept: 9,
+                oktober: 10, october: 10, okt: 10, oct: 10,
+                november: 11, nov: 11,
+                desember: 12, december: 12, des: 12, dec: 12
+            };
+
+            function parseBirthMonthDay(rawStr) {
+                if (!rawStr) return null;
+                const s = String(rawStr).trim().toLowerCase();
+
+                // Format YYYY-MM-DD
+                let m = s.match(/(\d{4})-(\d{1,2})-(\d{1,2})/);
+                if (m) return { month: parseInt(m[2], 10), day: parseInt(m[3], 10) };
+
+                // Format DD/MM/YYYY atau DD-MM-YYYY
+                m = s.match(/(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+                if (m) return { month: parseInt(m[2], 10), day: parseInt(m[1], 10) };
+
+                // Format "23 November 2009" / "23 Nov"
+                m = s.match(/(\d{1,2})\s+([a-z]+)/);
+                if (m && monthMap[m[2]]) {
+                    return { month: monthMap[m[2]], day: parseInt(m[1], 10) };
+                }
+                return null;
+            }
+
+            let confettiAnimId = null;
+            function launchTwitterBirthdayConfetti() {
+                const canvas = document.getElementById('birthday-confetti-canvas');
+                if (!canvas) return;
+                const ctx = canvas.getContext('2d');
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+                canvas.classList.remove('hidden');
+
+                const colors = ['#ff0055', '#ff9900', '#ffee00', '#00dd77', '#00aaff', '#aa44ff', '#ff66cc'];
+                const pieces = Array.from({ length: 150 }, () => ({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * -canvas.height,
+                    w: 6 + Math.random() * 8,
+                    h: 8 + Math.random() * 10,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    vy: 2.8 + Math.random() * 4.2,
+                    vx: -2 + Math.random() * 4,
+                    rot: Math.random() * 360,
+                    vRot: -6 + Math.random() * 12
+                }));
+
+                if (confettiAnimId) cancelAnimationFrame(confettiAnimId);
+                let frame = 0;
+
+                function draw() {
+                    frame++;
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    pieces.forEach(p => {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                        p.rot += p.vRot;
+                        ctx.save();
+                        ctx.translate(p.x, p.y);
+                        ctx.rotate((p.rot * Math.PI) / 180);
+                        ctx.fillStyle = p.color;
+                        ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+                        ctx.restore();
+                    });
+
+                    if (frame < 260) {
+                        confettiAnimId = requestAnimationFrame(draw);
+                    } else {
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        canvas.classList.add('hidden');
+                    }
+                }
+                draw();
+            }
+
+            function showBirthdayToastBanner(studentName) {
+                let banner = document.getElementById('birthday-celebration-banner');
+                if (!banner) {
+                    banner = document.createElement('div');
+                    banner.id = 'birthday-celebration-banner';
+                    banner.className = 'fixed top-16 left-1/2 -translate-x-1/2 z-[99998] px-5 py-3.5 rounded-2xl border-2 border-pink-400/80 bg-zinc-950/95 text-white shadow-2xl text-center max-w-sm w-[92%] backdrop-blur-md transition-all';
+                    document.body.appendChild(banner);
+                }
+                banner.innerHTML = `
+                    <div class="text-xl mb-0.5">🎂🎉🎈</div>
+                    <div class="text-xs uppercase tracking-wider text-pink-300 font-extrabold">Selamat Ulang Tahun!</div>
+                    <div class="text-sm font-black mt-0.5 birthday-name-rainbow">${studentName}</div>
+                    <div class="text-[11px] text-zinc-300 mt-1">Semoga panjang umur, sehat selalu, dan sukses di XI RPL 1!</div>
+                `;
+                banner.classList.remove('hidden');
+                clearTimeout(banner._hideTimer);
+                banner._hideTimer = setTimeout(() => banner.classList.add('hidden'), 5500);
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const birthdayNames = [];
+
+                // Scan semua node/kartu siswa di halaman hirarki
+                document.querySelectorAll('[data-birth-date], [data-student-id], button, div').forEach(el => {
+                    if (el.dataset.bdayChecked) return;
+                    const rawBirth = el.dataset.birthDate || el.getAttribute('data-tanggal-lahir') || '';
+                    if (!rawBirth) return;
+                    el.dataset.bdayChecked = '1';
+
+                    const parsed = parseBirthMonthDay(rawBirth);
+                    if (parsed && parsed.month === todayMonth && parsed.day === todayDay) {
+                        const sName = el.dataset.studentName || el.getAttribute('data-name') || el.innerText.split('\n')[0].trim();
+                        birthdayNames.push(sName);
+
+                        // Beri ring warna-warni pada avatar di dalamnya
+                        const avatar = el.querySelector('img, .rounded-full');
+                        if (avatar) {
+                            avatar.classList.add('birthday-avatar-ring');
+                        } else {
+                            el.classList.add('birthday-avatar-ring');
+                        }
+
+                        // Tambahkan badge kue ulang tahun
+                        if (!el.querySelector('.bday-cake-badge')) {
+                            const badge = document.createElement('span');
+                            badge.className = 'bday-cake-badge inline-block ml-1 text-xs';
+                            badge.textContent = '🎂';
+                            el.appendChild(badge);
+                        }
+
+                        // Saat diklik -> semburkan confetti & kartu ucapan ultah ala X/Twitter!
+                        el.addEventListener('click', () => {
+                            launchTwitterBirthdayConfetti();
+                            showBirthdayToastBanner(sName);
+                        });
+                    }
+                });
+
+                // Otomatis semburkan confetti pembuka jika hari ini ada siswa yang berulang tahun
+                if (birthdayNames.length > 0) {
+                    setTimeout(() => {
+                        launchTwitterBirthdayConfetti();
+                        showBirthdayToastBanner(birthdayNames.join(' & '));
+                    }, 500);
+                }
+            });
+        })();
     </script>
 </x-app-layout>
