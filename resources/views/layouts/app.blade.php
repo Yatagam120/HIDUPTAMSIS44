@@ -782,6 +782,42 @@
                 min-height: 4.5px !important;
             }
         }
+            /* Polish Jadwal HP: Hari Senin-Jumat utuh 100%, padding lega, anti-terpotong */
+        @media (max-width: 640px) {
+            main.page-animate-in {
+                padding-left: 0.45rem !important;
+                padding-right: 0.45rem !important;
+            }
+            main.page-animate-in .theme-card:has(table.timetable-grid) {
+                padding: 0.65rem 0.4rem !important;
+            }
+            table.timetable-grid {
+                border-spacing: 1.5px !important;
+            }
+            table.timetable-grid th:first-child,
+            table.timetable-grid td:first-child {
+                width: 40px !important;
+                min-width: 40px !important;
+                max-width: 40px !important;
+                font-size: 7.5px !important;
+                padding: 2px 1px !important;
+                overflow: visible !important;
+                text-overflow: clip !important;
+            }
+            table.timetable-grid thead th:not(:first-child) {
+                font-size: 5px !important;
+                line-height: 1.05 !important;
+                padding: 2px 0.5px !important;
+                letter-spacing: -0.03em !important;
+            }
+            table.timetable-grid a,
+            table.timetable-grid .subject-box {
+                min-height: 38px !important;
+                height: 38px !important;
+                padding: 2px 1px !important;
+                border-radius: 5px !important;
+            }
+        }
     </style>
 </head>
 <body class="antialiased" data-theme="mode-gelap" data-font="sans" data-graphic="simple" data-anim="off">
