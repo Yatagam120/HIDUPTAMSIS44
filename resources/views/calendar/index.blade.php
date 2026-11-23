@@ -201,9 +201,10 @@
                         Simpan Penanda
                     </button>
                 </form>
-
-            <div class="theme-card rounded-2xl shadow-md p-6">
-                <h3 class="text-base font-bold mb-3">Agenda Bulan {{ $namaBulan[$month] }}</h3>
+    </div>
+</div>
+<div class="mt-5">
+    Agenda Bulan {{ $namaBulan[$month] }}</h3>
 
                 <div class="space-y-2.5 max-h-96 overflow-y-auto pr-1">
                     @php $hasAnyEvent = false; @endphp

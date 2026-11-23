@@ -691,6 +691,23 @@
                 font-size: 10.5px !important;
             }
         }
+            /* Legacy & Minimalist: Animasi hanya berlaku di Navbar saja */
+        html[data-graphic="legacy"][data-anim="on"] main.page-animate-in,
+        html[data-graphic="minimalist"][data-anim="on"] main.page-animate-in,
+        html[data-graphic="legacy"][data-anim="on"] main .theme-card,
+        html[data-graphic="minimalist"][data-anim="on"] main .theme-card {
+            animation: none !important;
+            transition: none !important;
+            transform: none !important;
+        }
+        html[data-graphic="legacy"][data-anim="on"] nav.main-tamsis-nav .nav-btn-anim,
+        html[data-graphic="minimalist"][data-anim="on"] nav.main-tamsis-nav .nav-btn-anim {
+            transition: transform 0.22s ease, box-shadow 0.22s ease, background-color 0.22s ease !important;
+        }
+        html[data-graphic="legacy"][data-anim="on"] nav.main-tamsis-nav .nav-btn-anim:hover,
+        html[data-graphic="minimalist"][data-anim="on"] nav.main-tamsis-nav .nav-btn-anim:hover {
+            transform: translateY(-2px) scale(1.03) !important;
+        }
     </style>
 </head>
 <body class="antialiased" data-theme="mode-gelap" data-font="sans" data-graphic="simple" data-anim="off">
@@ -757,9 +774,11 @@
                                 } catch (\Throwable $e) {}
                             }
 
+                            $creatorUser = isset($ti->user_id) ? \App\Models\User::find($ti->user_id) : null;
+                            $creatorName = $creatorUser ? $creatorUser->name : 'Siswa';
                             $navNotifs->push([
                                 'title' => $titlePrefix . ($ti->title ?? $ti->judul ?? 'Tugas'),
-                                'sub'   => $subLabel,
+                                'sub'   => $subLabel . ' • Oleh ' . $creatorName,
                                 'url'   => route('subjects.show', ['subject' => $ti->subject_id, 'tab' => $tType]),
                                 'dot'   => $dotColor,
                             ]);

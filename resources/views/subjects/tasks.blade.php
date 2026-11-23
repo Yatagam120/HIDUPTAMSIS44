@@ -1,18 +1,60 @@
 <x-app-layout>
     @php
         $uid = (int) auth()->id();
-        $listItems = $tasks ?? $items ?? collect();
+        $activeFilter = strtolower(trim((string) request()->query('filter', 'semua')));
+
+        // Ambil semua item approved (termasuk catatan) agar filter Catatan, PR, Tugas, Event lengkap
+        $postTbl = \Illuminate\Support\Facades\Schema::hasTable('subject_posts')
+            ? 'subject_posts'
+            : (\Illuminate\Support\Facades\Schema::hasTable('subject_items') ? 'subject_items' : null);
+
+        if ($postTbl) {
+            $q = \Illuminate\Support\Facades\DB::table($postTbl)->orderByDesc('id');
+            if (\Illuminate\Support\Facades\Schema::hasColumn($postTbl, 'status')) {
+                $q->where('status', 'approved');
+            }
+            $allRecords = $q->get();
+            $subjMap = \App\Models\Subject::all()->keyBy('id');
+            $userMap = \App\Models\User::all()->keyBy('id');
+
+            $listItems = $allRecords->map(function ($row) use ($subjMap, $userMap) {
+                $row->type = strtolower(trim((string) ($row->category ?? $row->kategori ?? $row->type ?? $row->jenis ?? 'tugas')));
+                $row->title = $row->title ?? $row->judul ?? 'Tanpa Judul';
+                $row->description = $row->description ?? $row->deskripsi ?? $row->content ?? '';
+                $row->due_date = $row->due_date ?? $row->deadline ?? $row->tanggal_deadline ?? null;
+                $row->subject = $subjMap->get($row->subject_id);
+                $row->author = isset($row->user_id) ? $userMap->get($row->user_id) : null;
+                return $row;
+            });
+        } else {
+            $listItems = ($tasks ?? $items ?? collect())->map(function ($row) {
+                $row->type = strtolower(trim((string) ($row->type ?? $row->category ?? 'tugas')));
+                return $row;
+            });
+        }
+
+        if ($activeFilter !== 'semua' && in_array($activeFilter, ['catatan', 'pr', 'tugas', 'event'], true)) {
+            $listItems = $listItems->where('type', $activeFilter)->values();
+        }
     @endphp
 
     <div class="max-w-5xl mx-auto space-y-5">
-        <div class="theme-card border theme-border rounded-2xl p-5 flex flex-wrap items-center justify-between gap-3 shadow-lg">
+        <!-- Header List Tugas + Filter Pojok Kanan Atas -->
+        <div class="theme-card border theme-border rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
             <div>
-                <h1 class="text-xl sm:text-2xl font-extrabold">📌 Daftar Semua Tugas, PR & Event</h1>
-                <p class="text-xs opacity-75 mt-1">Lihat lampiran foto & video, cek tenggat waktu, dan tandai tugas yang sudah selesai.</p>
+                <h1 class="text-xl sm:text-2xl font-extrabold">📋 List Tugas & Catatan Kelas</h1>
+                <p class="text-xs opacity-75 mt-1">Filter berdasarkan Catatan, PR, Tugas, atau Event.</p>
             </div>
-            <a href="{{ route('dashboard') }}" class="px-3.5 py-2 rounded-xl border theme-border theme-soft text-xs font-extrabold">
-                ← Kembali ke Jadwal Utama
-            </a>
+
+            <!-- Filter Pojok Kanan Atas -->
+            <div class="flex flex-wrap items-center gap-1.5 sm:justify-end">
+                @foreach(['semua' => 'Semua', 'catatan' => '📝 Catatan', 'pr' => '🏠 PR', 'tugas' => '📌 Tugas', 'event' => '🎉 Event'] as $fKey => $fLabel)
+                    <a href="{{ route('subjects.tasks', ['filter' => $fKey]) }}"
+                       class="px-3 py-1.5 rounded-xl border theme-border text-xs font-extrabold transition {{ $activeFilter === $fKey ? 'theme-primary shadow' : 'theme-soft hover:opacity-90' }}">
+                        {{ $fLabel }}
+                    </a>
+                @endforeach
+            </div>
         </div>
 
         @if(session('success'))
@@ -44,11 +86,14 @@
 
                         <h3 class="text-base font-extrabold {{ $isDone ? 'line-through opacity-60' : '' }}">{{ $t->title }}</h3>
 
+                        @if(!empty($t->author->name))
+                            <div class="text-[11px] opacity-70">Dibuat oleh <strong>{{ $t->author->name }}</strong></div>
+                        @endif
+
                         @if($t->description)
                             <p class="text-xs opacity-85 whitespace-pre-line">{{ $t->description }}</p>
                         @endif
 
-                        <!-- Media Foto & Video di List Tugas (#5) -->
                         @if(!empty($t->media_path))
                             <div class="pt-1">
                                 @if(($t->media_type ?? 'image') === 'video')
@@ -69,18 +114,20 @@
                             💬 Buka & Komentar
                         </a>
 
-                        <form action="{{ route('items.toggle-complete', $t->id) }}" method="POST">
-                            @csrf
-                            <button type="submit"
-                                    class="px-3 py-1.5 rounded-xl text-xs font-extrabold border {{ $isDone ? 'bg-emerald-500 text-white border-emerald-500' : 'theme-primary border-transparent' }}">
-                                {{ $isDone ? '✅ Selesai' : '⬜ Tandai Selesai' }}
-                            </button>
-                        </form>
+                        @if(in_array($t->type, ['tugas', 'pr', 'event'], true))
+                            <form action="{{ route('items.toggle-complete', $t->id) }}" method="POST">
+                                @csrf
+                                <button type="submit"
+                                        class="px-3 py-1.5 rounded-xl text-xs font-extrabold border {{ $isDone ? 'bg-emerald-500 text-white border-emerald-500' : 'theme-primary border-transparent' }}">
+                                    {{ $isDone ? '✅ Selesai' : '⬜ Tandai Selesai' }}
+                                </button>
+                            </form>
+                        @endif
                     </div>
                 </div>
             @empty
                 <div class="col-span-full theme-card border theme-border rounded-2xl p-8 text-center text-xs opacity-75">
-                    Belum ada Tugas, PR, atau Event yang tercatat.
+                    Belum ada item pada kategori "{{ ucfirst($activeFilter) }}".
                 </div>
             @endforelse
         </div>

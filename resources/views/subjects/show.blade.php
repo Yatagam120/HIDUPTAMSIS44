@@ -54,6 +54,14 @@
         </div>
 
         <!-- Form Tambah Postingan + Upload & Crop Gambar Sebelum Confirm Post (#2, #6) -->
+        <div class="space-y-3">
+    <button type="button" id="btn-toggle-subject-form"
+            onclick="document.getElementById('subject-post-form-wrap').classList.toggle('hidden')"
+            class="theme-primary px-4 py-2.5 rounded-xl text-xs font-extrabold shadow inline-flex items-center gap-2">
+        <span class="text-base leading-none font-black">+</span>
+        <span>Tambah Pelajaran / Postingan</span>
+    </button>
+    <div id="subject-post-form-wrap" class="hidden">
         <form id="subject-post-form"
               action="{{ route('subject.items.store', $subject->id) }}"
               method="POST"
@@ -118,6 +126,8 @@
                 {{ $isHighAuth ? 'Confirm & Posting Sekarang' : 'Ajukan Postingan (Verifikasi Admin)' }}
             </button>
         </form>
+    </div>
+</div>
 
         <!-- Daftar Postingan Per Tab -->
         @foreach($tabs as $tKey => $tMeta)

@@ -191,4 +191,68 @@
             </div>
         </div>
     </div>
-</x-app-layout>
+        @php
+            $allApUsers = \App\Models\User::orderBy('name')->get();
+            $onlineIds = [];
+            if (\Illuminate\Support\Facades\Schema::hasTable('sessions')) {
+                $onlineIds = \Illuminate\Support\Facades\DB::table('sessions')
+                    ->whereNotNull('user_id')
+                    ->where('last_activity', '>=', now()->subMinutes(5)->timestamp)
+                    ->pluck('user_id')
+                    ->map(fn($v) => (int) $v)
+                    ->unique()
+                    ->toArray();
+            }
+            if (auth()->check() && !in_array((int) auth()->id(), $onlineIds, true)) {
+                $onlineIds[] = (int) auth()->id();
+            }
+        @endphp
+
+        <!-- Status Member Aktif Online (Outline Glow Hijau) & Toggle Password -->
+        <div class="theme-card border theme-border rounded-2xl p-5 space-y-4 shadow-lg mt-6">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                    <h2 class="text-base font-extrabold">🟢 Status Member Online & Akun Pengguna</h2>
+                    <p class="text-xs opacity-75">Member yang sedang aktif memiliki outline glow hijau. Klik ikon mata untuk melihat/menyembunyikan password baru.</p>
+                </div>
+                <span class="px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-extrabold">
+                    {{ count($onlineIds) }} Member Online
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                @foreach($allApUsers as $apU)
+                    @php
+                        $isUserOnline = in_array((int) $apU->id, $onlineIds, true);
+                    @endphp
+                    <div class="p-3.5 rounded-2xl theme-soft border transition {{ $isUserOnline ? 'border-emerald-400 ring-2 ring-emerald-400/50 shadow-[0_0_16px_rgba(52,211,153,0.45)]' : 'theme-border opacity-85' }}">
+                        <div class="flex items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 min-w-0">
+                                <span class="w-2.5 h-2.5 rounded-full shrink-0 {{ $isUserOnline ? 'bg-emerald-400 animate-pulse' : 'bg-zinc-500' }}"></span>
+                                <span class="text-xs font-extrabold truncate">{{ $apU->name }}</span>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full uppercase font-bold {{ $isUserOnline ? 'bg-emerald-500/25 text-emerald-300' : 'bg-black/25 opacity-70' }}">
+                                {{ $isUserOnline ? 'Online' : ($apU->role ?? 'siswa') }}
+                            </span>
+                        </div>
+                        <div class="text-[11px] opacity-70 truncate mt-1">{{ $apU->email }}</div>
+
+                        <!-- Field Password dengan Toggle Visibility (Mata) -->
+                        <div class="mt-2.5 flex items-center gap-1.5">
+                            <input type="password"
+                                   id="ap-pass-{{ $apU-> <button type="button" onclick="const p=this.previousElementSibling; p.type=p.type==='password'?'text':'password';" class="px-2 py-1 rounded border theme-border text-xs" title="Lihat/Sembunyikan Password">👁️</button>id }}"
+                                   value="{{ $apU->plain_password ?? '********' }}"
+                                   readonly
+                                   class="flex-1 rounded-lg border theme-border px-2.5 py-1 text-[11px] font-mono">
+                            <button type="button"
+                                    onclick="const inp = document.getElementById('ap-pass-{{ $apU->id }}'); inp.type = inp.type === 'password' ? 'text' : 'password';"
+                                    title="Tampilkan / Sembunyikan Password"
+                                    class="px-2.5 py-1 rounded-lg border theme-border theme-card text-xs font-bold">
+                                👁️
+                            </button>
+                        </div>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+    </x-app-layout>

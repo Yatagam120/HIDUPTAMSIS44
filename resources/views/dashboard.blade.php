@@ -301,16 +301,11 @@
 
     <div class="theme-card rounded-xl shadow-md p-3 sm:p-5">
         <div class="mb-3 text-center">
-            <h1 class="text-xl sm:text-2xl font-bold" data-i18n="jadwal_title">Jadwal Pelajaran XI RPL 1</h1>
-            <p class="text-xs sm:text-sm opacity-75" data-i18n="jadwal_sub">Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.</p>
+            <h1 class="text-xl sm:text-2xl font-extrabold text-center w-full tracking-wide">JADWAL XI RPL 1</h1>
+            
 
             <!-- Legenda Ikon Pojok Kanan Atas Mapel -->
-            <div id="jadwal-legacy-legend" class="flex flex-wrap justify-center items-center gap-3 mt-2 text-[10.5px] opacity-80">
-                <span>📝 Catatan</span>
-                <span>📌 Tugas</span>
-                <span>🏠 PR</span>
-                <span>🎉 Event</span>
-            </div>
+            
         </div>
 
         @php
