@@ -197,9 +197,16 @@
                                   class="w-full rounded-xl border p-2.5 text-sm"></textarea>
                     </div>
 
-                    <button type="submit" class="w-full py-2.5 rounded-xl font-bold text-sm theme-primary shadow-md hover:opacity-90 transition">
+                    <div class="flex flex-wrap items-center gap-2 pt-1">
+    <button type="submit" class="w-full py-2.5 rounded-xl font-bold text-sm theme-primary shadow-md hover:opacity-90 transition">
                         Simpan Penanda
                     </button>
+    <button type="button" id="btn-cancel-create-date"
+            onclick="document.getElementById('calendar-create-form-box').classList.add('hidden'); const openBtn = document.getElementById('btn-open-create-date'); if(openBtn) openBtn.classList.remove('hidden');"
+            class="px-4 py-2.5 rounded-xl border theme-border theme-soft text-xs font-extrabold hover:opacity-90">
+        ✕ Cancel
+    </button>
+</div>
                 </form>
     </div>
 </div>
@@ -414,7 +421,14 @@
 
             <div class="flex justify-end gap-2 pt-2">
                 <button type="button" onclick="closeQuickCreateDayModal()" class="px-4 py-2 rounded-xl border theme-border text-xs font-bold">Batal</button>
-                <button type="submit" class="px-5 py-2 rounded-xl theme-primary text-xs font-extrabold shadow-md">Simpan Penanda</button>
+                <div class="flex flex-wrap items-center gap-2 pt-1">
+    <button type="submit" class="px-5 py-2 rounded-xl theme-primary text-xs font-extrabold shadow-md">Simpan Penanda</button>
+    <button type="button" id="btn-cancel-create-date"
+            onclick="document.getElementById('calendar-create-form-box').classList.add('hidden'); const openBtn = document.getElementById('btn-open-create-date'); if(openBtn) openBtn.classList.remove('hidden');"
+            class="px-4 py-2.5 rounded-xl border theme-border theme-soft text-xs font-extrabold hover:opacity-90">
+        ✕ Cancel
+    </button>
+</div>
             </div>
         </form>
     </div>

@@ -749,8 +749,7 @@
             table.timetable-grid .subject-box {
                 min-width: 0 !important;
                 width: 100% !important;
-                min-height: 36px !important;
-                height: 36px !important;
+                min-height: 40px !important; height: 40px !important;
                 padding: 2px 1px !important;
                 gap: 1.5px !important;
                 border-radius: 5px !important;
@@ -769,7 +768,7 @@
                 white-space: nowrap !important;
             }
             .mobile-type-tag {
-                font-size: 5.5px !important;
+                font-size: 5.8px !important; white-space: nowrap !important;
                 padding: 0.5px 2.5px !important;
                 border-radius: 3px !important;
             }
@@ -1162,13 +1161,18 @@
                     if ($mIsDone && in_array($mType, ['tugas', 'pr'], true)) continue;
 
                     $sid = (string) $mi->subject_id;
-                    $tagMap = ['pr' => 'PR', 'tugas' => 'TGS', 'event' => 'EVT', 'catatan' => 'CTT'];
+                    $tagMap = ['pr' => '🏠 PR', 'tugas' => '📌 TGS', 'event' => '🎉 EVT', 'catatan' => '📝 CTT'];
                     $prioMap = ['PR' => 4, 'TGS' => 3, 'EVT' => 2, 'CTT' => 1];
                     $candTag = $tagMap[$mType] ?? '';
                     if ($candTag) {
                         $curTag = $mobileSubjectNotifMap[$sid]['tag'] ?? '';
                         if (($prioMap[$candTag] ?? 0) >= ($prioMap[$curTag] ?? 0)) {
-                            $dotHex = $candTag === 'CTT' ? '#38bdf8' : '#facc15';
+                            $dotHex = match ($mType) {
+                                'catatan' => '#38bdf8',
+                                'pr'      => '#fb923c',
+                                'event'   => '#c084fc',
+                                default   => '#facc15',
+                            };
                             $dueM = $mi->due_date ?? $mi->deadline ?? null;
                             if ($dueM) {
                                 try {
