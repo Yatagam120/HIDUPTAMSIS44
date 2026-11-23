@@ -818,6 +818,16 @@
                 border-radius: 5px !important;
             }
         }
+            @media (min-width: 641px) {
+            table.timetable-grid td, table td {
+                overflow: hidden !important;
+            }
+            table.timetable-grid a, table a[href*="/mapel/"] {
+                padding: 6px 4px !important;
+                text-align: center !important;
+                overflow: hidden !important;
+            }
+        }
     </style>
 </head>
 <body class="antialiased" data-theme="mode-gelap" data-font="sans" data-graphic="simple" data-anim="off">
@@ -2080,6 +2090,95 @@
         }
 
         document.addEventListener('DOMContentLoaded', runGlobalUiNormalizer);
+            // =========================================================
+        // 3. LONCENG NOTIFIKASI: HILANG ANGKA SAAT DIKLIK, MUNCUL LAGI BILA ADA APPROVAL/EDIT BARU
+        // =========================================================
+        (function () {
+            function getNotifSignature() {
+                const items = [];
+                document.querySelectorAll('#notif-dropdown a, #notif-panel a, [id*="notif"] a').forEach(a => {
+                    items.push((a.textContent || '').trim());
+                });
+                return items.join('|');
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                // Paksa semua menu "(X) Tugas" menjadi "List Tugas"
+                document.querySelectorAll('nav a, nav button').forEach(el => {
+                    const txt = (el.textContent || '').replace(/\s+/g, ' ').trim();
+                    if (/^\(\d+\)\s*Tugas$/i.test(txt)) {
+                        el.textContent = 'List Tugas';
+                    }
+                });
+
+                // Paksa singkatan mapel di seluruh kotak jadwal desktop
+                if (window.innerWidth > 640) {
+                    const dict = [
+                        { keys: ['ketamansiswaan', 'etamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
+                        { keys: ['samsung tech institute', 'sistem teknologi informasi', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
+                        { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
+                        { keys: ['kreativitas & desain interaktif', 'kreativitas dan desain interaktif', 'kdi'], code: 'KDI', full: 'Kreativitas & Desain Interaktif' },
+                        { keys: ['muatan bahasa jepang', 'bahasa jepang', 'mbj'], code: 'MBJ(J)', full: 'Muatan Bahasa Jepang' },
+                        { keys: ['pendidikan pancasila', 'ppkn', 'pp'], code: 'PP', full: 'Pendidikan Pancasila' },
+                        { keys: ['bahasa inggris', 'b.ing'], code: 'B.Ing', full: 'Bahasa Inggris' },
+                        { keys: ['bahasa indonesia', 'bi'], code: 'BI', full: 'Bahasa Indonesia' },
+                        { keys: ['matematika', 'mtk'], code: 'MTK', full: 'Matematika' },
+                        { keys: ['pendidikan jasmani', 'pjok', 'penjas'], code: 'Penjas', full: 'Pendidikan Jasmani' },
+                        { keys: ['pemrograman lanjut', 'pl(rpl1)', 'pl'], code: 'PL(RPL1)', full: 'Pemrograman Lanjut' },
+                        { keys: ['sejarah indonesia', 'sejarah'], code: 'SI', full: 'Sejarah Indonesia' },
+                        { keys: ['kewirausahaan', 'pkk', 'kwh'], code: 'KWH', full: 'Kewirausahaan' },
+                        { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
+                    ];
+
+                    document.querySelectorAll('table tr').forEach(tr => {
+                        const dayTxt = (tr.firstElementChild?.textContent || '').trim().toLowerCase();
+                        const isSelasa = dayTxt.startsWith('sel');
+                        const cells = Array.from(tr.querySelectorAll('a[href*="/mapel/"], a[href*="/subject/"]'));
+
+                        cells.forEach((box, idx) => {
+                            const raw = (box.textContent || '').replace(/\s+/g, ' ').trim().toLowerCase();
+                            let hit = null;
+                            if (isSelasa && idx === cells.length - 1) {
+                                hit = { code: 'STI', full: 'Samsung Tech Institute' };
+                            } else {
+                                hit = dict.find(d => d.keys.some(k => raw.includes(k)));
+                            }
+                            if (hit) {
+                                const dots = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
+                                box.style.position = 'relative';
+                                box.innerHTML = `
+                                    <div class="font-extrabold text-sm leading-tight tracking-tight">${hit.code}</div>
+                                    <div class="text-[10px] opacity-75 leading-tight truncate max-w-full px-1">${hit.full}</div>
+                                `;
+                                dots.forEach(dt => box.appendChild(dt));
+                            }
+                        });
+                    });
+                }
+
+                // Logika Lonceng Notifikasi: sembunyikan badge angka setelah diklik sampai ada perubahan/approval baru
+                const bellBtn = document.querySelector('button[onclick*="notif"], #notif-bell-btn, nav button:has(svg)');
+                if (bellBtn) {
+                    const badge = bellBtn.querySelector('span');
+                    const currentSig = getNotifSignature();
+                    const seenSig = localStorage.getItem('notif_seen_signature') || '';
+
+                    if (badge && currentSig && currentSig === seenSig) {
+                        badge.classList.add('hidden');
+                    }
+
+                    bellBtn.addEventListener('click', () => {
+                        const latestSig = getNotifSignature();
+                        if (latestSig) {
+                            localStorage.setItem('notif_seen_signature', latestSig);
+                        }
+                        if (badge) {
+                            badge.classList.add('hidden');
+                        }
+                    });
+                }
+            });
+        })();
     </script>
 </body>
 </html>

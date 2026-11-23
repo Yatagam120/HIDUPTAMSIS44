@@ -358,4 +358,51 @@
 
         document.addEventListener('DOMContentLoaded', refreshSettingsButtonsState);
     </script>
+    <script>
+        (function () {
+            const langMapByLabel = [
+                { match: 'indonesia', code: 'id' },
+                { match: 'english', code: 'en' },
+                { match: '日本語', code: 'ja' },
+                { match: 'jepang', code: 'ja' },
+                { match: 'русский', code: 'ru' },
+                { match: 'rusia', code: 'ru' }
+            ];
+
+            function syncLanguageButtons(activeCode) {
+                document.querySelectorAll('button, a').forEach(btn => {
+                    const txt = (btn.textContent || '').trim().toLowerCase();
+                    const found = langMapByLabel.find(l => txt.includes(l.match));
+                    if (!found) return;
+
+                    btn.dataset.langCode = found.code;
+                    if (found.code === activeCode) {
+                        btn.classList.add('theme-primary', 'shadow');
+                        btn.classList.remove('theme-soft');
+                    } else {
+                        btn.classList.remove('theme-primary', 'shadow');
+                        btn.classList.add('theme-soft');
+                    }
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                const currentLang = localStorage.getItem('app_lang') || 'id';
+                syncLanguageButtons(currentLang);
+
+                document.querySelectorAll('button, a').forEach(btn => {
+                    if (!btn.dataset.langCode) return;
+                    btn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const chosen = this.dataset.langCode;
+                        localStorage.setItem('app_lang', chosen);
+                        syncLanguageButtons(chosen);
+                        if (typeof window.applyLanguage === 'function') {
+                            window.applyLanguage(chosen);
+                        }
+                    });
+                });
+            });
+        })();
+    </script>
 </x-app-layout>
