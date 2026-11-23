@@ -532,7 +532,7 @@
                 ['ketamansiswaan', 'KTS'],
                 ['kts', 'KTS'],
                 ['samsung institute tech', 'STI'],
-                ['sistem teknologi informasi', 'STI'],
+                ['Samsung Tech Institute', 'STI'],
                 ['pemrograman lanjut', 'PL(RPL1)'],
                 ['pml', 'PL(RPL1)'],
                 ['sejarah indonesia', 'SI'],

@@ -864,7 +864,7 @@
                             aria-label="Notifikasi"
                             class="relative px-2.5 py-1.5 rounded-lg border theme-border text-xs font-extrabold"
                             style="background-color: var(--primary-soft);">
-                        ðŸ””
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                         @if($navNotifs->count() > 0)
                             <span class="absolute -top-1 -right-1 px-1 min-w-[15px] h-[15px] rounded-full bg-red-500 text-white text-[9px] font-extrabold flex items-center justify-center">
                                 {{ $navNotifs->count() }}
@@ -938,7 +938,7 @@
                             aria-label="Notifikasi"
                             class="relative nav-btn-anim px-2.5 py-1.5 rounded-lg border theme-border text-xs font-extrabold"
                             style="background-color: var(--primary-soft);">
-                        ðŸ””
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                         @if($navNotifs->count() > 0)
                             <span class="absolute -top-1 -right-1 px-1 min-w-[16px] h-[16px] rounded-full bg-red-500 text-white text-[9px] font-extrabold flex items-center justify-center">
                                 {{ $navNotifs->count() }}
@@ -953,7 +953,7 @@
         <div id="nav-notif-dropdown"
              class="hidden fixed right-2 sm:right-6 left-2 sm:left-auto top-14 sm:w-80 theme-card border theme-border rounded-2xl shadow-2xl p-3 z-[9995] space-y-2 max-h-[75vh] overflow-y-auto">
             <div class="flex items-center justify-between border-b theme-border pb-2">
-                <span class="text-xs font-extrabold">ðŸ”” Notifikasi ({{ $navNotifs->count() }})</span>
+                <span class="text-xs font-extrabold"><svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 inline-block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg> Notifikasi ({{ $navNotifs->count() }})</span>
                 <button type="button" onclick="toggleNavNotifBox()" class="px-2 py-0.5 rounded text-xs font-bold border theme-border">âœ•</button>
             </div>
             @forelse($navNotifs as $notifItem)
@@ -2131,10 +2131,11 @@
 </script>
 {{-- [PATCH END] --}}
 
-<!-- SCHEDULE-NAV-CLEAN-START -->
-<script id="schedule-nav-clean-js">
+
+<!-- CLEAN-SCHEDULE-NOTIF-START -->
+<script id="clean-schedule-notif-js">
 (function () {
-    const subjectMap = [
+    const mapelDict = [
         { keys: ['ketamansiswaan', 'etamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
         { keys: ['samsung tech institute', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
         { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
@@ -2151,10 +2152,10 @@
         { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
     ];
 
-    function normalizeScheduleAndNav() {
+    function applyScheduleLabels() {
         document.querySelectorAll('nav a').forEach(a => {
-            const txt = (a.textContent || '').replace(/\s+/g, ' ').trim();
-            if (/^\(\d+\)\s*Tugas$/i.test(txt) || /list-tugas/i.test(a.getAttribute('href') || '')) {
+            const t = (a.textContent || '').replace(/\s+/g, ' ').trim();
+            if (/^\(\d+\)\s*Tugas$/i.test(t) || /list-tugas/i.test(a.getAttribute('href') || '')) {
                 a.textContent = 'List Tugas';
             }
         });
@@ -2167,40 +2168,48 @@
             const boxes = Array.from(tr.querySelectorAll('a[href*="/mapel/"], a[href*="/subject/"]'));
 
             boxes.forEach((box, idx) => {
-                const orig = box.dataset.cleanOrig || (box.textContent || '').replace(/\s+/g, ' ').trim();
-                box.dataset.cleanOrig = orig;
+                // Pertahankan indikator/dot/badge yang sudah ada di dalam kotak jadwal
+                const indicators = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot, [data-badge]'));
+                const textOnly = Array.from(box.childNodes)
+                    .filter(n => n.nodeType === 3 || (n.nodeType === 1 && !indicators.includes(n)))
+                    .map(n => n.textContent || '')
+                    .join(' ')
+                    .replace(/\s+/g, ' ')
+                    .trim();
+
+                const orig = box.dataset.schedOrig || textOnly;
+                box.dataset.schedOrig = orig;
                 const lower = orig.toLowerCase();
 
-                let match = null;
+                let found = null;
                 if (isSelasa && idx === boxes.length - 1) {
-                    match = { code: 'STI', full: 'Samsung Tech Institute' };
+                    found = { code: 'STI', full: 'Samsung Tech Institute' };
                 } else {
-                    match = subjectMap.find(item => item.keys.some(k => lower.includes(k)));
+                    found = mapelDict.find(m => m.keys.some(k => lower.includes(k)));
                 }
 
-                const badges = Array.from(box.querySelectorAll('.rounded-full, .event-grayred-badge, .notif-corner-dot'));
-                box.style.position = 'relative';
+                if (found) {
+                    box.style.position = 'relative';
+                    box.querySelectorAll('.sched-label-wrap').forEach(el => el.remove());
 
-                if (match) {
+                    const wrap = document.createElement('div');
+                    wrap.className = 'sched-label-wrap flex flex-col items-center justify-center leading-tight';
                     if (isMobile) {
-                        box.innerHTML = '<span class="font-extrabold leading-none">' + match.code + '</span>';
+                        wrap.innerHTML = '<span class="font-extrabold text-[8px]">' + found.code + '</span>';
                     } else {
-                        box.innerHTML = '<div class="font-extrabold text-sm leading-tight">' + match.code + '</div><div class="text-[10px] opacity-75 leading-tight truncate max-w-full px-1">' + match.full + '</div>';
+                        wrap.innerHTML = '<span class="font-extrabold text-sm">' + found.code + '</span><span class="text-[10px] opacity-75 truncate max-w-full px-1">' + found.full + '</span>';
                     }
-                    badges.forEach(b => box.appendChild(b));
-                } else if (isMobile && orig) {
-                    box.innerHTML = '<span class="font-extrabold leading-none">' + orig + '</span>';
-                    badges.forEach(b => box.appendChild(b));
+                    box.insertBefore(wrap, box.firstChild);
                 }
             });
         });
     }
 
-    document.addEventListener('DOMContentLoaded', normalizeScheduleAndNav);
-    window.addEventListener('resize', normalizeScheduleAndNav);
+    document.addEventListener('DOMContentLoaded', applyScheduleLabels);
+    window.addEventListener('resize', applyScheduleLabels);
 })();
 </script>
-<!-- SCHEDULE-NAV-CLEAN-END -->
+<!-- CLEAN-SCHEDULE-NOTIF-END -->
 </body>
 </html>
 
