@@ -5,129 +5,78 @@ namespace App\Http\Controllers;
 use App\Models\Student;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Schema;
 
 class StudentController extends Controller
 {
-    private function checkAuthority(): void
-    {
-        abort_unless(
-            in_array(Auth::user()->role, ['admin', 'guru', 'ketua_kelas', 'wakil_ketua']),
-            403,
-            'Hanya Admin, Wali Kelas, Ketua Kelas, dan Wakil Ketua Kelas yang dapat mengelola data siswa.'
-        );
-    }
-
     public function index()
     {
-        $walas = Student::where('jabatan', 'walas')->first();
-        $ketua = Student::where('jabatan', 'ketua_kelas')->first();
-        $wakil = Student::where('jabatan', 'wakil_ketua')->first();
-
-        $murid = Student::whereNotIn('jabatan', ['walas', 'ketua_kelas', 'wakil_ketua'])
-            ->orWhereNull('jabatan')
-            ->orderBy('nama')
-            ->get();
-
-        return view('students.index', compact('walas', 'ketua', 'wakil', 'murid'));
+        $students = Student::orderBy('id')->get();
+        $isHighAuth = SubjectController::isHighAuthority();
+        return view('students.index', compact('students', 'isHighAuth'));
     }
 
-    public function show(Student $student)
+    public function update(Request $request, $id)
     {
-        return view('students.show', compact('student'));
-    }
+        $student = Student::findOrFail($id);
+        $user = Auth::user();
+        $isHighAuth = SubjectController::isHighAuthority($user);
 
-    public function create()
-    {
-        $this->checkAuthority();
-        return view('students.create');
-    }
+        // Siswa & Ex-PPTS hanya boleh mengedit data miliknya sendiri (dan hanya foto)
+        if (!$isHighAuth && isset($student->user_id) && (int) $student->user_id !== (int) $user->id) {
+            abort(403, 'Anda hanya dapat mengganti foto profil Anda sendiri.');
+        }
 
-    public function store(Request $request)
-    {
-        $this->checkAuthority();
-
-        $data = $request->validate([
-            'nama'    => ['required', 'string', 'max:255'],
-            'jabatan' => ['required', 'in:walas,ketua_kelas,wakil_ketua,ppts,ex_ppts,siswa'],
-            'umur'    => ['nullable', 'integer', 'min:10', 'max:99'],
-            'foto'    => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
+        $request->validate([
+            'photo'      => 'nullable|image|mimes:jpg,jpeg,png,webp|max:5120',
+            'name'       => 'nullable|string|max:120',
+            'quote'      => 'nullable|string|max:255',
+            'birth_date' => 'nullable|date',
+            'gender'     => 'nullable|string|max:20',
         ]);
 
-        if (in_array($data['jabatan'], ['walas', 'ketua_kelas', 'wakil_ketua'])) {
-            Student::where('jabatan', $data['jabatan'])->update(['jabatan' => 'siswa']);
+        $columns = Schema::getColumnListing('students');
+        $updateData = [];
+
+        // Fix #17: Upload foto unik khusus untuk 1 ID siswa ini saja
+        if ($request->hasFile('photo')) {
+            $file = $request->file('photo');
+            $ext = strtolower($file->getClientOriginalExtension());
+            $dir = public_path('uploads/students');
+            if (!is_dir($dir)) mkdir($dir, 0755, true);
+            $fileName = 'student_' . $student->id . '_' . time() . '_' . uniqid() . '.' . $ext;
+            $file->move($dir, $fileName);
+            $photoPath = 'uploads/students/' . $fileName;
+
+            if (in_array('photo', $columns, true)) $updateData['photo'] = $photoPath;
+            elseif (in_array('avatar', $columns, true)) $updateData['avatar'] = $photoPath;
+            elseif (in_array('image', $columns, true)) $updateData['image'] = $photoPath;
         }
 
-        if ($request->hasFile('foto')) {
-            $data['foto'] = $request->file('foto')->store('students', 'public');
-        }
-
-        $data['umur'] = $request->input('umur') ?? 17;
-        $data['tanggal_lahir'] = $request->input('tanggal_lahir') ?? '2009-01-01';
-        $data['hobi'] = $request->input('hobi') ?? '-';
-        $data['skill'] = $request->input('skill') ?? '-';
-
-        Student::create($data);
-
-        Student::create($data);
-
-        Student::create($data);
-
-        Student::create($data);
-
-        return redirect()->route('students.index')->with('success', 'Data siswa berhasil ditambahkan!');
-    }
-
-    public function edit(Student $student)
-    {
-        $this->checkAuthority();
-        return view('students.edit', compact('student'));
-    }
-
-    public function update(Request $request, Student $student)
-    {
-        $this->checkAuthority();
-
-        $data = $request->validate([
-            'nama'    => ['required', 'string', 'max:255'],
-            'jabatan' => ['required', 'in:walas,ketua_kelas,wakil_ketua,ppts,ex_ppts,siswa'],
-            'umur'    => ['nullable', 'integer', 'min:10', 'max:99'],
-            'foto'    => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:3072'],
-        ]);
-
-        if (in_array($data['jabatan'], ['walas', 'ketua_kelas', 'wakil_ketua'])) {
-            Student::where('jabatan', $data['jabatan'])
-                ->where('id', '!=', $student->id)
-                ->update(['jabatan' => 'siswa']);
-        }
-
-        if ($request->boolean('hapus_foto') && $student->foto) {
-            Storage::disk('public')->delete($student->foto);
-            $data['foto'] = null;
-        } elseif ($request->hasFile('foto')) {
-            if ($student->foto) {
-                Storage::disk('public')->delete($student->foto);
+        // Fix #13: Hanya otoritas tinggi yang boleh ganti nama, quote, tanggal lahir, & gender
+        if ($isHighAuth) {
+            if ($request->filled('name') && in_array('name', $columns, true)) {
+                $updateData['name'] = $request->name;
             }
-            $data['foto'] = $request->file('foto')->store('students', 'public');
+            if ($request->has('quote') && in_array('quote', $columns, true)) {
+                $updateData['quote'] = $request->quote;
+            }
+            if ($request->filled('birth_date')) {
+                if (in_array('birth_date', $columns, true)) $updateData['birth_date'] = $request->birth_date;
+                elseif (in_array('tanggal_lahir', $columns, true)) $updateData['tanggal_lahir'] = $request->birth_date;
+            }
+            if ($request->filled('gender')) {
+                if (in_array('gender', $columns, true)) $updateData['gender'] = $request->gender;
+                elseif (in_array('jenis_kelamin', $columns, true)) $updateData['jenis_kelamin'] = $request->gender;
+            }
         }
 
-        $data['umur'] = $request->input('umur') ?? ($student->umur ?? 17);
-
-        $student->update($data);
-
-        return redirect()->route('students.show', $student->id)->with('success', 'Data siswa berhasil diperbarui!');
-    }
-
-    public function destroy(Student $student)
-    {
-        $this->checkAuthority();
-
-        if ($student->foto) {
-            Storage::disk('public')->delete($student->foto);
+        if (!empty($updateData)) {
+            Student::where('id', $student->id)->update($updateData);
         }
 
-        $student->delete();
-
-        return redirect()->route('students.index')->with('success', 'Data siswa berhasil dihapus!');
+        return back()->with('success', $isHighAuth
+            ? 'Profil siswa berhasil diperbarui!'
+            : 'Foto profil berhasil diperbarui!');
     }
 }

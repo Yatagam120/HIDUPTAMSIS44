@@ -65,7 +65,7 @@
         /* Tema Terang (Gradien) */
         body[data-theme="teal-growth"] {
             --bg-gradient: linear-gradient(135deg, #ecfdf5 0%, #ccfbf1 55%, #e0f2fe 100%);
-            --bg-card: rgba(255, 255, 255, 0.88);
+            --bg-card: rgba(255, 255, 255, 0.94);
             --text-main: #0f172a;
             --primary: #0d9488;
             --primary-soft: rgba(13, 148, 136, 0.14);
@@ -73,7 +73,7 @@
         }
         body[data-theme="creative-spark"] {
             --bg-gradient: linear-gradient(135deg, #fdf4ff 0%, #fae8ff 55%, #fce7f3 100%);
-            --bg-card: rgba(255, 255, 255, 0.9);
+            --bg-card: rgba(255, 255, 255, 0.94);
             --text-main: #1e1b4b;
             --primary: #c026d3;
             --primary-soft: rgba(192, 38, 211, 0.12);
@@ -81,7 +81,7 @@
         }
         body[data-theme="lavender-dream"] {
             --bg-gradient: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 55%, #f3e8ff 100%);
-            --bg-card: rgba(255, 255, 255, 0.9);
+            --bg-card: rgba(255, 255, 255, 0.94);
             --text-main: #1e1b4b;
             --primary: #4f46e5;
             --primary-soft: rgba(79, 70, 229, 0.12);
@@ -89,7 +89,7 @@
         }
         body[data-theme="soft-berry"] {
             --bg-gradient: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 55%, #fce7f3 100%);
-            --bg-card: rgba(255, 255, 255, 0.9);
+            --bg-card: rgba(255, 255, 255, 0.94);
             --text-main: #1f2937;
             --primary: #e11d48;
             --primary-soft: rgba(225, 29, 72, 0.12);
@@ -97,11 +97,66 @@
         }
         body[data-theme="morning-assembly"] {
             --bg-gradient: linear-gradient(135deg, #fefce8 0%, #fef3c7 55%, #ffedd5 100%);
-            --bg-card: rgba(255, 255, 255, 0.92);
+            --bg-card: rgba(255, 255, 255, 0.95);
             --text-main: #1c1917;
             --primary: #d97706;
             --primary-soft: rgba(217, 119, 6, 0.14);
             --border-color: rgba(217, 119, 6, 0.28);
+        }
+
+        /* Fix #16: Pastikan seluruh teks di Tema Terang (termasuk Kalender & badge) terbaca jelas */
+        body[data-theme="teal-growth"],
+        body[data-theme="creative-spark"],
+        body[data-theme="lavender-dream"],
+        body[data-theme="soft-berry"],
+        body[data-theme="morning-assembly"] {
+            color: var(--text-main) !important;
+        }
+        body[data-theme="teal-growth"] .theme-card,
+        body[data-theme="creative-spark"] .theme-card,
+        body[data-theme="lavender-dream"] .theme-card,
+        body[data-theme="soft-berry"] .theme-card,
+        body[data-theme="morning-assembly"] .theme-card,
+        body[data-theme="teal-growth"] .fc,
+        body[data-theme="creative-spark"] .fc,
+        body[data-theme="lavender-dream"] .fc,
+        body[data-theme="soft-berry"] .fc,
+        body[data-theme="morning-assembly"] .fc,
+        body[data-theme="teal-growth"] .fc-toolbar-title,
+        body[data-theme="creative-spark"] .fc-toolbar-title,
+        body[data-theme="lavender-dream"] .fc-toolbar-title,
+        body[data-theme="soft-berry"] .fc-toolbar-title,
+        body[data-theme="morning-assembly"] .fc-toolbar-title,
+        body[data-theme="teal-growth"] .fc-daygrid-day-number,
+        body[data-theme="creative-spark"] .fc-daygrid-day-number,
+        body[data-theme="lavender-dream"] .fc-daygrid-day-number,
+        body[data-theme="soft-berry"] .fc-daygrid-day-number,
+        body[data-theme="morning-assembly"] .fc-daygrid-day-number,
+        body[data-theme="teal-growth"] .fc-col-header-cell-cushion,
+        body[data-theme="creative-spark"] .fc-col-header-cell-cushion,
+        body[data-theme="lavender-dream"] .fc-col-header-cell-cushion,
+        body[data-theme="soft-berry"] .fc-col-header-cell-cushion,
+        body[data-theme="morning-assembly"] .fc-col-header-cell-cushion {
+            color: #0f172a !important;
+        }
+        body[data-theme="teal-growth"] .text-white,
+        body[data-theme="creative-spark"] .text-white,
+        body[data-theme="lavender-dream"] .text-white,
+        body[data-theme="soft-berry"] .text-white,
+        body[data-theme="morning-assembly"] .text-white {
+            color: #0f172a;
+        }
+        body[data-theme="teal-growth"] .theme-primary,
+        body[data-theme="creative-spark"] .theme-primary,
+        body[data-theme="lavender-dream"] .theme-primary,
+        body[data-theme="soft-berry"] .theme-primary,
+        body[data-theme="morning-assembly"] .theme-primary,
+        body[data-theme="teal-growth"] .theme-primary *,
+        body[data-theme="creative-spark"] .theme-primary *,
+        body[data-theme="lavender-dream"] .theme-primary *,
+        body[data-theme="soft-berry"] .theme-primary *,
+        body[data-theme="morning-assembly"] .theme-primary * {
+            color: #ffffff !important;
         }
 
         /* Gaya Huruf */
@@ -200,6 +255,14 @@
             --bg-gradient: #121215;
             --bg-card: #1c1c21;
         }
+        body[data-graphic="simple"][data-theme="teal-growth"],
+        body[data-graphic="simple"][data-theme="creative-spark"],
+        body[data-graphic="simple"][data-theme="lavender-dream"],
+        body[data-graphic="simple"][data-theme="soft-berry"],
+        body[data-graphic="simple"][data-theme="morning-assembly"] {
+            --bg-gradient: #f8fafc;
+            --bg-card: #ffffff;
+        }
         body[data-graphic="simple"],
         body[data-graphic="simple"] *,
         body[data-graphic="simple"] *::before,
@@ -270,7 +333,7 @@
             display: flex;
             align-items: center;
             flex-wrap: wrap;
-            gap: 6px;
+            gap: 5px;
             overflow: visible !important;
         }
 
@@ -323,7 +386,7 @@
         body[data-theme="lavender-dream"] textarea,
         body[data-theme="soft-berry"] textarea,
         body[data-theme="morning-assembly"] textarea {
-            background-color: rgba(255, 255, 255, 0.9);
+            background-color: rgba(255, 255, 255, 0.94);
             color: #0f172a;
         }
 
@@ -345,7 +408,8 @@
         body[data-theme="lavender-dream"] nav.main-tamsis-nav,
         body[data-theme="soft-berry"] nav.main-tamsis-nav,
         body[data-theme="morning-assembly"] nav.main-tamsis-nav {
-            background: rgba(255, 255, 255, 0.96) !important;
+            background: rgba(255, 255, 255, 0.97) !important;
+            color: #0f172a !important;
         }
 
         main.page-animate-in {
@@ -377,24 +441,41 @@
             box-shadow: 0 0 8px rgba(56, 189, 248, 0.85);
         }
 
+        /* Status Active Member khusus Dashboard (#11) */
         #online-members-pill {
             display: inline-flex;
             align-items: center;
             gap: 6px;
-            background: rgba(16, 185, 129, 0.16);
-            border: 1px solid rgba(16, 185, 129, 0.55);
-            color: #34d399;
-            padding: 4px 10px;
+            padding: 4px 11px;
             border-radius: 9999px;
             font-size: 11px;
             font-weight: 800;
+            border-width: 1px;
+        }
+        #online-members-pill.status-green {
+            background: rgba(16, 185, 129, 0.18);
+            border-color: rgba(16, 185, 129, 0.55);
+            color: #10b981;
+        }
+        #online-members-pill.status-yellow {
+            background: #facc15;
+            border-color: #ca8a04;
+            color: #0f172a !important;
+        }
+        #online-members-pill.status-black {
+            background: #09090b;
+            border-color: #3f3f46;
+            color: #ffffff !important;
         }
         #online-members-pill .online-dot {
             width: 8px;
             height: 8px;
             border-radius: 9999px;
-            background: #10b981;
-            box-shadow: 0 0 8px #10b981;
+        }
+
+        /* Preview Foto Global (#4) */
+        img:not(.no-preview) {
+            cursor: zoom-in;
         }
 
         /* Koreksi khusus Desktop: agar "Ketamansiswaan" tidak terpotong huruf n di ujung */
@@ -421,16 +502,15 @@
             .nav-links-wrap {
                 width: 100%;
                 display: flex !important;
-                flex-wrap: nowrap !important;
-                justify-content: space-between;
-                gap: 2px !important;
-                overflow-x: hidden !important;
+                flex-wrap: wrap !important;
+                justify-content: flex-start;
+                gap: 3px !important;
             }
             .nav-btn-anim {
-                padding: 4px 4.5px !important;
-                font-size: 8.5px !important;
+                padding: 4px 6px !important;
+                font-size: 9px !important;
                 border-radius: 6px !important;
-                letter-spacing: -0.02em;
+                letter-spacing: -0.01em;
                 white-space: nowrap !important;
             }
             main.page-animate-in {
@@ -538,7 +618,6 @@
                 overflow: hidden;
                 text-overflow: clip;
             }
-            /* Notifikasi kuning/merah/hijau di mobile diperkecil & ditaruh di pojok kanan atas */
             .timetable-grid a span.rounded-full,
             .timetable-grid .subject-box span.rounded-full {
                 position: absolute !important;
@@ -562,19 +641,61 @@
 </head>
 <body class="antialiased" data-theme="mode-gelap" data-font="sans" data-graphic="simple" data-anim="off">
     @php
+        $authUser = \Illuminate\Support\Facades\Auth::user();
+        $rawRole = strtolower(trim((string) ($authUser->role ?? $authUser->jabatan ?? 'siswa')));
+        $isHighAuth = in_array($rawRole, ['admin', 'guru', 'ppts', 'ketua_kelas', 'ketua kelas', 'wakil_ketua_kelas', 'wakil ketua kelas'], true);
+        // #15: Komok hanya untuk Ketua Kelas, Wakil Ketua Kelas, PPTS, dan Admin (Guru, Murid, Ex-PPTS dilarang)
+        $canAccessKomok = in_array($rawRole, ['admin', 'ppts', 'ketua_kelas', 'ketua kelas', 'wakil_ketua_kelas', 'wakil ketua kelas'], true);
+
         $pendingTaskCount = 0;
-        if (\Illuminate\Support\Facades\Auth::check()) {
+        $navNotifs = collect();
+
+        if ($authUser) {
             try {
-                if (class_exists(\App\Models\SubjectItem::class) && \Illuminate\Support\Facades\Schema::hasTable('subject_items')) {
-                    $userId = (int) \Illuminate\Support\Facades\Auth::id();
-                    $taskItems = \App\Models\SubjectItem::whereIn('type', ['tugas', 'pr'])->get();
-                    foreach ($taskItems as $ti) {
+                $targetTbl = \Illuminate\Support\Facades\Schema::hasTable('subject_posts')
+                    ? 'subject_posts'
+                    : (\Illuminate\Support\Facades\Schema::hasTable('subject_items') ? 'subject_items' : null);
+
+                if ($targetTbl) {
+                    $userId = (int) $authUser->id;
+                    $subjectsMap = \App\Models\Subject::all()->keyBy('id');
+                    $allItems = \Illuminate\Support\Facades\DB::table($targetTbl)->orderByDesc('id')->get();
+
+                    foreach ($allItems as $ti) {
+                        $tType = strtolower(trim((string) ($ti->category ?? $ti->kategori ?? $ti->type ?? $ti->jenis ?? 'catatan')));
+                        $tStatus = $ti->status ?? 'approved';
                         $doneByList = is_array($ti->completed_by ?? null)
                             ? $ti->completed_by
-                            : (json_decode($ti->completed_by ?? '[]', true) ?: []);
+                            : (json_decode((string) ($ti->completed_by ?? '[]'), true) ?: []);
                         $isDone = !empty($ti->is_completed) || in_array($userId, array_map('intval', $doneByList), true);
-                        if (!$isDone) {
+                        $subjObj = $subjectsMap->get($ti->subject_id);
+                        $subjName = $subjObj->kode_mapel ?? $subjObj->nama_mapel ?? 'Mapel';
+
+                        if ($isHighAuth && $tStatus === 'pending') {
+                            $navNotifs->push([
+                                'title' => 'Menunggu Verifikasi: ' . ($ti->title ?? $ti->judul ?? 'Postingan'),
+                                'sub'   => $subjName . ' • ' . strtoupper($tType),
+                                'url'   => route('subjects.show', ['subject' => $ti->subject_id, 'tab' => $tType]),
+                                'dot'   => '#38bdf8',
+                            ]);
+                        }
+
+                        if ($tStatus === 'approved' && in_array($tType, ['tugas', 'pr'], true) && !$isDone) {
                             $pendingTaskCount++;
+                            $dueVal = $ti->due_date ?? $ti->deadline ?? $ti->tanggal_deadline ?? null;
+                            if ($dueVal) {
+                                try {
+                                    $diff = now()->startOfDay()->diffInDays(\Carbon\Carbon::parse($dueVal)->startOfDay(), false);
+                                    if ($diff <= 2) {
+                                        $navNotifs->push([
+                                            'title' => ($diff < 0 ? 'LEWAT TENGGAT: ' : 'Tenggat Dekat: ') . ($ti->title ?? $ti->judul ?? 'Tugas'),
+                                            'sub'   => $subjName . ' • ' . \Carbon\Carbon::parse($dueVal)->format('d M Y'),
+                                            'url'   => route('subjects.show', ['subject' => $ti->subject_id, 'tab' => $tType]),
+                                            'dot'   => $diff < 0 ? '#ef4444' : '#facc15',
+                                        ]);
+                                    }
+                                } catch (\Throwable $e) {}
+                            }
                         }
                     }
                 }
@@ -583,10 +704,11 @@
             }
         }
 
+        // #11: Hitung Active Member untuk Dashboard
         $onlineUsersCount = 0;
         try {
-            if (\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Schema::hasColumn('users', 'last_seen_at')) {
-                \App\Models\User::where('id', \Illuminate\Support\Facades\Auth::id())->update(['last_seen_at' => now()]);
+            if ($authUser && \Illuminate\Support\Facades\Schema::hasColumn('users', 'last_seen_at')) {
+                \App\Models\User::where('id', $authUser->id)->update(['last_seen_at' => now()]);
                 $onlineUsersCount = \App\Models\User::where('last_seen_at', '>=', now()->subMinutes(5))->count();
             } elseif (\Illuminate\Support\Facades\Schema::hasTable('sessions')) {
                 $onlineUsersCount = \Illuminate\Support\Facades\DB::table('sessions')
@@ -603,6 +725,7 @@
         <img src="{{ asset('images/logo-tamsis.png') }}"
              onerror="this.style.display='none'"
              alt="Logo Tamsis"
+             class="no-preview"
              style="width: 68px; height: 68px; object-fit: contain; margin-bottom: 12px;">
         <div style="font-size: 17px; font-weight: 800; letter-spacing: 0.04em;">
             PELAJAR TAMAN SISWA HEBAT!
@@ -624,51 +747,129 @@
     <!-- Navbar Utama -->
     <nav class="main-tamsis-nav">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[52px] py-1.5 flex flex-wrap items-center justify-between gap-2">
-            <a href="{{ route('dashboard') }}" onclick="playSfx('click')" class="flex items-center gap-2 shrink-0" style="gap:8px;">
-                <img src="{{ asset('images/tamsis.jpeg') }}" onerror="this.src='{{ asset('images/logo-tamsis.png') }}'" alt="Logo Perguruan Tamansiswa" class="w-7 h-7 sm:w-9 sm:h-9 rounded-full object-cover shrink-0 border border-white/30 shadow">
-                <div class="leading-tight">
-                    <div class="text-[11px] sm:text-sm font-extrabold tracking-wide" style="color: var(--primary);">
-                        PELAJAR TAMAN SISWA HEBAT!
+            <div class="flex items-center justify-between w-full lg:w-auto gap-2">
+                <a href="{{ route('dashboard') }}" onclick="playSfx('click')" class="flex items-center gap-2 shrink-0" style="gap:8px;">
+                    <img src="{{ asset('images/tamsis.jpeg') }}" onerror="this.src='{{ asset('images/logo-tamsis.png') }}'" alt="Logo Perguruan Tamansiswa" class="no-preview w-7 h-7 sm:w-9 sm:h-9 rounded-full object-cover shrink-0 border border-white/30 shadow">
+                    <div class="leading-tight">
+                        <div class="text-[11px] sm:text-sm font-extrabold tracking-wide" style="color: var(--primary);">
+                            PELAJAR TAMAN SISWA HEBAT!
+                        </div>
+                        <div class="text-[9px] opacity-70 hidden md:block">
+                            Pelajar Tamsis Harus: N (Niat), J (Jujur), U (Unggul), N (Nasionalis)
+                        </div>
                     </div>
-                    <div class="text-[9px] opacity-70 hidden md:block">
-                        Pelajar Tamsis Harus: N (Niat), J (Jujur), U (Unggul), N (Nasionalis)
-                    </div>
+                </a>
+
+                <!-- Tombol Simbol Notif Berfungsi di HP & Laptop (#9) -->
+                <div class="relative lg:hidden">
+                    <button type="button"
+                            onclick="toggleNavNotifBox(); playSfx('click');"
+                            aria-label="Notifikasi"
+                            class="relative px-2.5 py-1.5 rounded-lg border theme-border text-xs font-extrabold"
+                            style="background-color: var(--primary-soft);">
+                        🔔
+                        @if($navNotifs->count() > 0)
+                            <span class="absolute -top-1 -right-1 px-1 min-w-[15px] h-[15px] rounded-full bg-red-500 text-white text-[9px] font-extrabold flex items-center justify-center">
+                                {{ $navNotifs->count() }}
+                            </span>
+                        @endif
+                    </button>
                 </div>
-            </a>
+            </div>
 
             <div class="nav-links-wrap">
-                @if(\Illuminate\Support\Facades\Auth::check() && \Illuminate\Support\Facades\Auth::user()->role === 'admin')
+                @if($isHighAuth && \Illuminate\Support\Facades\Route::has('admin.users'))
                     <a href="{{ route('admin.users') }}" onclick="playSfx('enter')"
-                       class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-extrabold whitespace-nowrap {{ request()->routeIs('admin.*') ? 'theme-primary shadow-sm' : 'border theme-border' }}"
+                       class="nav-btn-anim px-2.5 py-1.5 rounded-lg text-xs font-extrabold whitespace-nowrap {{ request()->routeIs('admin.*') ? 'theme-primary shadow-sm' : 'border theme-border' }}"
                        style="{{ request()->routeIs('admin.*') ? '' : 'background-color: var(--primary-soft); color: var(--primary);' }}"
                        data-i18n="nav_ap">AP</a>
                 @endif
 
                 <a href="{{ route('dashboard') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('dashboard') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                   class="nav-btn-anim px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('dashboard') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
                    data-i18n="nav_jadwal">Jadwal</a>
 
                 <a href="{{ route('tasks.index') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('tasks.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">
+                   class="nav-btn-anim px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('tasks.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}">
                     {{ $pendingTaskCount > 0 ? "({$pendingTaskCount}) Tugas" : 'List Tugas' }}
                 </a>
 
                 <a href="{{ route('calendar.index') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('calendar.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                   class="nav-btn-anim px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('calendar.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
                    data-i18n="nav_kalender">Kalender</a>
 
                 <a href="{{ route('siswa.index') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('siswa.*') || request()->routeIs('students.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                   class="nav-btn-anim px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('siswa.*') || request()->routeIs('students.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
                    data-i18n="nav_siswa">Siswa</a>
 
+                @if(\Illuminate\Support\Facades\Route::has('teachers.phone'))
+                    <a href="{{ route('teachers.phone') }}" onclick="playSfx('click')"
+                       class="nav-btn-anim px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('teachers.phone') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                       data-i18n="nav_nmr_guru">Nmr Guru</a>
+                @endif
+
+                @if(\Illuminate\Support\Facades\Route::has('materials.index'))
+                    <a href="{{ route('materials.index') }}" onclick="playSfx('click')"
+                       class="nav-btn-anim px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('materials.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                       data-i18n="nav_materi">Materi</a>
+                @endif
+
+                @if($canAccessKomok && \Illuminate\Support\Facades\Route::has('komok.index'))
+                    <a href="{{ route('komok.index') }}" onclick="playSfx('click')"
+                       class="nav-btn-anim px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('komok.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                       data-i18n="nav_komok">Komok</a>
+                @endif
+
+                @if(\Illuminate\Support\Facades\Route::has('practice.index'))
+                    <a href="{{ route('practice.index') }}" onclick="playSfx('click')"
+                       class="nav-btn-anim px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('practice.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                       data-i18n="nav_latihan">Latihan</a>
+                @endif
+
                 <a href="{{ route('profile.edit') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('profile.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                   class="nav-btn-anim px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('profile.*') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
                    data-i18n="nav_profile">Profil</a>
 
                 <a href="{{ route('settings') }}" onclick="playSfx('click')"
-                   class="nav-btn-anim px-3 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('settings') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
+                   class="nav-btn-anim px-2.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap {{ request()->routeIs('settings') ? 'theme-primary shadow-sm' : 'hover:opacity-85' }}"
                    data-i18n="nav_pengaturan">Pengaturan</a>
+
+                <!-- Tombol Simbol Notif Desktop (#9) -->
+                <div class="relative hidden lg:block">
+                    <button type="button"
+                            onclick="toggleNavNotifBox(); playSfx('click');"
+                            aria-label="Notifikasi"
+                            class="relative nav-btn-anim px-2.5 py-1.5 rounded-lg border theme-border text-xs font-extrabold"
+                            style="background-color: var(--primary-soft);">
+                        🔔
+                        @if($navNotifs->count() > 0)
+                            <span class="absolute -top-1 -right-1 px-1 min-w-[16px] h-[16px] rounded-full bg-red-500 text-white text-[9px] font-extrabold flex items-center justify-center">
+                                {{ $navNotifs->count() }}
+                            </span>
+                        @endif
+                    </button>
+                </div>
             </div>
+        </div>
+
+        <!-- Panel Dropdown Notifikasi (HP & Laptop) -->
+        <div id="nav-notif-dropdown"
+             class="hidden fixed right-2 sm:right-6 left-2 sm:left-auto top-14 sm:w-80 theme-card border theme-border rounded-2xl shadow-2xl p-3 z-[9995] space-y-2 max-h-[75vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b theme-border pb-2">
+                <span class="text-xs font-extrabold">🔔 Notifikasi ({{ $navNotifs->count() }})</span>
+                <button type="button" onclick="toggleNavNotifBox()" class="px-2 py-0.5 rounded text-xs font-bold border theme-border">✕</button>
+            </div>
+            @forelse($navNotifs as $notifItem)
+                <a href="{{ $notifItem['url'] }}" class="block p-2.5 rounded-xl theme-soft border theme-border hover:opacity-90">
+                    <div class="flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full shrink-0" style="background-color: {{ $notifItem['dot'] }};"></span>
+                        <span class="text-xs font-extrabold line-clamp-1">{{ $notifItem['title'] }}</span>
+                    </div>
+                    <div class="text-[10px] opacity-75 pl-4 mt-0.5">{{ $notifItem['sub'] }}</div>
+                </a>
+            @empty
+                <div class="py-4 text-center text-xs opacity-70">Tidak ada notifikasi tenggat atau pengajuan baru.</div>
+            @endforelse
         </div>
     </nav>
 
@@ -677,7 +878,50 @@
         {{ $slot }}
     </main>
 
+    <!-- Global Image Lightbox Preview (#4: Preview foto untuk apa pun) -->
+    <div id="global-photo-preview-modal"
+         onclick="closePhotoPreview()"
+         class="fixed inset-0 z-[99998] hidden items-center justify-center bg-black/85 p-4">
+        <button type="button"
+                onclick="closePhotoPreview()"
+                class="fixed top-4 right-4 px-3 py-1.5 rounded-xl bg-white/15 text-white text-xs font-extrabold border border-white/30">
+            ✕ Tutup
+        </button>
+        <img id="global-photo-preview-img"
+             src=""
+             alt="Preview Foto"
+             onclick="event.stopPropagation()"
+             class="no-preview max-w-full max-h-[88vh] rounded-2xl shadow-2xl border border-white/25 object-contain">
+    </div>
+
     <script>
+        function toggleNavNotifBox() {
+            const box = document.getElementById('nav-notif-dropdown');
+            if (box) box.classList.toggle('hidden');
+        }
+
+        function openPhotoPreview(src) {
+            if (!src) return;
+            const modal = document.getElementById('global-photo-preview-modal');
+            const img = document.getElementById('global-photo-preview-img');
+            img.src = src;
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closePhotoPreview() {
+            const modal = document.getElementById('global-photo-preview-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        document.addEventListener('click', function (e) {
+            const imgEl = e.target.closest('img');
+            if (imgEl && !imgEl.classList.contains('no-preview') && !imgEl.closest('#global-photo-preview-modal')) {
+                openPhotoPreview(imgEl.currentSrc || imgEl.src);
+            }
+        });
+
         function applySavedAppearance() {
             const savedTheme   = localStorage.getItem('app_theme') || 'mode-gelap';
             const savedFont    = localStorage.getItem('app_font') || 'sans';
@@ -685,6 +929,7 @@
             const savedAnim    = savedGraphic === 'simple' ? 'off' : (localStorage.getItem('app_anim') || 'off');
 
             document.body.setAttribute('data-theme', savedTheme);
+            document.documentElement.setAttribute('data-theme', savedTheme);
             document.body.setAttribute('data-font', savedFont);
             document.body.setAttribute('data-graphic', savedGraphic);
             document.body.setAttribute('data-anim', savedAnim);
@@ -806,13 +1051,24 @@
             shortenSubjectsForMobile();
         }
 
+        // #11: Status Active Member HANYA di Dashboard (0 = hitam, <2 = kuning, >=2 = hijau)
         function renderOnlineMemberPill() {
             const isDashboard = {{ request()->routeIs('dashboard') ? 'true' : 'false' }};
             const onlineCount = {{ (int) $onlineUsersCount }};
-            if (!isDashboard || onlineCount < 10) return;
+            if (!isDashboard) return;
 
             const heading = document.querySelector('main h1, main h2');
             if (!heading || document.getElementById('online-members-pill')) return;
+
+            let statusClass = 'status-green';
+            let dotColor = '#10b981';
+            if (onlineCount === 0) {
+                statusClass = 'status-black';
+                dotColor = '#71717a';
+            } else if (onlineCount < 2) {
+                statusClass = 'status-yellow';
+                dotColor = '#ca8a04';
+            }
 
             const headerRow = heading.parentElement;
             if (headerRow) {
@@ -824,7 +1080,8 @@
 
                 const pill = document.createElement('div');
                 pill.id = 'online-members-pill';
-                pill.innerHTML = `<span class="online-dot"></span><span>${onlineCount} Member Aktif</span>`;
+                pill.className = statusClass;
+                pill.innerHTML = `<span class="online-dot" style="background:${dotColor};"></span><span>${onlineCount} Member Aktif</span>`;
                 headerRow.appendChild(pill);
             }
         }
@@ -938,6 +1195,10 @@
                 nav_jadwal: 'Jadwal',
                 nav_kalender: 'Kalender',
                 nav_siswa: 'Siswa',
+                nav_nmr_guru: 'Nmr Guru',
+                nav_materi: 'Materi',
+                nav_komok: 'Komok',
+                nav_latihan: 'Latihan',
                 nav_profile: 'Profil',
                 nav_pengaturan: 'Pengaturan',
             },
@@ -947,6 +1208,10 @@
                 nav_jadwal: 'Schedule',
                 nav_kalender: 'Calendar',
                 nav_siswa: 'Students',
+                nav_nmr_guru: 'Teacher Contacts',
+                nav_materi: 'Materials',
+                nav_komok: 'Komok',
+                nav_latihan: 'Practice',
                 nav_profile: 'Profile',
                 nav_pengaturan: 'Settings',
             },
@@ -956,6 +1221,10 @@
                 nav_jadwal: '時間割',
                 nav_kalender: 'カレンダー',
                 nav_siswa: '生徒',
+                nav_nmr_guru: '先生連絡先',
+                nav_materi: '教材',
+                nav_komok: 'コモック',
+                nav_latihan: '練習',
                 nav_profile: 'プロフィール',
                 nav_pengaturan: '設定',
             },
@@ -965,12 +1234,39 @@
                 nav_jadwal: 'Расписание',
                 nav_kalender: 'Календарь',
                 nav_siswa: 'Ученики',
+                nav_nmr_guru: 'Номера учителей',
+                nav_materi: 'Материалы',
+                nav_komok: 'Комок',
+                nav_latihan: 'Практика',
                 nav_profile: 'Профиль',
                 nav_pengaturan: 'Настройки',
             }
         };
 
         const phraseDictionaries = {
+            en: {
+                'Jadwal Pelajaran XI RPL 1': 'XI RPL 1 Class Schedule',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': 'Click a subject box to view Notes, Assignments, Homework, or Events.',
+                'Hari / Jam': 'Day / Period',
+                'Senin': 'Monday',
+                'Selasa': 'Tuesday',
+                'Rabu': 'Wednesday',
+                'Kamis': 'Thursday',
+                'Jumat': 'Friday',
+                'Tenggat': 'Due Soon',
+                'Deadline': 'Deadline',
+                'Selesai': 'Completed',
+                'Pengaturan Tampilan': 'Display Settings',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, dan bahasa aplikasi.': 'Customize gradient color themes, graphic styles, animations, sound effects, and app language.',
+                'TEMA GELAP (GRADIEN)': 'DARK THEMES (GRADIENT)',
+                'TEMA TERANG (GRADIEN)': 'LIGHT THEMES (GRADIENT)',
+                'GRAFIK': 'GRAPHICS',
+                'GAYA HURUF': 'FONT STYLE',
+                'BAHASA': 'LANGUAGE',
+                'EFEK SUARA (SFX)': 'SOUND EFFECTS (SFX)',
+                'Kasih Saran & Laporan Bug': 'Feedback & Bug Report',
+                'Kembali ke Jadwal Utama': 'Back to Main Schedule',
+            },
             ja: {
                 'Jadwal Pelajaran XI RPL 1': 'XI RPL 1 授業時間割',
                 'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': '科目ボックスをクリックしてメモ・課題・宿題・予定を確認します。',
@@ -980,14 +1276,24 @@
                 'Rabu': '水曜日',
                 'Kamis': '木曜日',
                 'Jumat': '金曜日',
-                'Tenggat': '締切間近',
+                'Tenggat': '期限間近',
                 'Deadline': '締切',
                 'Selesai': '完了',
                 'Reset': 'リセット',
+                'Pengaturan Tampilan': '表示設定',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, dan bahasa aplikasi.': 'カラーテーマ、グラフィックスタイル、アニメーション、効果音、言語をカスタマイズします。',
+                'TEMA GELAP (GRADIEN)': 'ダークテーマ (グラデーション)',
+                'TEMA TERANG (GRADIEN)': 'ライトテーマ (グラデーション)',
+                'GRAFIK': 'グラフィック',
+                'GAYA HURUF': 'フォントスタイル',
+                'BAHASA': '言語',
+                'EFEK SUARA (SFX)': '効果音 (SFX)',
+                'Kasih Saran & Laporan Bug': 'ご意見・バグ報告',
+                'Kembali ke Jadwal Utama': 'メイン時間割に戻る',
             },
             ru: {
                 'Jadwal Pelajaran XI RPL 1': 'Расписание уроков XI RPL 1',
-                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, или Acara.': 'Нажмите на предмет, чтобы посмотреть заметки, задания, ДЗ или события.',
+                'Klik kotak mata pelajaran untuk melihat Catatan, Tugas, PR, atau Acara.': 'Нажмите на предмет, чтобы посмотреть заметки, задания, ДЗ или события.',
                 'Hari / Jam': 'День / Урок',
                 'Senin': 'Понедельник',
                 'Selasa': 'Вторник',
@@ -998,6 +1304,16 @@
                 'Deadline': 'Дедлайн',
                 'Selesai': 'Готово',
                 'Reset': 'Сброс',
+                'Pengaturan Tampilan': 'Настройки отображения',
+                'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, dan bahasa aplikasi.': 'Настройте цветовые темы, стиль графики, анимацию, звуковые эффекты и язык приложения.',
+                'TEMA GELAP (GRADIEN)': 'ТЁМНЫЕ ТЕМЫ (ГРАДИЕНТ)',
+                'TEMA TERANG (GRADIEN)': 'СВЕТЛЫЕ ТЕМЫ (ГРАДИЕНТ)',
+                'GRAFIK': 'ГРАФИКА',
+                'GAYA HURUF': 'СТИЛЬ ШРИФТА',
+                'BAHASA': 'ЯЗЫК',
+                'EFEK SUARA (SFX)': 'ЗВУКОВЫЕ ЭФФЕКТЫ (SFX)',
+                'Kasih Saran & Laporan Bug': 'Отзывы и сообщения об ошибках',
+                'Kembali ke Jadwal Utama': 'Назад к расписанию',
             }
         };
 

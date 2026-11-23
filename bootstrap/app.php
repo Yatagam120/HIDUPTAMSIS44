@@ -10,17 +10,10 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
-    ->withMiddleware(function (Middleware $middleware): void {
-        //
-    })
     ->withMiddleware(function (Middleware $middleware) {
-        $middleware->web(append: [\App\Http\Middleware\AntiHackingGuard::class]);
-    $middleware->alias([
-        'approved' => \App\Http\Middleware\EnsureUserIsApproved::class,
-    ]);
-})
-    ->withExceptions(function (Exceptions $exceptions): void {
+        // Wajib agar HTTPS proxy Railway tidak menyebabkan 419 Page Expired saat login/post
+        $middleware->trustProxies(at: '*');
+    })
+    ->withExceptions(function (Exceptions $exceptions) {
         //
     })->create();
-    
-    
