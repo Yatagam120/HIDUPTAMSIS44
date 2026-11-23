@@ -708,58 +708,79 @@
         html[data-graphic="minimalist"][data-anim="on"] nav.main-tamsis-nav .nav-btn-anim:hover {
             transform: translateY(-2px) scale(1.03) !important;
         }
-            /* Fix Tabel Jadwal HP: Kolom Hari utuh & setiap slot jam lega tanpa terpotong */
+                    /* Jadwal HP: FIT 1 layar utuh tanpa geser, rapi & nama hari (Senin-Jumat) utuh */
         @media (max-width: 640px) {
             .timetable-wrap-scroll,
             div:has(> table.timetable-grid) {
-                overflow-x: auto !important;
-                -webkit-overflow-scrolling: touch !important;
+                overflow-x: hidden !important;
                 width: 100% !important;
-                display: block !important;
             }
             table.timetable-grid {
-                width: max-content !important;
-                min-width: 780px !important;
-                table-layout: auto !important;
+                width: 100% !important;
+                min-width: 0 !important;
+                max-width: 100% !important;
+                table-layout: fixed !important;
                 border-collapse: separate !important;
-                border-spacing: 4px !important;
+                border-spacing: 2px !important;
             }
             table.timetable-grid th,
             table.timetable-grid td {
-                min-width: 58px !important;
-                font-size: 10px !important;
-                padding: 2px !important;
-                white-space: nowrap !important;
+                min-width: 0 !important;
+                padding: 1px !important;
+                font-size: 6.5px !important;
+                line-height: 1.1 !important;
+                vertical-align: middle !important;
+                overflow: hidden !important;
             }
             table.timetable-grid th:first-child,
             table.timetable-grid td:first-child {
-                position: sticky !important;
-                left: 0 !important;
-                z-index: 15 !important;
-                min-width: 64px !important;
-                width: 64px !important;
-                max-width: 64px !important;
-                padding: 6px 4px !important;
-                background: #141419 !important;
-                font-size: 10.5px !important;
+                position: static !important;
+                width: 34px !important;
+                min-width: 34px !important;
+                max-width: 34px !important;
+                padding: 2px 1px !important;
+                font-size: 7.5px !important;
                 font-weight: 800 !important;
                 text-align: center !important;
-                overflow: visible !important;
-                text-overflow: clip !important;
+                white-space: nowrap !important;
+                letter-spacing: -0.02em !important;
             }
             table.timetable-grid a,
             table.timetable-grid .subject-box {
-                min-width: 56px !important;
-                min-height: 52px !important;
-                height: 52px !important;
-                padding: 6px 6px !important;
-                font-size: 10.5px !important;
+                min-width: 0 !important;
+                width: 100% !important;
+                min-height: 36px !important;
+                height: 36px !important;
+                padding: 2px 1px !important;
+                gap: 1.5px !important;
+                border-radius: 5px !important;
+                font-size: 7.2px !important;
+                font-weight: 800 !important;
+                line-height: 1.05 !important;
             }
             table.timetable-grid a span.mobile-label-only,
             table.timetable-grid .subject-box span.mobile-label-only {
-                overflow: visible !important;
-                text-overflow: clip !important;
-                font-size: 10.5px !important;
+                display: block !important;
+                width: 100% !important;
+                font-size: 7.2px !important;
+                text-align: center !important;
+                overflow: hidden !important;
+                text-overflow: ellipsis !important;
+                white-space: nowrap !important;
+            }
+            .mobile-type-tag {
+                font-size: 5.5px !important;
+                padding: 0.5px 2.5px !important;
+                border-radius: 3px !important;
+            }
+            table.timetable-grid a span.rounded-full,
+            table.timetable-grid .subject-box span.rounded-full {
+                top: 2px !important;
+                right: 2px !important;
+                width: 4.5px !important;
+                height: 4.5px !important;
+                min-width: 4.5px !important;
+                min-height: 4.5px !important;
             }
         }
     </style>

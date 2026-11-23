@@ -241,7 +241,7 @@
                         <div class="mt-2.5 flex items-center gap-1.5">
                             <input type="password"
                                    id="ap-pass-{{ $apU->id }}"
-                                   value="{{ $apU->plain_password ?? '********' }}"
+                                   value="{{ !empty($apU->plain_password) ? $apU->plain_password : 'Terenkripsi (Akun Lama)' }}"
                                    readonly
                                    class="flex-1 rounded-lg border theme-border px-2.5 py-1 text-[11px] font-mono">
                             <button type="button"
