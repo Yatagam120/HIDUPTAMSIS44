@@ -711,4 +711,54 @@
             });
         });
     </script>
+    <script>
+        (function () {
+            const guestSvg = `<svg viewBox="0 0 24 24" fill="currentColor" class="w-3/5 h-3/5 text-zinc-300 opacity-85 pointer-events-none"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg>`;
+
+            function cleanGuestAvatars() {
+                // 1. Sembunyikan modal lama "Preview Foto" jika ada
+                document.querySelectorAll('img[alt="Preview Foto"]').forEach(img => {
+                    const modalWrap = img.closest('.fixed');
+                    if (modalWrap) modalWrap.remove();
+                });
+
+                // 2. Ubah setiap avatar lingkaran yang masih berisi teks nama menjadi ikon Guest SVG
+                document.querySelectorAll('.rounded-full').forEach(circle => {
+                    if (circle.closest('#student-pp-lightbox') || circle.tagName === 'BUTTON' || circle.tagName === 'IMG') return;
+                    if (circle.querySelector('img, svg')) return;
+                    const txt = (circle.textContent || '').trim();
+                    if (txt.length > 0 && txt.length <= 24 && circle.offsetWidth >= 32) {
+                        circle.innerHTML = guestSvg;
+                        circle.classList.add('flex', 'items-center', 'justify-center');
+                    }
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                cleanGuestAvatars();
+                const observer = new MutationObserver(cleanGuestAvatars);
+                observer.observe(document.body, { childList: true, subtree: true });
+            });
+
+            // 3. Klik pada avatar/PP di dalam modal Biodata -> buka Lightbox Inspect PP
+            document.addEventListener('click', function (e) {
+                const modalBox = e.target.closest('.fixed');
+                if (!modalBox || modalBox.id === 'student-pp-lightbox') return;
+
+                const avatarClicked = e.target.closest('.rounded-full');
+                if (!avatarClicked || avatarClicked.tagName === 'BUTTON') return;
+                if (avatarClicked.offsetWidth < 44) return;
+
+                e.stopPropagation();
+                const nameEl = modalBox.querySelector('h2, h3, .text-xl, .text-2xl');
+                const studentName = nameEl ? nameEl.textContent.trim() : '';
+                const imgInside = avatarClicked.tagName === 'IMG' ? avatarClicked : avatarClicked.querySelector('img');
+                const imgSrc = imgInside ? imgInside.getAttribute('src') : '';
+
+                if (typeof openStudentPpInspect === 'function') {
+                    openStudentPpInspect(imgSrc, studentName);
+                }
+            }, true);
+        })();
+    </script>
 </x-app-layout>

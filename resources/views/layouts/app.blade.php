@@ -1759,6 +1759,47 @@
             });
         });
             function formatDesktopSubjectLabels() {
+            const subjectDict = [
+                { keys: ['ketamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
+                { keys: ['samsung tech institute', 'sti'], code: 'STI', full: 'Samsung Tech Institute' },
+                { keys: ['bimbingan dan konseling', 'bimbingan konseling', 'bk'], code: 'BK', full: 'Bimbingan & Konseling' },
+                { keys: ['kreativitas & desain interaktif', 'kreativitas dan desain interaktif', 'kdi'], code: 'KDI', full: 'Kreativitas & Desain Interaktif' },
+                { keys: ['muatan bahasa jepang', 'bahasa jepang', 'mbj'], code: 'MBJ(J)', full: 'Muatan Bahasa Jepang' },
+                { keys: ['pendidikan pancasila', 'ppkn', 'pp'], code: 'PP', full: 'Pendidikan Pancasila' },
+                { keys: ['bahasa inggris', 'b.ing'], code: 'B.Ing', full: 'Bahasa Inggris' },
+                { keys: ['bahasa indonesia', 'bi'], code: 'BI', full: 'Bahasa Indonesia' },
+                { keys: ['matematika', 'mtk'], code: 'MTK', full: 'Matematika' },
+                { keys: ['pendidikan jasmani', 'pjok', 'penjas'], code: 'Penjas', full: 'Pendidikan Jasmani' },
+                { keys: ['pemrograman lanjut', 'pl(rpl1)', 'pl'], code: 'PL(RPL1)', full: 'Pemrograman Lanjut' },
+                { keys: ['sejarah indonesia', 'sejarah', 'si'], code: 'SI', full: 'Sejarah Indonesia' },
+                { keys: ['kewirausahaan', 'pkk', 'kwh'], code: 'KWH', full: 'Kewirausahaan' },
+                { keys: ['pendidikan agama islam', 'pai'], code: 'PAI', full: 'Pendidikan Agama Islam' }
+            ];
+
+            document.querySelectorAll('.timetable-grid tr').forEach(tr => {
+                const rowText = (tr.firstElementChild?.textContent || '').trim().toLowerCase();
+                const isSelasa = rowText.startsWith('sel');
+                const boxes = Array.from(tr.querySelectorAll('a, .subject-box'));
+
+                boxes.forEach((box, idx) => {
+                    const href = box.getAttribute('href') || '';
+                    const mId = href.match(/\/(?:mapel|subject)\/(\d+)/i);
+                    const serverNotif = (mId && typeof SERVER_SUBJECT_NOTIFS !== 'undefined') ? SERVER_SUBJECT_NOTIFS[mId[1]] : null;
+
+                    if (window.innerWidth > 640 && box.dataset.desktopFormatted !== '1') {
+                        const rawText = (box.textContent || '').trim();
+                        const lower = rawText.toLowerCase();
+                        let matched = null;
+
+                        // Khusus hari Selasa kotak terakhir (setelah KTS), wajib STI (Samsung Tech Institute)
+                        if (isSelasa && idx === boxes.length - 1 && (lower === 'si' || lower.includes('sejarah') || lower.includes('sti'))) {
+                            matched = { code: 'STI', full: 'Samsung Tech Institute' };
+                        } else if (lower) {
+                            matched = subjectDict.find(item =>
+                                item.keys.some(k => {
+                                    if (lower === k) return true;
+                                    if (k.length <= 3) {
+                                        const esc = k.replace(/[.*+?^${}()|[\]\\]/g, '\\function formatDesktopSubjectLabels() {
             if (window.innerWidth <= 640) return;
 
             const subjectDict = [
@@ -1816,6 +1857,35 @@
                     box.appendChild(subEl);
                     preserved.forEach(el => box.appendChild(el));
                 }
+            });
+        }');
+                                        return new RegExp('(?:^|[^a-z0-9])' + esc + '(?:$|[^a-z0-9])', 'i').test(lower);
+                                    }
+                                    return lower.includes(k);
+                                })
+                            );
+                        }
+
+                        if (matched) {
+                            box.dataset.desktopFormatted = '1';
+                            box.style.position = 'relative';
+                            box.title = `${matched.code} - ${matched.full}`;
+                            box.innerHTML = `
+                                <div class="font-extrabold text-xs sm:text-sm leading-tight tracking-tight">${matched.code}</div>
+                                <div class="text-[9.5px] opacity-75 leading-tight line-clamp-1 max-w-full px-1">${matched.full}</div>
+                            `;
+                        }
+                    }
+
+                    // Pastikan titik indikator notifikasi selalu tampil di pojok kanan atas jika mapel punya item aktif
+                    if (serverNotif && !box.querySelector('.notif-corner-dot')) {
+                        box.style.position = 'relative';
+                        const dot = document.createElement('span');
+                        dot.className = 'notif-corner-dot rounded-full';
+                        dot.style.cssText = 'position:absolute;top:5px;right:5px;width:8px;height:8px;border-radius:9999px;background:' + serverNotif.dot + ';box-shadow:0 0 6px ' + serverNotif.dot + ';z-index:10;';
+                        box.appendChild(dot);
+                    }
+                });
             });
         }
 
