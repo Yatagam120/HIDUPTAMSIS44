@@ -651,4 +651,38 @@
             });
         })();
     </script>
+    <div id="student-pp-lightbox" onclick="this.classList.add('hidden'); this.classList.remove('flex');"
+         class="fixed inset-0 z-[99999] hidden items-center justify-center bg-black/90 p-4 cursor-zoom-out">
+        <div class="relative max-w-md w-full flex flex-col items-center gap-3" onclick="event.stopPropagation()">
+            <img id="student-pp-lightbox-img" src="" alt="Foto Profil Siswa"
+                 class="max-h-[75vh] w-auto rounded-2xl border-2 border-white/25 shadow-2xl object-contain">
+            <button type="button" onclick="document.getElementById('student-pp-lightbox').classList.add('hidden'); document.getElementById('student-pp-lightbox').classList.remove('flex');"
+                    class="px-4 py-1.5 rounded-full bg-white/15 text-white text-xs font-extrabold hover:bg-white/25">
+                ✕ Tutup Foto
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Pastikan saat biodata siswa dibuka, foto PP di dalam modal biodata yang bisa diklik untuk inspect
+            document.querySelectorAll('[id*="modal"] img, [id*="biodata"] img').forEach(ppImg => {
+                if (ppImg.id === 'student-pp-lightbox-img') return;
+                ppImg.style.cursor = 'zoom-in';
+                ppImg.title = 'Klik foto profil untuk memperbesar (Inspect PP)';
+                ppImg.addEventListener('click', function (e) {
+                    e.stopPropagation();
+                    const src = this.getAttribute('src');
+                    if (!src) return;
+                    const lb = document.getElementById('student-pp-lightbox');
+                    const lbImg = document.getElementById('student-pp-lightbox-img');
+                    if (lb && lbImg) {
+                        lbImg.src = src;
+                        lb.classList.remove('hidden');
+                        lb.classList.add('flex');
+                    }
+                });
+            });
+        });
+    </script>
 </x-app-layout>

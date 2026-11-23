@@ -1643,6 +1643,78 @@
         window.addEventListener('resize', () => {
             shortenSubjectsForMobile();
         });
+            @php
+            $uncompletedPrCount = 0;
+            $uncompletedTugasCount = 0;
+            $subjectEventMap = [];
+            if (isset($allItems) && $authUser) {
+                $uidInt = (int) $authUser->id;
+                foreach ($allItems as $ci) {
+                    if (($ci->status ?? 'approved') !== 'approved') continue;
+                    $cType = strtolower(trim((string) ($ci->category ?? $ci->kategori ?? $ci->type ?? $ci->jenis ?? '')));
+                    $cDoneArr = is_array($ci->completed_by ?? null)
+                        ? $ci->completed_by
+                        : (json_decode((string) ($ci->completed_by ?? '[]'), true) ?: []);
+                    $cIsDone = in_array($uidInt, array_map('intval', $cDoneArr), true);
+
+                    if ($cType === 'pr' && !$cIsDone) $uncompletedPrCount++;
+                    if ($cType === 'tugas' && !$cIsDone) $uncompletedTugasCount++;
+                    if ($cType === 'event' && !$cIsDone) {
+                        $sidEv = (string) $ci->subject_id;
+                        $subjectEventMap[$sidEv] = ($subjectEventMap[$sidEv] ?? 0) + 1;
+                    }
+                }
+            }
+        @endphp
+        const UNCOMPLETED_PR_COUNT = {{ $uncompletedPrCount }};
+        const UNCOMPLETED_TUGAS_COUNT = {{ $uncompletedTugasCount }};
+        const SUBJECT_EVENT_MAP = @json($subjectEventMap);
+
+        function applyPrTugasCountsAndEventBadges() {
+            // 1. Tampilkan angka PR & Tugas yang belum selesai di tombol filter jadwal
+            document.querySelectorAll('.filter-bar-mobile-grid button, .filter-bar-mobile-grid a, button, a').forEach(el => {
+                if (el.closest('nav')) return;
+                const txt = (el.textContent || '').trim();
+                if (/^📌?\s*Tugas$/i.test(txt) && UNCOMPLETED_TUGAS_COUNT > 0 && !el.querySelector('.cnt-pill')) {
+                    const pill = document.createElement('span');
+                    pill.className = 'cnt-pill ml-1.5 px-1.5 py-0.2 rounded-full bg-amber-400 text-zinc-950 text-[10px] font-black';
+                    pill.textContent = UNCOMPLETED_TUGAS_COUNT;
+                    el.appendChild(pill);
+                }
+                if (/^🏠?\s*PR$/i.test(txt) && UNCOMPLETED_PR_COUNT > 0 && !el.querySelector('.cnt-pill')) {
+                    const pill = document.createElement('span');
+                    pill.className = 'cnt-pill ml-1.5 px-1.5 py-0.2 rounded-full bg-orange-400 text-zinc-950 text-[10px] font-black';
+                    pill.textContent = UNCOMPLETED_PR_COUNT;
+                    el.appendChild(pill);
+                }
+            });
+
+            // 2. Penanda Event warna merah keabuan (#b97a7a) di pojok kanan atas kotak mapel
+            document.querySelectorAll('.timetable-grid a, .timetable-grid .subject-box').forEach(box => {
+                const href = box.getAttribute('href') || '';
+                const m = href.match(/\/(?:mapel|subject)\/(\d+)/i);
+                if (!m) return;
+                const evCount = SUBJECT_EVENT_MAP[m[1]] || 0;
+                if (evCount > 0 && !box.querySelector('.event-grayred-badge')) {
+                    box.style.position = 'relative';
+                    const evBadge = document.createElement('span');
+                    evBadge.className = 'event-grayred-badge';
+                    evBadge.title = evCount + ' Event Aktif';
+                    evBadge.textContent = evCount;
+                    evBadge.style.cssText = 'position:absolute;top:3px;right:3px;min-width:14px;height:14px;padding:0 3px;border-radius:9999px;background:#b97a7a;color:#ffffff;font-size:8.5px;font-weight:900;display:flex;align-items:center;justify-content:center;box-shadow:0 0 6px rgba(185,122,122,0.75);z-index:12;';
+                    box.appendChild(evBadge);
+                }
+            });
+
+            // 3. Tutup otomatis modal preview gambar kosong jika tidak ada src valid
+            document.querySelectorAll('img[alt="Preview Foto"]').forEach(img => {
+                if (!img.getAttribute('src') || img.getAttribute('src') === '') {
+                    const wrap = img.closest('.fixed');
+                    if (wrap) wrap.classList.add('hidden');
+                }
+            });
+        }
+        document.addEventListener('DOMContentLoaded', applyPrTugasCountsAndEventBadges);
     </script>
 </body>
 </html>

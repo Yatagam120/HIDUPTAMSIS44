@@ -31,6 +31,9 @@ class KomokController extends Controller
             $users = User::whereIn('id', $rawPosts->pluck('user_id')->unique())->get()->keyBy('id');
             $posts = $rawPosts->map(function ($p) use ($users) {
                 $p->author = $users->get($p->user_id);
+                $p->resolved_src = !empty($p->media_data)
+                    ? $p->media_data
+                    : ((!empty($p->media_path) && file_exists(public_path($p->media_path))) ? asset($p->media_path) : null);
                 return $p;
             });
         }
@@ -50,14 +53,23 @@ class KomokController extends Controller
 
         $file = $request->file('media');
         $ext = strtolower($file->getClientOriginalExtension());
+        $mime = $file->getMimeType() ?: 'image/jpeg';
+        $mediaType = in_array($ext, ['mp4', 'webm', 'mov'], true) ? 'video' : 'image';
+
+        $mediaData = null;
+        if ($mediaType === 'image' && $file->getSize() <= 4194304) {
+            $rawBytes = @file_get_contents($file->getRealPath());
+            if ($rawBytes !== false) {
+                $mediaData = 'data:' . $mime . ';base64,' . base64_encode($rawBytes);
+            }
+        }
+
         $dir = public_path('uploads/komok');
         if (!is_dir($dir)) mkdir($dir, 0755, true);
         $name = 'komok_' . time() . '_' . uniqid() . '.' . $ext;
         $file->move($dir, $name);
 
-        $mediaType = in_array($ext, ['mp4', 'webm', 'mov'], true) ? 'video' : 'image';
-
-        DB::table('komok_posts')->insert([
+        $insert = [
             'title'      => $request->title,
             'caption'    => $request->caption,
             'media_path' => 'uploads/komok/' . $name,
@@ -65,7 +77,13 @@ class KomokController extends Controller
             'user_id'    => Auth::id(),
             'created_at' => now(),
             'updated_at' => now(),
-        ]);
+        ];
+
+        if (Schema::hasColumn('komok_posts', 'media_data')) {
+            $insert['media_data'] = $mediaData;
+        }
+
+        DB::table('komok_posts')->insert($insert);
 
         return back()->with('success', 'Media Komok berhasil diposting!');
     }
@@ -73,9 +91,7 @@ class KomokController extends Controller
     public function destroy($id)
     {
         $this->ensureAllowed();
-
         DB::table('komok_posts')->where('id', $id)->delete();
-
         return back()->with('success', 'Postingan Komok dihapus!');
     }
 }

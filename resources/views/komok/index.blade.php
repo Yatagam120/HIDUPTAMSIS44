@@ -53,10 +53,14 @@
                         <div class="bg-black/40 flex items-center justify-center overflow-hidden max-h-72">
                             @if($p->media_type === 'video')
                                 <video controls class="w-full max-h-72 object-contain bg-black">
-                                    <source src="{{ asset($p->media_path) }}">
+                                    <source src="{{ $p->resolved_src ?? asset($p->media_path) }}">
                                 </video>
                             @else
-                                <img src="{{ asset($p->media_path) }}" alt="{{ $p->title ?? 'Komok' }}"
+                                @if(!empty($p->resolved_src))
+    <img src="{{ $p->resolved_src }}" alt="{{ $p- onerror="this.parentElement.innerHTML='<div class=\'p-6 text-center text-xs opacity-60\'>⚠️ File media lama terhapus saat rebuild server sebelum fitur penyimpanan permanen aktif. Silakan upload ulang.</div>';">
+@else
+    <div class="p-6 text-center text-xs opacity-60">⚠️ File media lama terhapus saat rebuild server. Silakan upload ulang.</div>
+@endiftitle ?? 'Komok' }}"
                                      class="w-full max-h-72 object-contain">
                             @endif
                         </div>
