@@ -359,6 +359,7 @@
         document.addEventListener('DOMContentLoaded', refreshSettingsButtonsState);
     </script>
     
+
 <script id="settings-interactive-binding">
 document.addEventListener('DOMContentLoaded', function () {
     const themeMap = {
@@ -377,7 +378,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const fontMap = { 'modern sans': 'modern', 'klasik serif': 'serif', 'coding mono': 'mono' };
     const langMap = { 'indonesia': 'id', 'english': 'en', '日本語': 'ja', 'jepang': 'ja', 'русский': 'ru', 'rusia': 'ru' };
 
-    function refreshSettingsHighlight() {
+    function refreshSettingsUI() {
         const curTheme = localStorage.getItem('app_theme') || 'mode-gelap';
         const curGraphic = localStorage.getItem('app_graphic') || 'simple';
         const curFont = localStorage.getItem('app_font') || 'modern';
@@ -386,7 +387,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
         document.querySelectorAll('main button').forEach(btn => {
             const t = (btn.textContent || '').trim().toLowerCase();
-
             for (const [k, slug] of Object.entries(themeMap)) {
                 if (t.includes(k)) {
                     btn.classList.toggle('theme-primary', slug === curTheme);
@@ -412,8 +412,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             }
             if (t === 'aktif' || t === 'nonaktif') {
-                const animRow = btn.closest('div')?.textContent?.toLowerCase() || '';
-                if (animRow.includes('animasi')) {
+                const rowTxt = (btn.closest('div')?.textContent || '').toLowerCase();
+                if (rowTxt.includes('animasi')) {
                     btn.textContent = curAnim === 'on' ? 'Aktif' : 'Nonaktif';
                     btn.classList.toggle('theme-primary', curAnim === 'on');
                 }
@@ -422,54 +422,41 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     document.querySelectorAll('main button').forEach(btn => {
-        btn.addEventListener('click', function (e) {
-            const t = (this.textContent || '').trim().toLowerCase();
+        const t = (btn.textContent || '').trim().toLowerCase();
+        const isManaged = Object.keys(themeMap).some(k => t.includes(k))
+            || Object.keys(graphicMap).includes(t)
+            || Object.keys(fontMap).some(k => t.includes(k))
+            || Object.keys(langMap).some(k => t.includes(k))
+            || ((t === 'aktif' || t === 'nonaktif') && (btn.closest('div')?.textContent || '').toLowerCase().includes('animasi'));
 
-            for (const [k, slug] of Object.entries(themeMap)) {
-                if (t.includes(k)) {
-                    e.preventDefault();
-                    window.setAppTheme(slug);
-                    refreshSettingsHighlight();
-                    return;
+        if (isManaged) {
+            btn.removeAttribute('onclick');
+            btn.addEventListener('click', function (e) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                const label = (this.textContent || '').trim().toLowerCase();
+
+                for (const [k, slug] of Object.entries(themeMap)) {
+                    if (label.includes(k)) { window.setAppTheme(slug); refreshSettingsUI(); return; }
                 }
-            }
-            for (const [k, slug] of Object.entries(graphicMap)) {
-                if (t === k) {
-                    e.preventDefault();
-                    window.setAppGraphic(slug);
-                    refreshSettingsHighlight();
-                    return;
+                for (const [k, slug] of Object.entries(graphicMap)) {
+                    if (label === k) { window.setAppGraphic(slug); refreshSettingsUI(); return; }
                 }
-            }
-            for (const [k, slug] of Object.entries(fontMap)) {
-                if (t.includes(k)) {
-                    e.preventDefault();
-                    window.setAppFont(slug);
-                    refreshSettingsHighlight();
-                    return;
+                for (const [k, slug] of Object.entries(fontMap)) {
+                    if (label.includes(k)) { window.setAppFont(slug); refreshSettingsUI(); return; }
                 }
-            }
-            for (const [k, code] of Object.entries(langMap)) {
-                if (t.includes(k)) {
-                    e.preventDefault();
-                    localStorage.setItem('app_lang', code);
-                    window.applyLanguage(code);
-                    refreshSettingsHighlight();
-                    return;
+                for (const [k, code] of Object.entries(langMap)) {
+                    if (label.includes(k)) { localStorage.setItem('app_lang', code); window.applyLanguage(code); refreshSettingsUI(); return; }
                 }
-            }
-            if (t === 'aktif' || t === 'nonaktif') {
-                const animRow = this.closest('div')?.textContent?.toLowerCase() || '';
-                if (animRow.includes('animasi')) {
-                    e.preventDefault();
+                if (label === 'aktif' || label === 'nonaktif') {
                     window.toggleAppAnim();
-                    refreshSettingsHighlight();
+                    refreshSettingsUI();
                 }
-            }
-        });
+            }, true);
+        }
     });
 
-    refreshSettingsHighlight();
+    refreshSettingsUI();
 });
 </script>
 </x-app-layout>

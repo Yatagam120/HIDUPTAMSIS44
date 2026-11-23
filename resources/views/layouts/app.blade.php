@@ -1797,41 +1797,21 @@
     html[data-theme="soft-berry"] body { background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 55%, #fce7f3 100%) !important; color: #881337 !important; }
     html[data-theme="morning-assembly"] body { background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 55%, #f1f5f9 100%) !important; color: #0f172a !important; }
 
-    /* Card adaptation untuk Tema Terang vs Gelap */
     html[data-theme="tech-growth"] .theme-card,
     html[data-theme="creative-spark"] .theme-card,
     html[data-theme="lavender-dream"] .theme-card,
     html[data-theme="soft-berry"] .theme-card,
     html[data-theme="morning-assembly"] .theme-card {
-        background: rgba(255, 255, 255, 0.86) !important;
+        background: rgba(255, 255, 255, 0.88) !important;
         color: inherit !important;
         border-color: rgba(15, 23, 42, 0.14) !important;
     }
-    html[data-theme="tech-growth"] .theme-soft,
-    html[data-theme="creative-spark"] .theme-soft,
-    html[data-theme="lavender-dream"] .theme-soft,
-    html[data-theme="soft-berry"] .theme-soft,
-    html[data-theme="morning-assembly"] .theme-soft {
-        background: rgba(15, 23, 42, 0.06) !important;
-        color: inherit !important;
-    }
 
-    /* === GAYA GRAFIK (Legacy / Minimalist / Simple) === */
-    html[data-graphic="legacy"] .theme-card {
-        border-radius: 4px !important;
-        border-width: 2px !important;
-        box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.45) !important;
-    }
-    html[data-graphic="minimalist"] .theme-card {
-        border-radius: 10px !important;
-        box-shadow: none !important;
-        backdrop-filter: none !important;
-    }
-    html[data-graphic="simple"] .theme-card {
-        border-radius: 1rem !important;
-    }
+    /* === GAYA GRAFIK === */
+    html[data-graphic="legacy"] .theme-card { border-radius: 4px !important; border-width: 2px !important; box-shadow: 4px 4px 0px rgba(0, 0, 0, 0.45) !important; }
+    html[data-graphic="minimalist"] .theme-card { border-radius: 10px !important; box-shadow: none !important; backdrop-filter: none !important; }
+    html[data-graphic="simple"] .theme-card { border-radius: 1rem !important; }
 
-    /* Legacy & Minimalist: Animasi hanya di Navbar */
     html[data-graphic="legacy"][data-anim="on"] main,
     html[data-graphic="minimalist"][data-anim="on"] main,
     html[data-graphic="legacy"][data-anim="on"] main .theme-card,
@@ -1840,47 +1820,29 @@
         transition: none !important;
         transform: none !important;
     }
-    html[data-anim="off"] *,
-    html[data-anim="off"] *::before,
-    html[data-anim="off"] *::after {
+    html[data-anim="off"] *, html[data-anim="off"] *::before, html[data-anim="off"] *::after {
         animation: none !important;
         transition: none !important;
     }
 
-    /* === GAYA HURUF (Font Style) === */
-    html[data-font="modern"] body { font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif !important; }
-    html[data-font="serif"] body { font-family: Georgia, 'Times New Roman', serif !important; }
-    html[data-font="mono"] body { font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace !important; }
+    /* === GAYA HURUF === */
+    html[data-font="modern"] body, html[data-font="modern"] * { font-family: 'Plus Jakarta Sans', 'Inter', system-ui, sans-serif; }
+    html[data-font="serif"] body, html[data-font="serif"] * { font-family: Georgia, 'Times New Roman', serif !important; }
+    html[data-font="mono"] body, html[data-font="mono"] * { font-family: 'JetBrains Mono', 'Fira Code', Consolas, monospace !important; }
 
-    /* === TABEL JADWAL HP: FIT 1 LAYAR PENUH === */
+    /* === TABEL JADWAL HP: FIT 1 LAYAR === */
     @media (max-width: 640px) {
-        table {
-            width: 100% !important;
-            table-layout: fixed !important;
-            border-spacing: 1.5px !important;
+        table { width: 100% !important; table-layout: fixed !important; border-spacing: 1.5px !important; }
+        table th:first-child, table td:first-child {
+            width: 40px !important; min-width: 40px !important; max-width: 40px !important;
+            font-size: 7.5px !important; padding: 2px 1px !important; white-space: nowrap !important; overflow: visible !important;
         }
-        table th:first-child,
-        table td:first-child {
-            width: 40px !important;
-            min-width: 40px !important;
-            max-width: 40px !important;
-            font-size: 7.5px !important;
-            padding: 2px 1px !important;
-            white-space: nowrap !important;
-            overflow: visible !important;
-        }
-        table a[href*="/mapel/"] {
-            min-height: 38px !important;
-            height: 38px !important;
-            padding: 2px 1px !important;
-            font-size: 7px !important;
-        }
+        table a[href*="/mapel/"] { min-height: 38px !important; height: 38px !important; padding: 2px 1px !important; font-size: 7px !important; }
     }
 </style>
 
 <script id="global-theme-engine-js">
 (function () {
-    // 1. Apply Saved Preferences Instantly
     const savedTheme = localStorage.getItem('app_theme') || 'mode-gelap';
     const savedGraphic = localStorage.getItem('app_graphic') || 'simple';
     const savedFont = localStorage.getItem('app_font') || 'modern';
@@ -1891,30 +1853,25 @@
     document.documentElement.setAttribute('data-font', savedFont);
     document.documentElement.setAttribute('data-anim', savedAnim);
 
-    window.setAppTheme = function (themeSlug) {
-        localStorage.setItem('app_theme', themeSlug);
-        document.documentElement.setAttribute('data-theme', themeSlug);
+    window.setAppTheme = function (slug) {
+        localStorage.setItem('app_theme', slug);
+        document.documentElement.setAttribute('data-theme', slug);
     };
-
-    window.setAppGraphic = function (graphicSlug) {
-        localStorage.setItem('app_graphic', graphicSlug);
-        document.documentElement.setAttribute('data-graphic', graphicSlug);
+    window.setAppGraphic = function (slug) {
+        localStorage.setItem('app_graphic', slug);
+        document.documentElement.setAttribute('data-graphic', slug);
     };
-
-    window.setAppFont = function (fontSlug) {
-        localStorage.setItem('app_font', fontSlug);
-        document.documentElement.setAttribute('data-font', fontSlug);
+    window.setAppFont = function (slug) {
+        localStorage.setItem('app_font', slug);
+        document.documentElement.setAttribute('data-font', slug);
     };
-
     window.toggleAppAnim = function () {
-        const cur = document.documentElement.getAttribute('data-anim') || 'on';
-        const nxt = cur === 'on' ? 'off' : 'on';
+        const nxt = (document.documentElement.getAttribute('data-anim') || 'on') === 'on' ? 'off' : 'on';
         localStorage.setItem('app_anim', nxt);
         document.documentElement.setAttribute('data-anim', nxt);
         return nxt;
     };
 
-    // 2. 4-Language Translator
     const I18N = {
         en: {
             'Jadwal': 'Schedule', 'List Tugas': 'Task List', 'Kalender': 'Calendar', 'Siswa': 'Students',
@@ -1925,15 +1882,10 @@
             'Pengaturan Tampilan': 'Display Settings',
             'Sesuaikan tema gradien warna, gaya grafik, animasi, suara efek, musik kelas, dan bahasa aplikasi.': 'Customize gradient color themes, graphic styles, animations, sound effects, class music, and app language.',
             '← Kembali ke Jadwal Utama': '← Back to Main Schedule',
-            'TEMA GELAP (GRADIEN)': 'DARK THEMES (GRADIENT)',
-            'TEMA TERANG (GRADIEN)': 'LIGHT THEMES (GRADIENT)',
-            'GRAFIK & ANIMASI': 'GRAPHICS & ANIMATION',
-            'Animasi Transisi UI': 'UI Transition Animation',
-            'GAYA HURUF': 'FONT STYLE',
-            'EFEK SUARA (SFX)': 'SOUND EFFECTS (SFX)',
-            'BAHASA': 'LANGUAGE',
-            'Pemutar Musik Kelas': 'Class Music Player',
-            'List Tugas & Catatan Kelas': 'Class Task & Note List',
+            'TEMA GELAP (GRADIEN)': 'DARK THEMES (GRADIENT)', 'TEMA TERANG (GRADIEN)': 'LIGHT THEMES (GRADIENT)',
+            'GRAFIK & ANIMASI': 'GRAPHICS & ANIMATION', 'Animasi Transisi UI': 'UI Transition Animation',
+            'GAYA HURUF': 'FONT STYLE', 'EFEK SUARA (SFX)': 'SOUND EFFECTS (SFX)', 'BAHASA': 'LANGUAGE',
+            'Pemutar Musik Kelas': 'Class Music Player', 'List Tugas & Catatan Kelas': 'Class Task & Note List',
             'Semua': 'All', 'Buka & Komentar': 'Open & Comment', 'Tandai Selesai': 'Mark Completed',
             'Hari / Jam': 'Day / Time', 'Senin': 'Monday', 'Selasa': 'Tuesday', 'Rabu': 'Wednesday', 'Kamis': 'Thursday', 'Jumat': 'Friday'
         },
@@ -1943,8 +1895,7 @@
             'Pengaturan': '設定', 'JADWAL XI RPL 1': 'XI RPL 1 時間割',
             'Catatan': 'ノート', 'Tugas': '課題', 'PR': '宿題', 'Event': 'イベント',
             'Tenggat': '締切間近', 'Deadline': '期限切れ', 'Selesai': '完了', 'Reset': 'リセット',
-            'Pengaturan Tampilan': '表示設定',
-            '← Kembali ke Jadwal Utama': '← 時間割に戻る',
+            'Pengaturan Tampilan': '表示設定', '← Kembali ke Jadwal Utama': '← 時間割に戻る',
             'TEMA GELAP (GRADIEN)': 'ダークテーマ', 'TEMA TERANG (GRADIEN)': 'ライトテーマ',
             'GRAFIK & ANIMASI': 'グラフィックとアニメーション', 'GAYA HURUF': 'フォントスタイル',
             'BAHASA': '言語設定', 'Pemutar Musik Kelas': 'クラス音楽プレイヤー',
@@ -1956,8 +1907,7 @@
             'Pengaturan': 'Настройки', 'JADWAL XI RPL 1': 'РАСПИСАНИЕ XI RPL 1',
             'Catatan': 'Заметки', 'Tugas': 'Задания', 'PR': 'ДЗ', 'Event': 'События',
             'Tenggat': 'Скоро срок', 'Deadline': 'Просрочено', 'Selesai': 'Готово', 'Reset': 'Сброс',
-            'Pengaturan Tampilan': 'Настройки экрана',
-            '← Kembali ke Jadwal Utama': '← Назад к расписанию',
+            'Pengaturan Tampilan': 'Настройки экрана', '← Kembali ke Jadwal Utama': '← Назад к расписанию',
             'TEMA GELAP (GRADIEN)': 'ТЁМНЫЕ ТЕМЫ', 'TEMA TERANG (GRADIEN)': 'СВЕТЛЫЕ ТЕМЫ',
             'GRAFIK & ANIMASI': 'ГРАФИКА И АНИМАЦИЯ', 'GAYA HURUF': 'СТИЛЬ ШРИФТА',
             'BAHASA': 'ЯЗЫК', 'Pemutar Musik Kelas': 'Музыкальный плеер класса',
@@ -1974,10 +1924,7 @@
             const p = n.parentElement;
             if (!p || ['SCRIPT', 'STYLE', 'TEXTAREA', 'INPUT'].includes(p.tagName)) continue;
             if (n._orig === undefined) n._orig = n.nodeValue;
-            if (!dict) {
-                n.nodeValue = n._orig;
-                continue;
-            }
+            if (!dict) { n.nodeValue = n._orig; continue; }
             let val = n._orig;
             for (const k of keys) {
                 if (val.includes(k)) val = val.split(k).join(dict[k]);
@@ -1986,9 +1933,8 @@
         }
     };
 
-    // 3. DOM Ready Normalizer (Navbar "List Tugas", Singkatan Mapel Desktop, Bell Dismiss)
     document.addEventListener('DOMContentLoaded', function () {
-        // A. Navbar "(X) Tugas" -> "List Tugas"
+        // 1. Paksa "(X) Tugas" -> "List Tugas"
         document.querySelectorAll('nav a').forEach(a => {
             const t = (a.textContent || '').replace(/\s+/g, ' ').trim();
             if (/^\(\d+\)\s*Tugas$/i.test(t) || /list-tugas/i.test(a.getAttribute('href') || '')) {
@@ -1996,7 +1942,7 @@
             }
         });
 
-        // B. Singkatan Kotak Jadwal di Desktop (KTS, STI, BK, KDI, MBJ(J), PP, B.Ing, BI, MTK, Penjas, PL(RPL1), SI, KWH, PAI)
+        // 2. Singkatan Kotak Jadwal di Desktop (KTS, STI, BK, KDI, MBJ(J), PP, B.Ing, BI, MTK, Penjas, PL(RPL1), SI, KWH, PAI)
         if (window.innerWidth > 640) {
             const dict = [
                 { keys: ['ketamansiswaan', 'etamansiswaan', 'kts'], code: 'KTS', full: 'Ketamansiswaan' },
@@ -2038,23 +1984,40 @@
             });
         }
 
-        // C. Lonceng Notifikasi: sembunyikan angka setelah diklik hingga ada approval/edit baru
-        const bellBtn = document.querySelector('nav button');
+        // 3. Lonceng Notifikasi: Pastikan tombol lonceng bisa diklik buka/tutup & angka hilang setelah diklik
+        const bellBtn = document.getElementById('notif-bell-btn') || document.querySelector('button[aria-label*="Notif"], nav button[onclick*="notif"]');
+        const notifMenu = document.getElementById('notif-dropdown') || document.getElementById('notif-menu') || (bellBtn ? bellBtn.parentElement.querySelector('div[class*="absolute"]') : null);
+
         if (bellBtn) {
+            bellBtn.style.cursor = 'pointer';
+            bellBtn.style.pointerEvents = 'auto';
+            bellBtn.style.zIndex = '60';
+
             const badge = bellBtn.querySelector('span');
-            const notifLinks = Array.from(document.querySelectorAll('[id*="notif"] a')).map(a => a.textContent.trim()).join('|');
+            const notifLinks = notifMenu ? Array.from(notifMenu.querySelectorAll('a')).map(a => a.textContent.trim()).join('|') : '';
             const seenSig = localStorage.getItem('notif_seen_sig') || '';
+
             if (badge && notifLinks && notifLinks === seenSig) {
                 badge.classList.add('hidden');
             }
-            bellBtn.addEventListener('click', function () {
-                const latest = Array.from(document.querySelectorAll('[id*="notif"] a')).map(a => a.textContent.trim()).join('|');
+
+            bellBtn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                if (notifMenu) {
+                    notifMenu.classList.toggle('hidden');
+                }
+                const latest = notifMenu ? Array.from(notifMenu.querySelectorAll('a')).map(a => a.textContent.trim()).join('|') : '';
                 if (latest) localStorage.setItem('notif_seen_sig', latest);
                 if (badge) badge.classList.add('hidden');
             });
+
+            document.addEventListener('click', function (e) {
+                if (notifMenu && !notifMenu.contains(e.target) && !bellBtn.contains(e.target)) {
+                    notifMenu.classList.add('hidden');
+                }
+            });
         }
 
-        // D. Apply saved language
         const curLang = localStorage.getItem('app_lang') || 'id';
         if (curLang !== 'id') window.applyLanguage(curLang);
     });
