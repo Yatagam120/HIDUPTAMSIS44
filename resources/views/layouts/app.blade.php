@@ -708,6 +708,60 @@
         html[data-graphic="minimalist"][data-anim="on"] nav.main-tamsis-nav .nav-btn-anim:hover {
             transform: translateY(-2px) scale(1.03) !important;
         }
+            /* Fix Tabel Jadwal HP: Kolom Hari utuh & setiap slot jam lega tanpa terpotong */
+        @media (max-width: 640px) {
+            .timetable-wrap-scroll,
+            div:has(> table.timetable-grid) {
+                overflow-x: auto !important;
+                -webkit-overflow-scrolling: touch !important;
+                width: 100% !important;
+                display: block !important;
+            }
+            table.timetable-grid {
+                width: max-content !important;
+                min-width: 780px !important;
+                table-layout: auto !important;
+                border-collapse: separate !important;
+                border-spacing: 4px !important;
+            }
+            table.timetable-grid th,
+            table.timetable-grid td {
+                min-width: 58px !important;
+                font-size: 10px !important;
+                padding: 2px !important;
+                white-space: nowrap !important;
+            }
+            table.timetable-grid th:first-child,
+            table.timetable-grid td:first-child {
+                position: sticky !important;
+                left: 0 !important;
+                z-index: 15 !important;
+                min-width: 64px !important;
+                width: 64px !important;
+                max-width: 64px !important;
+                padding: 6px 4px !important;
+                background: #141419 !important;
+                font-size: 10.5px !important;
+                font-weight: 800 !important;
+                text-align: center !important;
+                overflow: visible !important;
+                text-overflow: clip !important;
+            }
+            table.timetable-grid a,
+            table.timetable-grid .subject-box {
+                min-width: 56px !important;
+                min-height: 52px !important;
+                height: 52px !important;
+                padding: 6px 6px !important;
+                font-size: 10.5px !important;
+            }
+            table.timetable-grid a span.mobile-label-only,
+            table.timetable-grid .subject-box span.mobile-label-only {
+                overflow: visible !important;
+                text-overflow: clip !important;
+                font-size: 10.5px !important;
+            }
+        }
     </style>
 </head>
 <body class="antialiased" data-theme="mode-gelap" data-font="sans" data-graphic="simple" data-anim="off">

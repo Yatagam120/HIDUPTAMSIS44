@@ -86,7 +86,8 @@
                 <input type="text" name="title" required placeholder="Judul postingan..."
                        class="sm:col-span-2 rounded-xl border theme-border px-3 py-2 text-xs font-semibold">
                 <input type="date" name="due_date" id="post-due-date"
-                       class="rounded-xl border theme-border px-3 py-2 text-xs font-semibold">
+                       value="{{ now()->format('Y-m-d') }}"
+                       class="rounded-xl border theme-border px-3 py-2 text-xs font-semibold {{ $activeTab === 'catatan' ? 'hidden' : '' }}">
             </div>
 
             <textarea name="description" rows="2" placeholder="Deskripsi, instruksi tugas, atau isi catatan..."
